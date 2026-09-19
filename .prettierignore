@@ -1,0 +1,15 @@
+node_modules
+.next
+out
+pnpm-lock.yaml
+coverage
+playwright-report
+test-results
+.cache
+.tools
+.pnpm-store
+supabase/.temp
+supabase/.branches
+next-env.d.ts
+# Preserve the supplied product vision verbatim.
+README.md

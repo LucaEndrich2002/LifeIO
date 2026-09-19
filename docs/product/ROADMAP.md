@@ -1,0 +1,85 @@
+# LifeOS – Roadmap
+
+Stand: 19.09.2026
+
+Quellen: [README](../../README.md), Abschnitte 9, 10 und 21, sowie [PRD](PRD.md). Diese Roadmap beschreibt die Reihenfolge und Abnahmebedingungen, keine bereits implementierten Funktionen.
+
+## Aktueller Stand
+
+- Die bereitgestellte README wurde unverändert in den Projektordner übernommen.
+- Phase 0 ist als PRD-Entwurf mit fünf Kernjourneys, Anforderungen R01–R14, Erfolgskriterien und gekennzeichneten offenen Entscheidungen ausgearbeitet.
+- Das lokale Projektfundament ist implementiert: Git auf `feat/project-foundation`, Next.js-App, pnpm-Lockfile, Lint/Typecheck/Tests/Build, Formatter und GitHub-Actions-Workflow.
+- Eine minimale responsive Shell für Home, Money, Plan, Goals und AI mit Light/Dark Mode ist als begrenzter Vorgriff auf Phase 2 vorhanden. Es gibt noch keine Fachfunktionen oder gespeicherten Nutzerdaten.
+- `AGENTS.md` und `CLAUDE.md` wurden aus der README abgeleitet; Architektur, Datenmodell, Designgrundlage und lokale Einrichtung sind dokumentiert.
+- Die lokale Supabase-Umgebung läuft unter Docker Desktop und WSL 2. Dienstzustand, Wiederanlauf, öffentliche Verbindungskonfiguration und ausschließlich lokale Ports sind geprüft. Ein Docker-Desktop-Startfehler samt angewendetem Workaround ist dokumentiert.
+- Phase 1 bleibt hinsichtlich externer Voraussetzungen offen: GitHub-Ziel, tatsächlicher CI-Lauf und Supabase Cloud sind noch nicht eingerichtet. Details stehen in [DEVELOPMENT.md](../DEVELOPMENT.md) und [LOCAL_SUPABASE.md](../LOCAL_SUPABASE.md).
+
+## Entwicklungsphasen
+
+| Phase                             | Ziel und begrenzter Umfang                                                                                                                                     | Abschlusskriterium                                                                                                                               |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 0 – Produktdefinition             | Zielgruppe, Problem, V1-Scope, Nicht-Ziele, fünf Journeys, messbare Acceptance Criteria                                                                        | Alle V1-Funktionen sind im PRD zugeordnet; produktrelevante Annahmen sind sichtbar und vor der betroffenen Implementierung geklärt.              |
+| 1 – Projektfundament              | Git, Repository-Regeln, Next.js/TypeScript, pnpm, Tailwind/shadcn, ESLint/Formatter, Vitest/RTL, Playwright, Supabase-Konfiguration, Umgebungsvariablen und CI | `pnpm lint`, `pnpm typecheck`, `pnpm test` und `pnpm build` laufen lokal und in CI; lokale Datenbankeinrichtung ist reproduzierbar dokumentiert. |
+| 2 – Designsystem und App Shell    | Layout, Navigation, Cards/KPIs/Progress, Empty/Loading/Error States, Light/Dark Mode, responsive Darstellung                                                   | Statischer Dashboard-Prototyp funktioniert auf Desktop und Smartphone und ist per Tastatur bedienbar.                                            |
+| 3 – Authentication und Onboarding | Konto, Profil, Einkommen/Fixkosten/erstes Sparziel als Einstieg                                                                                                | J01 erfüllt; neuer Nutzer erreicht sein Dashboard ohne manuelle Datenbankeingriffe; Zugriffsschutz und Isolation sind getestet.                  |
+| 4 – Money Core                    | Einkommen, manuelle Ausgaben, Kategorien, Fixkosten, Budget, Sparrate und Monatsübersicht                                                                      | J02–J03 und R03–R06 erfüllt; Beträge und Monatsgrenzen sind durch Unit- und Integrationstests abgesichert.                                       |
+| 5 – Goals                         | Ziele, Fortschritt, Beiträge, Projektion und Milestones; erste Verbindung zu Budget                                                                            | J04 und finanzielle Teile von R07/R10 erfüllt; Money und Goals teilen eine konsistente Datenbasis.                                               |
+| 6 – Plan                          | Aufgaben, einfache Kalenderereignisse, Tages-/Wochenansicht, Goal-Links                                                                                        | R08–R10 erfüllt; Ziele sind mit konkreten Aufgaben und Terminen verbunden.                                                                       |
+| 7 – Home                          | Today, Money, Goals, Attention und Vorbereitung des Insight-Bereichs                                                                                           | R11 und J05 erfüllt; fünf Testpersonen verstehen die drei Dashboard-Kernaussagen in zehn Sekunden.                                               |
+| 8 – Life AI, zuerst lesend        | Definierte Read-Tools, autorisierte Datenbeschaffung, verständliche Antworten und Datenherkunft                                                                | R12 erfüllt; KI hat keinen beliebigen Datenbankzugriff und kann keine Daten verändern.                                                           |
+| 9 – Weekly Review und Insights    | Wochenzusammenfassung, deterministische Hinweise, grundlegende In-App-Notifications                                                                            | R13–R14 erfüllt; Kennzahlen sind reproduzierbar, Hinweise werden nicht unkontrolliert dupliziert.                                                |
+| 10 – Security, Privacy und Beta   | RLS-/Auth-Prüfung, Rate Limits, Datenflüsse, Logs, Secrets, Validierung, Backups/Migrationen; Beta mit 10–30 Personen                                          | Keine bekannten kritischen Sicherheitsfehler; dokumentierte Tests und Nutzersignale ermöglichen die nächste Produktentscheidung.                 |
+| 11 – Monetarisierung              | Free/Pro-Angebot anhand tatsächlicher Nutzung ausarbeiten                                                                                                      | Wiederkehrender Produktnutzen ist belegt, bevor Zahlungsintegration umgesetzt wird.                                                              |
+
+Security, Typprüfung, Validierung und Isolation beginnen bei der ersten Implementierung. Phase 10 prüft den Gesamtablauf vor der Beta; sie verschiebt diese Pflichten nicht ans Projektende.
+
+## Referenz: Scope des technischen Projektfundaments
+
+**Ausgangsproblem:** Der Projektordner enthielt nur Produktdokumentation und keine ausführbare Anwendung. Die folgenden Kriterien beschreiben den Umfang des inzwischen lokal angelegten Fundaments; externe Voraussetzungen bleiben wie oben beschrieben offen.
+
+**Ziel:** Ein kleiner modularer Monolith lässt sich reproduzierbar starten, prüfen und schrittweise erweitern.
+
+**Scope:**
+
+- Lokales Git-Repository mit eigenem Task-Branch und gezielten Ignore-Regeln; GitHub-Ziel vor Veröffentlichung festlegen.
+- `AGENTS.md` und `CLAUDE.md` mit Stack, Architekturgrenzen, Sicherheitsregeln, vorgesehenen Commands und Definition of Done.
+- Next.js/React mit TypeScript Strict Mode und pnpm; Tailwind, shadcn/ui, ESLint und Formatter.
+- `docs/architecture/SYSTEM.md`, `DATA_MODEL.md` und `docs/design/DESIGN_SYSTEM.md` aus der README ableiten. Life-Core-Entitäten und `EntityLink` zunächst beschreiben.
+- Supabase-Clientgrenzen, `.env.example` mit Platzhaltern, lokale Konfiguration und dokumentierter Start mit Docker. Ein Cloud-Projekt und Secrets werden nur in der vorgesehenen Umgebung eingerichtet.
+- Vitest/React Testing Library für sinnvolle erste Prüfungen sowie Playwright für einen Navigations-Smoke-Test.
+- GitHub Actions mit Installation aus dem Lockfile, Lint, Typecheck, Tests und Build.
+- Eine minimale Shell für Home, Money, Plan, Goals und AI gemäß Projektprompt. Sie ist der begrenzte Vorgriff auf Phase 2; das vollständige Designsystem bleibt ein späterer Task.
+
+**Nicht im Scope:** Vollständige Auth-/Onboarding-Flows, Money-/Goal-Funktionen, ein vollständiges Life-Core-Schema, KI-Anbindung, Integrationen oder Deployment einer produktiven App.
+
+**Acceptance Criteria und Validierung:**
+
+- Installation und Start sind anhand der Dokumentation reproduzierbar; notwendige Umgebungsvariablen sind erklärt und echte Secrets ausgeschlossen.
+- `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` und der vorbereitete `pnpm test:e2e` laufen erfolgreich. CI verwendet pnpm und einen eingefrorenen Lockfile.
+- Die Shell zeigt die fünf Navigationsziele und unterscheidet Platzhalter von tatsächlich verfügbaren Funktionen.
+- Tests prüfen reales Verhalten, beispielsweise ungültige Konfiguration und erreichbare Navigation. Datenbanktests werden mit den ersten persistierten Nutzerdaten um RLS-/Isolationstests ergänzt.
+- Supabase lässt sich lokal mit dokumentierten Schritten starten. Falls eine externe Voraussetzung fehlt, wird der verbleibende Teil ausdrücklich als offen ausgewiesen; Phase 1 wird nicht pauschal als abgeschlossen bezeichnet.
+- Abschließender Diff-Review prüft Scope, Typen, Imports, Konfiguration, Secrets, unnötige Abhängigkeiten und Sicherheitsgrenzen.
+
+**Bekannte Voraussetzungen:** Bei der Bestandsaufnahme waren Node.js 24.13.1, npm 11.8.0 über `npm.cmd` und Git 2.51.0 verfügbar. pnpm, Docker, Supabase CLI und GitHub CLI waren nicht im PATH. Diese Angaben sind eine lokale Momentaufnahme, keine Versionsempfehlung; Versionen und Kompatibilität werden beim Setup geprüft. Die Supabase CLI kann als Projektwerkzeug bereitgestellt werden. Für die lokale Datenbank wird eine laufende Docker-Umgebung benötigt.
+
+## Reihenfolge innerhalb des V1-Core
+
+Die nummerierten Entwicklungsphasen der README bestimmen die Reihenfolge. Ihre erste Issue-Liste ist eine Sammlung von Tasks, keine zusätzliche widersprechende Reihenfolge.
+
+- Die Shell aus Phase 2 ist zunächst statisch; das datengetriebene Home Dashboard folgt in Phase 7.
+- Onboarding benötigt in Phase 3 minimale, autorisierte Persistenz für Profil, Einkommen, Fixkosten und Ziel. Die vollständigen Fachregeln und Verwaltungsoberflächen folgen in Phasen 4/5; sie werden dabei erweitert, nicht als zweites Datenmodell neu angelegt.
+- Goal → Budget wird eingeführt, sobald beide Module existieren. Links zu Tasks und Events folgen mit Phase 6.
+- Die fünf Kernjourneys stehen vor der echten KI-Schicht. Schreibende KI-Aktionen bleiben ein separater späterer Task mit sichtbarer Bestätigung jeder konkreten Aktion.
+
+## Nach V1
+
+| Stufe                    | Vision aus der README, außerhalb des aktuellen Fundaments                                                                                   |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| V1.5 – Connected Life    | Externe Kalender, weitergehende Wiederholungen/Subscriptions, verbesserte Notifications; Abgrenzung monatlicher V1-Fixkosten gemäß PRD O02. |
+| V2 – AI Life Assistant   | Bestätigte AI Actions, Planung, Szenarien, Daily Brief und Goal Generation.                                                                 |
+| V3 – Life Admin          | Dokumente, Verträge, Fristen und Life Events.                                                                                               |
+| V4 – Financial Ecosystem | Open Banking über geeignete Partner, automatische Transaktionen, Assets, Net Worth und Forecasts.                                           |
+| V5 – Ecosystem           | Health, Habits, weitere Integrationen, Automationen und Templates.                                                                          |
+
+Es gibt noch keine zugesagten Termine. Jede Stufe benötigt einen begrenzten Task mit Problem, Scope, Nicht-Zielen, Acceptance Criteria und Tests.
