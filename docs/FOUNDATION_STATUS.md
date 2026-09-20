@@ -1,6 +1,6 @@
 # Projektfundament – Prüfbericht
 
-Stand: 19.09.2026. Lokaler Branch: `feat/project-foundation`.
+Stand: 19.09.2026. Dieser Bericht beschreibt den ursprünglichen Foundation-Commit `9c20b8c` auf `feat/project-foundation`, inzwischen auch auf GitHub `main`. Den anschließend vom Nutzer beauftragten Dashboard-Ausbau und die GitHub-Anbindung beschreibt [DASHBOARD_STATUS.md](DASHBOARD_STATUS.md).
 
 ## Implementiert
 
@@ -39,7 +39,7 @@ Beim ersten Browserlauf fehlte Speicherplatz. Die ausschließlich in diesem Task
 ## Offene Punkte
 
 1. Ein Socket-Fehler von Docker Desktop unter Windows trat beim Desktop-Neustart auf. Die lokale Umgebung läuft nach einem reversiblen Workaround; spätere Desktop-Neustarts können erneut betroffen sein. Befund, Sicherungen und Betriebsablauf stehen in [LOCAL_SUPABASE.md](LOCAL_SUPABASE.md). Anwendungsmigrationen, Seeds und Nutzer-Isolationstests folgen erst mit dem ersten Schema.
-2. GitHub-Ziel und Supabase-Cloud-Projekt fehlen. Es gibt keinen Push, keinen Merge, kein Deployment und keine als erfolgreich behauptete externe CI.
+2. Das GitHub-Ziel wurde im Folgetask auf Nutzervorgabe angebunden; CI-Ergebnisse stehen im separaten Dashboard-Prüfbericht. Supabase Cloud und ein öffentliches App-Deployment bleiben offen.
 3. Die derzeitigen Next.js-Lint-Plugins unterstützen ESLint 10 noch nicht durchgehend. ESLint 9.39.5 funktioniert, ist aber als nicht mehr unterstützt markiert. Diese gemeinsame Werkzeugaktualisierung bleibt offen; Details in [DEVELOPMENT.md](DEVELOPMENT.md).
 4. Die bestehenden offenen Produktentscheidungen im [PRD](product/PRD.md) sind vor den jeweiligen Fachfeatures zu klären. Authentication und persönliche Daten sind noch nicht implementiert.
 5. Git wurde in der Sandbox initialisiert. Bei einem Zugriff über ein anderes Windows-Benutzerkonto kann Git einen Eigentümerhinweis melden. Für die Prüfung wurde nur pro Befehl der konkrete Projektordner über `-c safe.directory=C:/Users/lucae/LifeIO` freigegeben; keine globale Git-Sicherheitsregel wurde geändert.
@@ -48,4 +48,4 @@ Phase 1 ist damit lokal weitgehend umgesetzt, aber wegen der externen Voraussetz
 
 ## Empfohlener nächster Task
 
-Die noch fehlende GitHub-Anbindung und einen tatsächlichen CI-Lauf in einem eigenen Task klären. Die lokale Supabase-Grundlage für spätere Authentifizierung und Datenpersistenz ist eingerichtet; ein Supabase-Cloud-Projekt und weitere Produktphasen bleiben separate Tasks.
+Der Nutzer hat den Dashboard-Prototyp und GitHub/CI gemeinsam als Folgetask beauftragt; siehe [DASHBOARD_STATUS.md](DASHBOARD_STATUS.md). Die lokale Supabase-Grundlage für spätere Authentifizierung und Datenpersistenz ist eingerichtet; ein Supabase-Cloud-Projekt und weitere Produktphasen bleiben separate Tasks.

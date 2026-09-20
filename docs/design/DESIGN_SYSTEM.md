@@ -1,6 +1,6 @@
 # LifeOS – erste Designgrundlage
 
-Die Shell setzt die Richtung aus der README um: ruhig, übersichtlich, großzügige Abstände und klare Hierarchie. Sie ist ein technischer Einstieg in Phase 2, noch kein vollständiges Designsystem oder Daten-Dashboard.
+Die Shell setzt die Richtung aus der README um: ruhig, übersichtlich, großzügige Abstände und klare Hierarchie. Phase 2 enthält einen statischen Dashboard-Prototyp; ein Dashboard mit persönlichen, gespeicherten Daten folgt in Phase 7.
 
 ## Visuelle Sprache
 
@@ -12,14 +12,18 @@ Die Shell setzt die Richtung aus der README um: ruhig, übersichtlich, großzüg
 
 ## Vorhandene Bausteine
 
-| Baustein                   | Verwendung                                                               |
-| -------------------------- | ------------------------------------------------------------------------ |
-| AppShell                   | Markenbereich, Hauptnavigation, Inhaltsbereich und Vorschauhinweis       |
-| AppNavigation              | Home, Money, Plan, Goals und AI mit `aria-current`                       |
-| Card                       | Lokaler shadcn/ui-Baustein mit Header, Titel, Beschreibung und Inhalt    |
-| ModulePlaceholder          | Gemeinsamer ehrlicher Leerzustand für noch nicht verfügbare Module       |
-| ThemeToggle                | Systempräferenz beim Einstieg; explizite Auswahl bleibt lokal erhalten   |
-| Error / Loading / NotFound | Verständliche Zustände ohne interne Fehlerdetails oder falsche Nullwerte |
+| Baustein                   | Verwendung                                                                   |
+| -------------------------- | ---------------------------------------------------------------------------- |
+| AppShell                   | Markenbereich, Hauptnavigation, Inhaltsbereich und Vorschauhinweis           |
+| AppNavigation              | Home, Money, Plan, Goals und AI mit `aria-current`                           |
+| Card                       | Lokaler shadcn/ui-Baustein mit Header, Titel, Beschreibung und Inhalt        |
+| KpiCard                    | Kennzahl mit semantischem Begriff/Wert-Paar und erklärender Datenbasis       |
+| Progress                   | Natives, benanntes HTML-Progress-Element mit Prozentwert und Maximum 100     |
+| EmptyState                 | Icon, Überschrift, Erklärung und echter Link zum zugehörigen Bereich         |
+| PreviewSwitcher            | Tastaturbedienbare Buttons zum Umschalten zwischen Beispiel- und Leeransicht |
+| ModulePlaceholder          | Gemeinsamer ehrlicher Leerzustand für noch nicht verfügbare Module           |
+| ThemeToggle                | Systempräferenz beim Einstieg; explizite Auswahl bleibt lokal erhalten       |
+| Error / Loading / NotFound | Verständliche Zustände ohne interne Fehlerdetails oder falsche Nullwerte     |
 
 `components.json` ist für Tailwind 4, CSS-Variablen, New York und den Alias `@/components/ui` vorbereitet. Weitere shadcn/ui-Komponenten werden bei tatsächlichem Bedarf ergänzt. Card-Titel sind semantische Überschriften; deren Ebene muss bei späterer Wiederverwendung zum Kontext passen.
 
@@ -31,6 +35,10 @@ Alle interaktiven Elemente sind echte Links oder Buttons, besitzen sichtbaren Ta
 
 Browsertests prüfen Desktop, 375 px Mobilbreite, Light/Dark-Umschaltung, Persistenz, Skip-Link und Überlauf. Diese Prüfungen ersetzen keine vollständige Accessibility-Prüfung der späteren Fachfunktionen.
 
-## Weiterentwicklung in Phase 2
+## Dashboard-Prototyp
 
-KPI-, Fortschritts- und Formularbausteine mit echten Zuständen ausarbeiten, Kontraste und Tastaturabläufe vertieft prüfen und einen statischen Dashboard-Prototyp auf PRD-Journeys abstimmen. Keine erfundenen Kontostände, Fake-Erfolge oder bereits nutzbar dargestellten Formulare in der Foundation-Vorschau.
+Die Startseite zeigt Monatssaldo, Tagesplan, Zielfortschritt und einen begründeten Budgethinweis. Der Hinweis auf fiktive Daten steht vor allen Kennzahlen. Der Beispieltag und der Monat sind sichtbar fixiert; der Saldo nennt seine Einnahmen-/Ausgabenbasis und ist ausdrücklich kein Kontostand. Fortschrittsbalken haben zugängliche Namen und Werte, Prozent- und Betragstexte sind zusätzlich sichtbar.
+
+„Ohne Einträge“ ersetzt sämtliche Beispielwerte durch erklärende Leerzustände. Fehlende Daten erscheinen weder als 0 € noch als vermeintlich erledigte Aufgaben. Alle angebotenen Links führen zu vorhandenen Modulvorschauen; Aufgaben lassen sich noch nicht abhaken. Die gewählte Vorschau wird nicht gespeichert. Die Ladeansicht verwendet Platzhalter ohne erfundene Kennzahlen; Fehleransicht und Retry bleiben auf Routenebene.
+
+Die Umsetzung benötigt keine zusätzlichen Pakete. Formulare, echte Kontodaten, automatisch berechnete Hinweise und AI Insights gehören zu späteren Fachphasen. Die noch ausstehende Nutzerprüfung aus J05 wird durch den Prototyp und seine Browsertests nicht als erfüllt betrachtet.

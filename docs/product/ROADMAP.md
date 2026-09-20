@@ -8,11 +8,11 @@ Quellen: [README](../../README.md), Abschnitte 9, 10 und 21, sowie [PRD](PRD.md)
 
 - Die bereitgestellte README wurde unverändert in den Projektordner übernommen.
 - Phase 0 ist als PRD-Entwurf mit fünf Kernjourneys, Anforderungen R01–R14, Erfolgskriterien und gekennzeichneten offenen Entscheidungen ausgearbeitet.
-- Das lokale Projektfundament ist implementiert: Git auf `feat/project-foundation`, Next.js-App, pnpm-Lockfile, Lint/Typecheck/Tests/Build, Formatter und GitHub-Actions-Workflow.
-- Eine minimale responsive Shell für Home, Money, Plan, Goals und AI mit Light/Dark Mode ist als begrenzter Vorgriff auf Phase 2 vorhanden. Es gibt noch keine Fachfunktionen oder gespeicherten Nutzerdaten.
+- Das lokale Projektfundament ist implementiert: Next.js-App, pnpm-Lockfile, Lint/Typecheck/Tests/Build, Formatter und GitHub-Actions-Workflow. Der Foundation-Commit liegt im vom Nutzer vorgegebenen GitHub-Repository auf `main`; der Dashboard-Task verwendet `codex/dashboard-and-ci`.
+- Die responsive Shell für Home, Money, Plan, Goals und AI mit Light/Dark Mode wurde auf Nutzerwunsch um den statischen Dashboard-Prototyp aus Phase 2 erweitert: Kennzahlen, Today, Goals, begründeter Budgethinweis sowie umschaltbare Beispiel-/Leeransicht. Alle Beispieldaten sind sichtbar als fiktiv gekennzeichnet. Es gibt noch keine Fachfunktionen oder gespeicherten Nutzerdaten.
 - `AGENTS.md` und `CLAUDE.md` wurden aus der README abgeleitet; Architektur, Datenmodell, Designgrundlage und lokale Einrichtung sind dokumentiert.
 - Die lokale Supabase-Umgebung läuft unter Docker Desktop und WSL 2. Dienstzustand, Wiederanlauf, öffentliche Verbindungskonfiguration und ausschließlich lokale Ports sind geprüft. Ein Docker-Desktop-Startfehler samt angewendetem Workaround ist dokumentiert.
-- Phase 1 bleibt hinsichtlich externer Voraussetzungen offen: GitHub-Ziel, tatsächlicher CI-Lauf und Supabase Cloud sind noch nicht eingerichtet. Details stehen in [DEVELOPMENT.md](../DEVELOPMENT.md) und [LOCAL_SUPABASE.md](../LOCAL_SUPABASE.md).
+- GitHub ist angebunden und Actions wurde ausgelöst; der konkrete Prüfstand steht in [DASHBOARD_STATUS.md](../DASHBOARD_STATUS.md). Supabase Cloud bleibt offen. Details zur lokalen Einrichtung stehen in [DEVELOPMENT.md](../DEVELOPMENT.md) und [LOCAL_SUPABASE.md](../LOCAL_SUPABASE.md).
 
 ## Entwicklungsphasen
 

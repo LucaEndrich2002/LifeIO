@@ -1,10 +1,12 @@
 # LifeOS – Systemarchitektur
 
-Stand: Projektfundament, 18.09.2026. Produktumfang: [PRD](../product/PRD.md).
+Stand: Projektfundament und Dashboard-Prototyp, 19.09.2026. Produktumfang: [PRD](../product/PRD.md).
 
 ## Aktuell implementiert
 
-Eine Next.js-App mit App Router, React und TypeScript Strict Mode. Die fünf öffentlichen Vorschauseiten sind statisch und verwenden keine Nutzerdaten. Tailwind und lokale shadcn/ui-Bausteine bilden die Oberfläche. Die Shell funktioniert ohne Konto, Datenbank oder KI-Schlüssel.
+Eine Next.js-App mit App Router, React und TypeScript Strict Mode. Die fünf öffentlichen Vorschauseiten sind statisch und verwenden keine Nutzerdaten. Home zeigt einen ausdrücklich gekennzeichneten Dashboard-Prototyp mit fiktiven Beispieldaten und einer umschaltbaren Ansicht ohne Einträge. Tailwind und lokale shadcn/ui-Bausteine bilden die Oberfläche. Die Shell funktioniert ohne Konto, Datenbank oder KI-Schlüssel.
+
+Die Dashboard-Inhalte bleiben Server Components. Nur `PreviewSwitcher` ist für die Umschaltung interaktiv; er erhält die beiden serverseitig gerenderten Ansichten als React-Nodes. Die Auswahl lebt ausschließlich im Komponentenstatus, ohne Speicherung oder Netzwerkaufruf. Beispielbeträge sind fertige Anzeigetexte, Fortschrittswerte feste Prozentangaben; es gibt hier keine Finanzberechnung oder persistierten Geldwerte. Der Beispieltag ist ausdrücklich der 19.09.2026, kein dynamisch ermitteltes persönliches „Heute“.
 
 Supabase-Clientfabriken und Konfigurationsvalidierung sind vorbereitet, aber in keiner Seite eingebunden. Es gibt keine Authentifizierung, geschützten Fachrouten, Datenbanktabellen oder KI-Aufrufe. Die öffentliche Vorschau darf erst mit Zugriffsschutz um persönliche Inhalte erweitert werden.
 
@@ -23,9 +25,9 @@ Supabase Auth / PostgreSQL mit RLS
 | Ort                 | Verantwortung                                                                           |
 | ------------------- | --------------------------------------------------------------------------------------- |
 | `src/app`           | Routen, Layout, Metadaten, globale Fehler-/Ladezustände; keine Fachberechnungen         |
-| `src/components/ui` | Kleine lokale UI-Bausteine nach shadcn/ui; derzeit Card                                 |
+| `src/components/ui` | Lokale Card nach shadcn/ui und nativer HTML-Fortschrittsbalken                          |
 | `src/components`    | Gemeinsame Shell, Navigation, Darstellung und Theme                                     |
-| `src/features/home` | Derzeit statischer Home-Einstieg                                                        |
+| `src/features/home` | Dashboard-Prototyp mit Beispieldaten, Leerzustand und lokalem Ansichtswechsel           |
 | `src/lib`           | Konfiguration, Browserclient und allgemeine UI-Hilfen                                   |
 | `src/server`        | Durch `server-only` geschützte Infrastruktur; später autorisierte Repository-Funktionen |
 | `supabase`          | Versionierte lokale Konfiguration; Migrationen und Seeds kommen mit den ersten Tabellen |
@@ -78,7 +80,7 @@ Spätere Schreibaktionen wie `create_task`, `create_goal`, `update_goal` und `cr
 
 Vitest/RTL prüfen die Konfigurationsgrenze und zugängliche Navigation. Playwright prüft Navigation, direkte Routen, Theme-Persistenz, Tastaturzugang und 404 auf Desktop und Mobilgerät. Mit Datenpersistenz folgen Integrationstests gegen lokale Supabase mit mindestens zwei Nutzern und anonymem Zugriff.
 
-GitHub Actions installiert aus dem Lockfile und führt Formatterprüfung, Lint, Typecheck, Tests, Build und Browser-Smoke-Tests ohne Cloud-Secrets aus. Der Workflow benötigt nur `contents: read` und führt keine Deployments aus. Hosting bleibt gemäß README für später Vercel plus Supabase Cloud.
+GitHub Actions installiert aus dem Lockfile und führt Formatterprüfung, Lint, Typecheck, Tests, Build und Browser-Smoke-Tests ohne Cloud-Secrets aus. Der Workflow läuft bei Push, Pull Request oder manueller Auslösung. Browserberichte und Screenshots werden als Artefakt für sieben Tage aufbewahrt. Der Workflow benötigt nur `contents: read` und führt keine Deployments aus. Hosting bleibt gemäß README für später Vercel plus Supabase Cloud.
 
 Vor Beta fehlen unter anderem umfassende Auth-/RLS-Tests, Datenflüsse und Löschkonzept, Backup-/Restore-Prüfung, Rate Limits, eine zur Auth-Architektur passende CSP und produktive Secret-Verwaltung. Die jetzigen Basis-HTTP-Header ersetzen diese Arbeiten nicht.
 
