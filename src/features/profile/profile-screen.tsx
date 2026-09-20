@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { supportedTimeZones } from "@/domain/profile";
 import { SignOutButton } from "@/features/auth/sign-out-button";
@@ -16,6 +17,14 @@ export async function ProfileScreen({
     .eq("user_id", user.id)
     .maybeSingle();
   if (error) throw new Error("Profile could not be loaded.");
+  const onboarding = profile
+    ? await supabase
+        .from("onboarding")
+        .select("completed_at")
+        .eq("user_id", user.id)
+        .maybeSingle()
+    : null;
+  if (onboarding?.error) throw new Error("Onboarding status unavailable.");
   return (
     <div className="space-y-7">
       {passwordUpdated && (
@@ -45,10 +54,21 @@ export async function ProfileScreen({
           />
         </CardContent>
       </Card>
-      <p className="text-xs leading-relaxed text-muted-foreground">
-        Diese Profilangaben werden für dein Konto gespeichert. Einkommen,
-        Fixkosten und Sparziel kommen im nächsten Onboarding-Schritt hinzu.
-      </p>
+      {profile ? (
+        <Link
+          href="/account/onboarding"
+          className="flex min-h-12 items-center justify-center rounded-xl border border-primary px-5 py-3 text-sm font-medium text-primary"
+        >
+          {onboarding?.data?.completed_at
+            ? "Meine Startübersicht öffnen"
+            : "Weiter zur finanziellen Einrichtung"}
+        </Link>
+      ) : (
+        <p className="text-xs leading-relaxed text-muted-foreground">
+          Speichere zuerst dein Profil. Danach kannst du Einkommen, Fixkosten
+          und dein erstes Sparziel einrichten.
+        </p>
+      )}
       <SignOutButton />
     </div>
   );

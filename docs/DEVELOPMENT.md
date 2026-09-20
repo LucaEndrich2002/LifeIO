@@ -14,7 +14,7 @@ Die Vorschau läuft auf `http://127.0.0.1:3000`. Für Windows PowerShell mit ges
 
 Die Shell benötigt keine `.env.local`, keine Cloud-Verbindung und keinen Login. Sie speichert keine persönlichen Daten. Nur die Farbschema-Präferenz wird im Browser gespeichert. Auf Home kann zwischen fiktiven Beispieldaten und einer Vorschau ohne Einträge umgeschaltet werden; dieser Ansichtswechsel ist nicht persistent.
 
-Der Kontobereich ist separat: `/auth/login` und `/account` benötigen die lokale Supabase-Konfiguration und speichern nach Anmeldung ein echtes privates Profil. „Mein Konto“ führt von der Vorschau dorthin. Registrierung, Codes und Passwortwiederherstellung sind in [AUTH_PROFILE_STATUS.md](AUTH_PROFILE_STATUS.md) beschrieben. E-Mails landen im lokalen Testpostfach auf Port 54324.
+Der Kontobereich ist separat: `/auth/login` und `/account` benötigen die lokale Supabase-Konfiguration und speichern nach Anmeldung ein echtes privates Profil. „Mein Konto“ führt von der Vorschau dorthin. Vom gespeicherten Profil führt ein Link zur finanziellen Einrichtung; `/account/onboarding` setzt diese fort, `/account/overview` zeigt nach Abschluss die persönliche Startübersicht. Vor dem Start alle Migrationen mit `pnpm exec supabase migration up --local` anwenden. Details: [AUTH_PROFILE_STATUS.md](AUTH_PROFILE_STATUS.md) und [FINANCIAL_ONBOARDING_STATUS.md](FINANCIAL_ONBOARDING_STATUS.md). E-Mails landen im lokalen Testpostfach auf Port 54324.
 
 ## Qualitätsprüfungen
 

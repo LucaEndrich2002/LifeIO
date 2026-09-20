@@ -1,17 +1,18 @@
 # LifeOS – Roadmap
 
-Stand: 19.09.2026
+Stand: 20.09.2026
 
 Quellen: [README](../../README.md), Abschnitte 9, 10 und 21, sowie [PRD](PRD.md). Diese Roadmap beschreibt die Reihenfolge und Abnahmebedingungen, keine bereits implementierten Funktionen.
 
 ## Aktueller Stand
 
-- Auf den Fortsetzungsauftrag folgt das erste Inkrement von Phase 3: Kontozugang, E-Mail-Codes, Passwortwiederherstellung und privates Profil mit RLS. Der Prüfstand steht in [AUTH_PROFILE_STATUS.md](../AUTH_PROFILE_STATUS.md). Einkommen, Fixkosten, Sparziel und der Abschluss des Onboardings bleiben der nächste begrenzte Schritt; R02/J01 sind noch nicht vollständig umgesetzt.
+- Das zweite Inkrement von Phase 3 ergänzt die finanzielle Einrichtung: Einkommen, monatliche Fixkosten und ein Sparziel mit Auslassentscheidungen, Wiederaufnahme, atomarem Speichern und persönlicher Startübersicht. Umfang, Regeln und Abnahme stehen in [FINANCIAL_ONBOARDING_STATUS.md](../FINANCIAL_ONBOARDING_STATUS.md). Optionale Aufgaben und die vollständige laufende Verwaltung bleiben spätere Inkremente; R02/J01 sind noch nicht insgesamt erfüllt.
+- Kontozugang, E-Mail-Codes, Passwortwiederherstellung und privates Profil mit RLS sind implementiert und geprüft: [AUTH_PROFILE_STATUS.md](../AUTH_PROFILE_STATUS.md).
 
 - Die bereitgestellte README wurde unverändert in den Projektordner übernommen.
 - Phase 0 ist als PRD-Entwurf mit fünf Kernjourneys, Anforderungen R01–R14, Erfolgskriterien und gekennzeichneten offenen Entscheidungen ausgearbeitet.
 - Das lokale Projektfundament ist implementiert: Next.js-App, pnpm-Lockfile, Lint/Typecheck/Tests/Build, Formatter und GitHub-Actions-Workflow. Der Foundation-Commit liegt im vom Nutzer vorgegebenen GitHub-Repository auf `main`; der Dashboard-Task verwendet `codex/dashboard-and-ci`.
-- Die responsive Shell für Home, Money, Plan, Goals und AI mit Light/Dark Mode wurde auf Nutzerwunsch um den statischen Dashboard-Prototyp aus Phase 2 erweitert: Kennzahlen, Today, Goals, begründeter Budgethinweis sowie umschaltbare Beispiel-/Leeransicht. Alle Beispieldaten sind sichtbar als fiktiv gekennzeichnet. Es gibt noch keine Fachfunktionen oder gespeicherten Nutzerdaten.
+- Die responsive Shell für Home, Money, Plan, Goals und AI mit Light/Dark Mode enthält den statischen Dashboard-Prototyp aus Phase 2. Alle dortigen Beispieldaten sind sichtbar als fiktiv gekennzeichnet. Echte persönliche Daten befinden sich im geschützten Kontobereich einschließlich der finanziellen Startübersicht.
 - `AGENTS.md` und `CLAUDE.md` wurden aus der README abgeleitet; Architektur, Datenmodell, Designgrundlage und lokale Einrichtung sind dokumentiert.
 - Die lokale Supabase-Umgebung läuft unter Docker Desktop und WSL 2. Dienstzustand, Wiederanlauf, öffentliche Verbindungskonfiguration und ausschließlich lokale Ports sind geprüft. Ein Docker-Desktop-Startfehler samt angewendetem Workaround ist dokumentiert.
 - GitHub ist angebunden und Actions wurde ausgelöst; der konkrete Prüfstand steht in [DASHBOARD_STATUS.md](../DASHBOARD_STATUS.md). Supabase Cloud bleibt offen. Details zur lokalen Einrichtung stehen in [DEVELOPMENT.md](../DEVELOPMENT.md) und [LOCAL_SUPABASE.md](../LOCAL_SUPABASE.md).

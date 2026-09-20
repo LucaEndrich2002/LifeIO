@@ -1,4 +1,4 @@
-﻿export type Json =
+export type Json =
   | string
   | number
   | boolean
@@ -9,6 +9,173 @@
 export type Database = {
   public: {
     Tables: {
+      expenses: {
+        Row: {
+          amount_minor: number;
+          created_at: string;
+          currency: string;
+          id: string;
+          name: string;
+          onboarding_slot: number;
+          recurrence: string;
+          start_month: string;
+          user_id: string;
+        };
+        Insert: {
+          amount_minor: number;
+          created_at?: string;
+          currency?: string;
+          id?: string;
+          name: string;
+          onboarding_slot: number;
+          recurrence?: string;
+          start_month: string;
+          user_id: string;
+        };
+        Update: {
+          amount_minor?: number;
+          created_at?: string;
+          currency?: string;
+          id?: string;
+          name?: string;
+          onboarding_slot?: number;
+          recurrence?: string;
+          start_month?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "expenses_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["user_id"];
+          },
+        ];
+      };
+      goals: {
+        Row: {
+          created_at: string;
+          currency: string;
+          current_minor: number;
+          id: string;
+          monthly_minor: number;
+          name: string;
+          onboarding_slot: number;
+          target_minor: number;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          currency?: string;
+          current_minor: number;
+          id?: string;
+          monthly_minor: number;
+          name: string;
+          onboarding_slot?: number;
+          target_minor: number;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          currency?: string;
+          current_minor?: number;
+          id?: string;
+          monthly_minor?: number;
+          name?: string;
+          onboarding_slot?: number;
+          target_minor?: number;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "goals_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["user_id"];
+          },
+        ];
+      };
+      incomes: {
+        Row: {
+          amount_minor: number;
+          created_at: string;
+          currency: string;
+          id: string;
+          month: string;
+          name: string;
+          onboarding_slot: number;
+          user_id: string;
+        };
+        Insert: {
+          amount_minor: number;
+          created_at?: string;
+          currency?: string;
+          id?: string;
+          month: string;
+          name: string;
+          onboarding_slot?: number;
+          user_id: string;
+        };
+        Update: {
+          amount_minor?: number;
+          created_at?: string;
+          currency?: string;
+          id?: string;
+          month?: string;
+          name?: string;
+          onboarding_slot?: number;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "incomes_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["user_id"];
+          },
+        ];
+      };
+      onboarding: {
+        Row: {
+          completed_at: string | null;
+          expenses_status: string;
+          goal_status: string;
+          income_status: string;
+          month: string;
+          revision: number;
+          user_id: string;
+        };
+        Insert: {
+          completed_at?: string | null;
+          expenses_status?: string;
+          goal_status?: string;
+          income_status?: string;
+          month: string;
+          revision?: number;
+          user_id: string;
+        };
+        Update: {
+          completed_at?: string | null;
+          expenses_status?: string;
+          goal_status?: string;
+          income_status?: string;
+          month?: string;
+          revision?: number;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "onboarding_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: true;
+            referencedRelation: "profiles";
+            referencedColumns: ["user_id"];
+          },
+        ];
+      };
       profiles: {
         Row: {
           created_at: string;
@@ -42,6 +209,14 @@ export type Database = {
     };
     Functions: {
       is_supported_time_zone: { Args: { candidate: string }; Returns: boolean };
+      onboarding_amount: {
+        Args: { allow_zero?: boolean; value: Json };
+        Returns: number;
+      };
+      save_onboarding_step: {
+        Args: { p_payload: Json; p_revision: number; p_step: string };
+        Returns: undefined;
+      };
     };
     Enums: {
       [_ in never]: never;
