@@ -8,7 +8,7 @@ Stand: 20.09.2026. Arbeitsbranch: `codex/auth-and-profile`, aufgebaut auf dem Da
 
 Das Profil speichert Anzeigename, explizite IANA-Zeitzone und EUR. Deutsch, Montag als Wochenbeginn und Europe/Berlin als änderbare Voreinstellung sind die im Task vorgeschlagenen Arbeitsannahmen. Es wurde keine abweichende Nutzervorgabe übermittelt. Ein erneutes Speichern aktualisiert denselben Datensatz. Der Kontobereich verwendet eigene Lade-/Fehlerzustände und erklärt die tatsächliche Speicherung; die öffentliche Dashboard-Vorschau bleibt klar als fiktiv gekennzeichnet.
 
-Der Profil-Schritt ist der Beginn des Onboardings. Einkommen, Fixkosten, Sparziel, optionale Aufgaben und der Abschlussstatus aus R02/J01 sind noch nicht implementiert. Phase 3 ist deshalb nicht insgesamt abgeschlossen. Es werden keine fiktiven Finanzwerte in ein neues Konto übernommen.
+Dieser Bericht beschreibt den ersten Auth-/Profil-Stand. Das Folgeinkrement ergänzt inzwischen Einkommen, Fixkosten, Sparziel und den finanziellen Abschlussstatus: [FINANCIAL_ONBOARDING_STATUS.md](FINANCIAL_ONBOARDING_STATUS.md). Optionale Aufgaben bleiben offen; Phase 3 ist nicht insgesamt abgeschlossen. Es werden keine fiktiven Finanzwerte in ein neues Konto übernommen.
 
 ## Lokal ausprobieren
 
@@ -50,4 +50,4 @@ GitHub Actions startet Supabase mit demselben Schema, führt sowohl RLS- als auc
 
 ## Nächster begrenzter Schritt
 
-Das restliche Onboarding aus R02: Einkommen, Fixkosten und erstes Sparziel mit ausdrücklich speicherbaren Auslassentscheidungen, Wiederaufnahme und einem korrekten Abschlussstatus. Vor finanzieller Persistenz sind Betragsgrenzen und die dafür relevanten Regeln aus O02/O03 im [PRD](product/PRD.md) festzulegen. Vollständige Money-/Goals-Verwaltung, Cloud-Betrieb und Deployment bleiben eigene Aufgaben.
+Der hier ursprünglich vorgesehene finanzielle Einstieg ist im [Folgeinkrement](FINANCIAL_ONBOARDING_STATUS.md) umgesetzt. Vollständige Money-/Goals-Verwaltung, optionale Aufgaben, Cloud-Betrieb und Deployment bleiben eigene Aufgaben.

@@ -1,10 +1,12 @@
 # LifeOS – beabsichtigtes V1-Datenmodell
 
-Dieses Dokument beschreibt die Entitäten aus der README. Im ersten Auth-/Profil-Inkrement existiert `public.profiles`; die übrigen Entitäten bleiben Entwurf. Offene Produktregeln stehen im [PRD, Abschnitt 8](../product/PRD.md).
+Dieses Dokument beschreibt die Entitäten aus der README. Implementiert sind `profiles` sowie die initialen Finanzdatensätze `incomes`, `expenses`, `goals` und der Einrichtungsstatus `onboarding`. Die übrigen Entitäten bleiben Entwurf. Offene Produktregeln stehen im [PRD, Abschnitt 8](../product/PRD.md).
 
 ## Bereits implementiert
 
-`profiles` verwendet `user_id` als Primär-/Fremdschlüssel zu `auth.users`, `display_name`, `time_zone`, `currency = EUR` sowie serverseitige Zeitstempel. Constraints, Eigentümer-RLS und explizite Spaltenrechte sind Teil derselben Migration. Die Löschung eines Auth-Nutzers entfernt sein Profil per Kaskade. Ein finanzieller Onboarding-Abschlussstatus wird erst mit dem entsprechenden Ablauf ergänzt; ein gespeichertes Profil bedeutet noch nicht abgeschlossenes Onboarding.
+`profiles` verwendet `user_id` als Primär-/Fremdschlüssel zu `auth.users`, `display_name`, `time_zone`, `currency = EUR` sowie serverseitige Zeitstempel. Constraints, Eigentümer-RLS und explizite Spaltenrechte sind Teil derselben Migration. Die Löschung eines Auth-Nutzers entfernt sein Profil und dessen initiale Finanzdaten ausdrücklich per Kaskade. Ein gespeichertes Profil bedeutet noch nicht abgeschlossenes Onboarding.
+
+`incomes` speichert einen positiven EUR-Betrag mit Monat, `expenses` die monatlichen Fixkostenregeln ab einem Startmonat, `goals` Zielbetrag, Sparstand und geplanten Beitrag. Beträge sind `bigint` mit Obergrenze 99.999.999.999 Cent; die drei Fachtabellen haben stabile UUIDs und eindeutige Slots für die initialen Einträge. `onboarding` speichert ausschließlich Schrittentscheidungen, Startmonat, Revision und finanziellen Abschlusszeitpunkt. Ein eng begrenztes, authentifiziertes Datenbank-RPC verändert die Fachdatensätze und den Status gemeinsam in einer Transaktion; direkte Schreibrechte sind entzogen, Lesen ist durch Eigentümer-RLS geschützt. Vollständige Details und die spätere Erweiterung der Slots: [FINANCIAL_ONBOARDING_STATUS.md](../FINANCIAL_ONBOARDING_STATUS.md).
 
 ## Entitäten
 

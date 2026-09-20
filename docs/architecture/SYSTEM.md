@@ -8,7 +8,7 @@ Eine Next.js-App mit App Router, React und TypeScript Strict Mode. Die fünf öf
 
 Die Dashboard-Inhalte bleiben Server Components. Nur `PreviewSwitcher` ist für die Umschaltung interaktiv; er erhält die beiden serverseitig gerenderten Ansichten als React-Nodes. Die Auswahl lebt ausschließlich im Komponentenstatus, ohne Speicherung oder Netzwerkaufruf. Beispielbeträge sind fertige Anzeigetexte, Fortschrittswerte feste Prozentangaben; es gibt hier keine Finanzberechnung oder persistierten Geldwerte. Der Beispieltag ist ausdrücklich der 19.09.2026, kein dynamisch ermitteltes persönliches „Heute“.
 
-`/auth/[mode]` bietet Anmeldung, Registrierung, Codebestätigung und Passwortwiederherstellung. `/account` und `/account/password` verlangen eine verifizierte Identität. Das Profil ist die erste private Tabelle mit RLS. Die öffentliche Vorschau liegt in der Routengruppe `(preview)` und bleibt statisch; Konto und Auth verwenden ein eigenes Layout. Geldwerte, Aufgaben und Ziele werden weiterhin nicht gespeichert. Siehe [AUTH_PROFILE_STATUS.md](../AUTH_PROFILE_STATUS.md).
+`/auth/[mode]` bietet Anmeldung, Registrierung, Codebestätigung und Passwortwiederherstellung. Der gesamte `/account`-Bereich verlangt eine verifizierte Identität. Neben Profil und Passwort gibt es `/account/onboarding/[step]` für den finanziellen Einstieg und `/account/overview` für dessen persönliche Startübersicht. Die öffentliche Vorschau liegt in der Routengruppe `(preview)` und bleibt statisch; Konto und Auth verwenden ein eigenes Layout. Details: [AUTH_PROFILE_STATUS.md](../AUTH_PROFILE_STATUS.md) und [FINANCIAL_ONBOARDING_STATUS.md](../FINANCIAL_ONBOARDING_STATUS.md).
 
 ## Modularer Monolith
 
@@ -33,7 +33,7 @@ Supabase Auth / PostgreSQL mit RLS
 | `supabase`          | Lokale Konfiguration, Auth-Mailtemplates und Profilmigration mit RLS                    |
 | `tests/e2e`         | Playwright-Flows gegen den Produktionsbuild                                             |
 
-Die Featureordner `auth` und `profile` enthalten die Kontooberfläche; `src/domain` validiert Auth-/Profileingaben, `src/types` enthält generierte Datenbanktypen und `tests/integration` prüft Profilrechte. Weitere Module entstehen bei tatsächlichem Bedarf.
+Die Featureordner `auth`, `profile` und `onboarding` enthalten die Kontooberfläche; `src/domain` validiert Eingaben und definiert exakte EUR-/Monatsregeln. `src/types` enthält generierte Datenbanktypen. `tests/integration` prüft Profil- und Finanzrechte sowie atomare Einrichtungsschritte. Die Finanzmutation verwendet ein begrenztes Datenbank-RPC mit eigener Eigentümerprüfung, leerem `search_path`, expliziten Funktionsrechten und Revisionsvergleich. Die Anwendung bleibt beim normalen sitzungsgebundenen Supabase-Client. Weitere Module entstehen bei tatsächlichem Bedarf.
 
 Eine Route ruft einen konkreten Anwendungsfall auf. Dieser validiert Eingaben und Identität, nutzt reine Domain-Funktionen und führt autorisierte Datenzugriffe aus. Domain-Funktionen importieren weder React noch Next.js noch Supabase. Module teilen definierte Services und `EntityLink`, nicht beliebige interne Implementierungen. Kein Event-Bus, keine Microservices und kein generisches Repository-Framework im Fundament.
 

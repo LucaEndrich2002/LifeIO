@@ -2,7 +2,7 @@ export default function AccountLoading() {
   return (
     <div role="status" className="space-y-6">
       <p className="text-sm text-muted-foreground">
-        Dein Profil wird geladen …
+        Dein persönlicher Bereich wird geladen …
       </p>
       <div
         aria-hidden="true"
