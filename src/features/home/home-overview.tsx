@@ -1,11 +1,16 @@
 import Link from "next/link";
 import {
+  ArrowRight,
   ArrowUpRight,
   CalendarDays,
-  Sparkles,
+  Circle,
+  Clock3,
+  Flag,
   Target,
   Wallet,
 } from "lucide-react";
+import { EmptyState } from "@/components/empty-state";
+import { KpiCard } from "@/components/kpi-card";
 import {
   Card,
   CardContent,
@@ -13,142 +18,293 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { PreviewSwitcher } from "@/features/home/preview-switcher";
 
-const areas = [
+// Display-only fixtures for the Phase 2 prototype, not financial records or calculations.
+const exampleGoals = [
   {
-    href: "/money",
-    name: "Money",
-    icon: Wallet,
-    title: "Dein Geld im Blick",
-    description:
-      "Einkommen, Ausgaben und Budgets. Verstehe, wie dein Monat aussieht.",
-    tag: "Finanzieller Spielraum",
+    name: "Notgroschen",
+    detail: "Mehr Sicherheit im Alltag",
+    amount: "3.600,00 €",
+    target: "6.000,00 €",
+    progress: 60,
   },
   {
-    href: "/plan",
-    name: "Plan",
-    icon: CalendarDays,
-    title: "Raum für deinen Tag",
-    description:
-      "Aufgaben und Termine. Finde heraus, was als Nächstes wichtig ist.",
-    tag: "Zeit für das Wesentliche",
-  },
-  {
-    href: "/goals",
-    name: "Goals",
-    icon: Target,
-    title: "Schritt für Schritt weiter",
-    description:
-      "Deine Ziele und dein Fortschritt. Mach aus guten Absichten einen Plan.",
-    tag: "Eine Richtung, die zählt",
+    name: "Auszeit am Meer",
+    detail: "Eine Reise im Sommer 2027",
+    amount: "840,00 €",
+    target: "1.200,00 €",
+    progress: 70,
   },
 ];
 
+function AreaLink({ href, children }: { href: string; children: string }) {
+  return (
+    <Link
+      href={href}
+      className="inline-flex min-h-11 items-center gap-2 rounded-md text-xs font-medium text-primary hover:underline"
+    >
+      {children}
+      <ArrowUpRight className="size-3.5" aria-hidden="true" />
+    </Link>
+  );
+}
+
+function ExampleDashboard() {
+  return (
+    <div className="space-y-6">
+      <section
+        aria-label="Auf einen Blick"
+        className="grid gap-4 md:grid-cols-3"
+      >
+        <KpiCard
+          label="Monatssaldo · September"
+          value="820,00 €"
+          description="3.200,00 € Einnahmen − 2.380,00 € Ausgaben"
+          icon={Wallet}
+        />
+        <KpiCard
+          label="Heute geplant"
+          value="3 Einträge"
+          description="2 Aufgaben und 1 Termin für deinen Tag"
+          icon={CalendarDays}
+        />
+        <KpiCard
+          label="Deine Ziele"
+          value="2 aktiv"
+          description="Kleine Schritte für größere Pläne"
+          icon={Target}
+        />
+      </section>
+      <div className="grid items-start gap-6 xl:grid-cols-[1.15fr_1fr]">
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between gap-3">
+              <CardTitle>Heute</CardTitle>
+              <AreaLink href="/plan">Plan ansehen</AreaLink>
+            </div>
+            <CardDescription>
+              Beispieltag · Samstag, 19. September 2026
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ul aria-label="Beispiel-Tagesplan" className="space-y-2">
+              <li className="flex gap-4 rounded-xl bg-accent/60 p-4">
+                <span className="mt-0.5 text-sm font-medium tabular-nums">
+                  10:00
+                </span>
+                <div className="min-w-0 border-l border-primary/25 pl-4">
+                  <p className="text-sm font-medium">
+                    Zeit für den Wochenüberblick
+                  </p>
+                  <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <Clock3 className="size-3" aria-hidden="true" />
+                    Termin · 30 Minuten
+                  </p>
+                </div>
+              </li>
+              <li className="flex items-start gap-4 px-4 py-5">
+                <Circle
+                  className="mt-0.5 size-4 shrink-0 text-muted-foreground"
+                  aria-hidden="true"
+                />
+                <div>
+                  <p className="text-sm font-medium">
+                    Ausgaben der Woche durchsehen
+                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Aufgabe · Heute fällig
+                  </p>
+                </div>
+              </li>
+              <li className="flex items-start gap-4 border-t px-4 py-5">
+                <Circle
+                  className="mt-0.5 size-4 shrink-0 text-muted-foreground"
+                  aria-hidden="true"
+                />
+                <div>
+                  <p className="text-sm font-medium">Reiseideen sammeln</p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Aufgabe · Gehört zu „Auszeit am Meer“
+                  </p>
+                </div>
+              </li>
+            </ul>
+            <p className="mt-3 border-t pt-4 text-xs leading-relaxed text-muted-foreground">
+              In dieser Vorschau lassen sich Einträge noch nicht bearbeiten oder
+              abhaken.
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between gap-3">
+              <CardTitle>Deine Ziele</CardTitle>
+              <AreaLink href="/goals">Goals ansehen</AreaLink>
+            </div>
+            <CardDescription>Was dir langfristig wichtig ist.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ul className="space-y-6">
+              {exampleGoals.map((goal) => (
+                <li
+                  key={goal.name}
+                  className="border-b pb-6 last:border-0 last:pb-0"
+                >
+                  <div className="mb-4 flex items-start justify-between gap-3">
+                    <div>
+                      <h3 className="text-sm font-medium">{goal.name}</h3>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        {goal.detail}
+                      </p>
+                    </div>
+                    <span className="rounded-lg bg-accent px-2 py-1 text-xs font-semibold text-primary tabular-nums">
+                      {goal.progress} %
+                    </span>
+                  </div>
+                  <Progress
+                    label={`Fortschritt: ${goal.name}`}
+                    value={goal.progress}
+                  />
+                  <p className="mt-3 text-xs text-muted-foreground tabular-nums">
+                    <span className="font-medium text-foreground">
+                      {goal.amount}
+                    </span>{" "}
+                    von {goal.target}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+      </div>
+      <section
+        aria-labelledby="attention-title"
+        className="grid gap-5 rounded-2xl border border-primary/20 bg-accent/50 p-6 sm:grid-cols-[auto_1fr_auto] sm:items-center"
+      >
+        <span className="flex size-11 items-center justify-center rounded-2xl bg-card text-primary">
+          <Flag className="size-5" aria-hidden="true" />
+        </span>
+        <div>
+          <h2 id="attention-title" className="font-semibold">
+            Ein Blick lohnt sich
+          </h2>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            Im Beispiel sind 270,00 € von 300,00 € Freizeitbudget verbraucht.
+            Für September bleiben in dieser Kategorie 30,00 €.
+          </p>
+        </div>
+        <AreaLink href="/money">Money ansehen</AreaLink>
+      </section>
+      <p className="text-xs leading-relaxed text-muted-foreground">
+        Der Monatssaldo zeigt im Beispiel Einnahmen minus erfasste Ausgaben im
+        September 2026. Er ist kein Kontostand und berücksichtigt keine weiteren
+        Rücklagen.
+      </p>
+    </div>
+  );
+}
+
+function EmptyDashboard() {
+  return (
+    <div className="space-y-6">
+      <section
+        aria-labelledby="empty-title"
+        className="rounded-2xl border bg-accent/40 p-6 sm:p-8"
+      >
+        <p className="mb-3 text-xs font-medium tracking-wide text-primary uppercase">
+          Vorschau ohne Einträge
+        </p>
+        <h2 id="empty-title" className="text-2xl font-semibold tracking-tight">
+          Dein Überblick beginnt mit dir.
+        </h2>
+        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+          Sobald du später dein Konto einrichtest und erste Einträge erfasst,
+          kommen hier Geld, Zeit und Ziele zusammen. Bis dahin kannst du die
+          geplanten Bereiche entdecken.
+        </p>
+      </section>
+      <div className="grid gap-4 md:grid-cols-3">
+        {[
+          {
+            area: "Money",
+            title: "Noch kein Monatsüberblick",
+            description:
+              "Mit deinem ersten Einkommen und deinen Ausgaben entsteht später dein Monatsüberblick.",
+            icon: Wallet,
+            href: "/money",
+            linkLabel: "Money entdecken",
+          },
+          {
+            area: "Heute",
+            title: "Platz für deinen Tag",
+            description:
+              "Deine ersten Aufgaben und Termine machen sichtbar, was als Nächstes ansteht.",
+            icon: CalendarDays,
+            href: "/plan",
+            linkLabel: "Plan entdecken",
+          },
+          {
+            area: "Deine Ziele",
+            title: "Was möchtest du erreichen?",
+            description:
+              "Ein erstes Ziel gibt deinen nächsten Schritten eine Richtung. Du bestimmst das Tempo.",
+            icon: Target,
+            href: "/goals",
+            linkLabel: "Goals entdecken",
+          },
+        ].map(({ area, ...props }) => (
+          <Card key={area}>
+            <CardHeader>
+              <CardTitle>{area}</CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1">
+              <EmptyState {...props} />
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+      <section
+        aria-labelledby="empty-attention-title"
+        className="flex items-start gap-4 rounded-2xl border p-6"
+      >
+        <ArrowRight
+          className="mt-0.5 size-5 shrink-0 text-primary"
+          aria-hidden="true"
+        />
+        <div>
+          <h2 id="empty-attention-title" className="text-sm font-medium">
+            Hinweise wachsen mit deinem Überblick
+          </h2>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            Ohne Einträge gibt es noch keine Grundlage für Budget- oder
+            Fristenhinweise.
+          </p>
+        </div>
+      </section>
+    </div>
+  );
+}
+
 export function HomeOverview() {
   return (
-    <div className="space-y-10">
-      <section
-        aria-labelledby="welcome-title"
-        className="relative overflow-hidden rounded-3xl border bg-accent/50 px-6 py-9 sm:px-10 sm:py-12"
-      >
-        <div className="relative z-10 max-w-xl">
-          <p className="mb-5 flex items-center gap-2 text-xs font-semibold tracking-[0.12em] text-primary uppercase">
-            <span className="size-1.5 rounded-full bg-primary" />
-            Willkommen bei LifeOS
-          </p>
-          <h1
-            id="welcome-title"
-            className="text-4xl leading-[1.12] font-semibold tracking-[-0.04em] sm:text-5xl"
-          >
-            Mehr Überblick.
-            <br />
-            <span className="text-primary">Mehr Raum fürs Leben.</span>
-          </h1>
-          <p className="mt-5 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base">
-            Dein Geld, deine Zeit und deine Ziele gehören zusammen. Hier
-            entsteht dein persönlicher Überblick.
-          </p>
-          <Link
-            href="/goals"
-            className="mt-8 inline-flex min-h-11 items-center gap-3 rounded-xl bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
-          >
-            Goals entdecken
-            <ArrowUpRight className="size-4" aria-hidden="true" />
-          </Link>
-        </div>
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-28 -bottom-36 size-[430px] rounded-full border border-primary/10 sm:-right-36 xl:-right-8"
-        >
-          <div className="absolute inset-12 rounded-full border border-primary/10" />
-          <div className="absolute inset-24 rounded-full border border-primary/10" />
-          <div className="absolute inset-36 rounded-full bg-primary/5" />
-        </div>
-      </section>
-      <section aria-labelledby="areas-title">
-        <div className="mb-5 flex items-end justify-between gap-4">
-          <h2 id="areas-title" className="text-lg font-semibold tracking-tight">
-            Was dir wichtig ist
-          </h2>
-          <span className="text-xs text-muted-foreground">
-            Drei Bereiche. Ein Zusammenhang.
-          </span>
-        </div>
-        <div className="grid gap-4 md:grid-cols-3">
-          {areas.map(({ href, name, icon: Icon, title, description, tag }) => (
-            <Card key={href} className="h-full">
-              <CardHeader>
-                <div className="mb-5 flex items-center justify-between">
-                  <span className="flex size-10 items-center justify-center rounded-xl bg-muted">
-                    <Icon className="size-5 text-primary" aria-hidden="true" />
-                  </span>
-                  <span className="text-[11px] text-muted-foreground">
-                    In Vorbereitung
-                  </span>
-                </div>
-                <CardTitle>{title}</CardTitle>
-                <CardDescription>{description}</CardDescription>
-              </CardHeader>
-              <CardContent className="mt-auto">
-                <p className="mb-6 text-xs text-muted-foreground">{tag}</p>
-                <Link
-                  href={href}
-                  className="flex items-center justify-between rounded-md py-1 text-sm font-medium hover:text-primary"
-                >
-                  {name} entdecken
-                  <ArrowUpRight className="size-4" aria-hidden="true" />
-                </Link>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </section>
-      <section
-        aria-labelledby="connections-title"
-        className="grid gap-6 border-t pt-8 sm:grid-cols-[1fr_auto] sm:items-center"
-      >
-        <div className="flex items-start gap-4">
-          <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-accent">
-            <Sparkles className="size-4 text-primary" aria-hidden="true" />
-          </span>
-          <div>
-            <h2 id="connections-title" className="text-sm font-semibold">
-              Die Zusammenhänge machen den Unterschied.
-            </h2>
-            <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">
-              Später verbindet Life AI deine Bereiche zu hilfreichen Einblicken.
-              Verständlich und unter deiner Kontrolle.
-            </p>
-          </div>
-        </div>
-        <Link
-          href="/ai"
-          className="inline-flex items-center gap-2 rounded-md text-sm font-medium text-primary"
-        >
-          AI kennenlernen
-          <ArrowUpRight className="size-4" aria-hidden="true" />
-        </Link>
-      </section>
+    <div className="space-y-7">
+      <header className="pb-1">
+        <p className="mb-3 text-xs font-medium tracking-[0.14em] text-primary uppercase">
+          Geld. Zeit. Ziele.
+        </p>
+        <h1 className="text-3xl leading-tight font-semibold tracking-[-0.035em] sm:text-4xl">
+          Dein Tag, mit Überblick.
+        </h1>
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground sm:text-base">
+          Alles Wichtige an einem Ort. Mehr Raum für das, was zählt.
+        </p>
+      </header>
+      <PreviewSwitcher
+        example={<ExampleDashboard />}
+        empty={<EmptyDashboard />}
+      />
     </div>
   );
 }

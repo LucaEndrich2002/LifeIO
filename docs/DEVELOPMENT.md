@@ -12,7 +12,7 @@ pnpm dev
 
 Die Vorschau läuft auf `http://127.0.0.1:3000`. Für Windows PowerShell mit gesperrten `.ps1`-Launchern können die Befehle als `npm.cmd` bzw. `pnpm.cmd` aufgerufen werden; eine Änderung der Execution Policy ist nicht nötig.
 
-Die Shell benötigt keine `.env.local`, keine Cloud-Verbindung und keinen Login. Sie speichert keine persönlichen Daten. Nur die Farbschema-Präferenz wird im Browser gespeichert.
+Die Shell benötigt keine `.env.local`, keine Cloud-Verbindung und keinen Login. Sie speichert keine persönlichen Daten. Nur die Farbschema-Präferenz wird im Browser gespeichert. Auf Home kann zwischen fiktiven Beispieldaten und einer Vorschau ohne Einträge umgeschaltet werden; dieser Ansichtswechsel ist nicht persistent.
 
 ## Qualitätsprüfungen
 
@@ -30,7 +30,7 @@ pnpm test:e2e
 
 Playwright benötigt beim ersten Setup einen Browserdownload; Linux-CI verwendet zusätzlich `--with-deps`. `--only-shell` lädt nur den für diese Headless-Tests benötigten Browser. Unter Windows kann bei Problemen mit `pnpm exec` der lokale Launcher direkt aufgerufen werden: `.\node_modules\.bin\playwright.CMD install --only-shell chromium`. Bei knappem Speicher oder begrenzten Ressourcen kann `pnpm test:e2e --workers=1` verwendet werden; alle Tests bleiben aktiv.
 
-Vitest prüft Konfigurationsvalidierung und zugängliche Navigation. Playwright prüft alle fünf Bereiche, direkte Routen, Farbschema-Persistenz, mobilen Überlauf, Tastaturzugang und 404. Berichte und Screenshots stehen lokal unter `playwright-report` bzw. `test-results` und werden nicht versioniert.
+Vitest prüft Konfigurationsvalidierung und zugängliche Navigation. Playwright prüft alle fünf Bereiche, direkte Routen, Farbschema-Persistenz, mobilen Überlauf, Tastaturzugang und 404 sowie die Kennzeichnung der Beispieldaten, Zielfortschritte, Dashboard-Links und den Wechsel zum Leerzustand. Berichte und Screenshots stehen lokal unter `playwright-report` bzw. `test-results` und werden nicht versioniert.
 
 `pnpm format` formatiert bearbeitbare Projektdateien. Die unverändert übernommene Produkt-README ist davon ausgenommen. `pnpm test:watch` startet den interaktiven Testmodus.
 
@@ -67,14 +67,16 @@ Kein Supabase-Service-Role-Key und kein OpenAI-Key sind zum Entwickeln des Funda
 
 ## CI und Veröffentlichung
 
-`.github/workflows/ci.yml` läuft bei Pushes und Pull Requests: Installation mit Lockfile, Formatterprüfung, Lint, Typecheck, Unit-/Komponententests, Build und Playwright auf Desktop/Mobil. Kein Deployment und keine Cloud-Secrets sind dafür erforderlich. Erst nach Anbindung eines GitHub-Repositories kann ein tatsächlicher Actions-Lauf bestätigt werden.
+Das vom Nutzer vorgegebene Repository ist [LucaEndrich2002/LifeIO](https://github.com/LucaEndrich2002/LifeIO). `origin` verweist auf dessen HTTPS-URL. Das lokale Fundament wurde als erster Commit auf `main` übertragen; der Dashboard-Ausbau erfolgt auf `codex/dashboard-and-ci` und wird als Pull Request bereitgestellt.
 
-Vercel und Supabase Cloud bleiben die vorgesehenen späteren Hosting-Ziele. Es wurde kein externes Repository, kein Cloud-Projekt und kein öffentliches Deployment automatisch angelegt.
+`.github/workflows/ci.yml` läuft bei Pushes, Pull Requests und manueller Auslösung: Installation mit Lockfile, Formatterprüfung, Lint, Typecheck, Unit-/Komponententests, Build und Playwright auf Desktop/Mobil. Kein Deployment und keine Cloud-Secrets sind dafür erforderlich. [GitHub Actions](https://github.com/LucaEndrich2002/LifeIO/actions) zeigt die tatsächlichen Läufe. Browserberichte und Screenshots werden für sieben Tage als Artefakt gespeichert. Der aktuelle Prüfstand steht in [DASHBOARD_STATUS.md](DASHBOARD_STATUS.md).
+
+Vercel und Supabase Cloud bleiben die vorgesehenen späteren Hosting-Ziele. Das GitHub-Repository existierte bereits und wurde auf ausdrücklichen Nutzerwunsch angebunden. Ein Cloud-Projekt oder öffentliches App-Deployment ist noch nicht eingerichtet. Die Repository-Sichtbarkeit wurde nicht verändert.
 
 ## Bekannte Voraussetzungen und Versionsentscheidungen
 
 - Docker Desktop 4.91.0 mit WSL 2.7.13 und der lokale Supabase-Stack sind eingerichtet. Dienstzustand, ausschließlich lokale Ports und Wiederanlauf wurden am 19.09.2026 geprüft; `.env.local` enthält nur öffentliche Verbindungskonfiguration. Ein beim Docker-Desktop-Neustart beobachteter Socket-Fehler wurde mit einem reversiblen Workaround behoben und bleibt als externe Einschränkung dokumentiert: [LOCAL_SUPABASE.md](LOCAL_SUPABASE.md). Anwendungsmigrationen und RLS folgen erst mit dem ersten Schema.
-- Ein GitHub-Ziel und ein Supabase-Cloud-Projekt sind noch nicht konfiguriert.
+- GitHub ist angebunden; ein Supabase-Cloud-Projekt ist noch nicht konfiguriert. Die GitHub CLI 2.101.0 liegt auf diesem Rechner portabel unter dem ignorierten Pfad `.tools/gh/2.101.0/bin/gh.exe`; sie ist kein Projekt-Buildwerkzeug und keine Voraussetzung für CI. Die Anmeldung erfolgt über den GitHub-Browserflow, keine Tokens gehören in Projektdateien.
 - `jsdom` 29 ist auf die vorhandene Node-Patchversion abgestimmt. Version 30 verlangt eine neuere Patchversion; die Engine-Prüfung bleibt aktiv.
 - ESLint 9.39.5 wird von den derzeitigen Plugins in `eslint-config-next` unterstützt; ESLint 10 erzeugte inkompatible Peer-Abhängigkeiten. ESLint 9 ist bereits als nicht mehr unterstützt markiert. Die gemeinsame Aktualisierung von Next-Lint-Plugins und ESLint ist nach verfügbarer Kompatibilität erforderlich; es wurden keine Peer-Prüfungen oder Regeln unterdrückt.
 - TypeScript 5.9.3 ist für dieses Fundament geprüft. Versionssprünge werden gemeinsam mit Next.js und dem Testtooling validiert, nicht automatisch übernommen.

@@ -7,7 +7,7 @@ test("all five areas are reachable and distinguish the preview from real data", 
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
-    "Mehr Überblick.",
+    "Dein Tag, mit Überblick.",
   );
   await expect(page.getByRole("contentinfo")).toContainText(
     "speichert noch keine persönlichen Daten",

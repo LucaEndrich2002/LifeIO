@@ -3,6 +3,7 @@ name: Quality
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -36,3 +37,13 @@ jobs:
       - run: pnpm build
       - run: pnpm exec playwright install --with-deps --only-shell chromium
       - run: pnpm test:e2e
+      - name: Upload browser test reports
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+          retention-days: 7
