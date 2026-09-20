@@ -3,16 +3,14 @@ import "server-only";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { getSupabasePublicEnv } from "@/lib/env/public";
+import type { Database } from "@/types/database";
 
-/** For Route Handlers and Server Actions, where session cookies can be written.
- * Add the refresh proxy and read-only RSC adapter together with authentication.
- * This factory alone does not authenticate or authorize a request.
- */
+/** Writable adapter: only for Server Actions and Route Handlers. */
 export async function createSupabaseServerClient() {
-  const { url, publishableKey } = getSupabasePublicEnv();
   const cookieStore = await cookies();
+  const { url, publishableKey } = getSupabasePublicEnv();
 
-  return createServerClient(url, publishableKey, {
+  return createServerClient<Database>(url, publishableKey, {
     cookies: {
       getAll: () => cookieStore.getAll(),
       setAll: (items) => {
@@ -21,5 +19,14 @@ export async function createSupabaseServerClient() {
         }
       },
     },
+  });
+}
+
+/** Proxy refreshes cookies before RSC rendering. This adapter never silently catches writes. */
+export async function createSupabaseReadClient() {
+  const cookieStore = await cookies();
+  const { url, publishableKey } = getSupabasePublicEnv();
+  return createServerClient<Database>(url, publishableKey, {
+    cookies: { getAll: () => cookieStore.getAll() },
   });
 }

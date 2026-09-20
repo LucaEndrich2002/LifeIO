@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ArrowUpRight, Orbit } from "lucide-react";
+import { Orbit } from "lucide-react";
 import { AppNavigation } from "@/components/app-navigation";
 import { ThemeToggle } from "@/components/theme-toggle";
 
@@ -55,13 +55,18 @@ export function AppShell({ children }: { children: ReactNode }) {
             </span>{" "}
             Ein guter Anfang
           </p>
-          <div className="hidden lg:block">
-            <ThemeToggle />
+          <div className="flex items-center gap-4">
+            <Link
+              href="/account"
+              prefetch={false}
+              className="inline-flex min-h-11 items-center rounded-md text-xs font-medium text-primary hover:underline"
+            >
+              Mein Konto
+            </Link>
+            <div className="hidden lg:block">
+              <ThemeToggle />
+            </div>
           </div>
-          <ArrowUpRight
-            className="size-4 text-muted-foreground lg:hidden"
-            aria-hidden="true"
-          />
         </header>
         <main
           id="main-content"

@@ -5,6 +5,8 @@ coverage/
 .vitest/
 playwright-report/
 test-results/
+playwright-auth-report/
+test-results-auth/
 *.tsbuildinfo
 .env*
 !.env.example

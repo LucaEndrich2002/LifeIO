@@ -14,6 +14,8 @@ Die Vorschau läuft auf `http://127.0.0.1:3000`. Für Windows PowerShell mit ges
 
 Die Shell benötigt keine `.env.local`, keine Cloud-Verbindung und keinen Login. Sie speichert keine persönlichen Daten. Nur die Farbschema-Präferenz wird im Browser gespeichert. Auf Home kann zwischen fiktiven Beispieldaten und einer Vorschau ohne Einträge umgeschaltet werden; dieser Ansichtswechsel ist nicht persistent.
 
+Der Kontobereich ist separat: `/auth/login` und `/account` benötigen die lokale Supabase-Konfiguration und speichern nach Anmeldung ein echtes privates Profil. „Mein Konto“ führt von der Vorschau dorthin. Registrierung, Codes und Passwortwiederherstellung sind in [AUTH_PROFILE_STATUS.md](AUTH_PROFILE_STATUS.md) beschrieben. E-Mails landen im lokalen Testpostfach auf Port 54324.
+
 ## Qualitätsprüfungen
 
 ```sh
@@ -24,6 +26,9 @@ pnpm test
 pnpm build
 pnpm exec playwright install --only-shell chromium
 pnpm test:e2e
+# Zusätzlich mit laufender lokaler Supabase:
+pnpm test:integration
+pnpm test:auth
 ```
 
 `typecheck` erzeugt zuerst Next.js-Routentypen und funktioniert deshalb auch vor dem ersten Build. `test:e2e` startet selbst den bereits gebauten Produktionsserver auf Port 3100 und beendet ihn danach. Zuerst `pnpm build` ausführen. Ein bereits belegter Port wird absichtlich nicht wiederverwendet, damit nicht versehentlich eine andere Anwendung getestet wird.
@@ -55,15 +60,15 @@ pnpm db:stop
 pnpm db:reset
 ```
 
-Noch gibt es kein Anwendungsschema. Neue Tabellen werden nicht automatisch für die Data API freigegeben. Die erste Fachmigration muss Constraints, Grants, RLS und Isolationstests gemeinsam einführen. Seeds sind deaktiviert, bis es sinnvolle fiktive Fixtures gibt. Ein Cloud-Projekt muss dieselben Grenzen separat erhalten; die lokale Konfiguration setzt keine Cloud-Einstellungen.
+Die erste Migration erzeugt `public.profiles` samt Constraints, Grants, RLS und Isolationstests. Nach einem Checkout `pnpm exec supabase migration up --local` ausführen. Neue Tabellen werden nicht automatisch für die Data API freigegeben. Die Tests erzeugen und entfernen ihre eigenen lokalen Fixtures; globale Seeds bleiben deaktiviert. Ein Cloud-Projekt muss dieselben Grenzen separat erhalten.
 
-Die lokale Auth-Konfiguration bereitet bestätigte E-Mail-Adressen und sichere Passwortänderungen vor. Noch existieren weder Login-Seiten noch Callback-Routen; der Auth-Task ergänzt die genaue Redirect-Allowlist, Refresh-Proxy, RSC-Client und Autorisierung. Der vorhandene Serverclient darf nur in Route Handlers/Server Actions mit beschreibbaren Cookies verwendet werden.
+Die lokale Auth-Konfiguration verwendet bestätigte E-Mail-Adressen, sechsstellige Codes und sichere Passwortänderungen. Templates liegen unter `supabase/templates`; Supabase-Stop/Start aktiviert Änderungen bei erhaltenen Volumes. Codebestätigung und Wiederherstellung verwenden Server Actions mit festen Weiterleitungen. Der Proxy erneuert Sitzungen; Server Components und Server Actions verwenden getrennte Cookie-Adapter.
 
 ## Projektstruktur und Grenzen
 
 Siehe [SYSTEM.md](architecture/SYSTEM.md), [DATA_MODEL.md](architecture/DATA_MODEL.md) und [DESIGN_SYSTEM.md](design/DESIGN_SYSTEM.md). Reine Domain-Regeln, weitere Featuremodule, Datenbanktypen und Integrationstests entstehen erst mit ihren tatsächlichen Funktionen.
 
-Kein Supabase-Service-Role-Key und kein OpenAI-Key sind zum Entwickeln des Fundaments nötig. `.env*` ist bis auf `.env.example` ignoriert. Fehlermeldungen der Konfigurationsprüfung zeigen nur Variablennamen. Publizierbare Projektkonfiguration wird von Next.js beim Build eingebunden; nach Änderungen neu bauen.
+Kein Service-Role-Key und kein OpenAI-Key sind für normale App-Anfragen nötig. Nur der lokale Test-Runner liest einen privilegierten Schlüssel im Speicher für die Erzeugung und Bereinigung eigener Testkonten. Die Rechteprüfungen verwenden normale Nutzerrechte. `.env*` ist bis auf `.env.example` ignoriert; Konfigurationsfehler zeigen nur Variablennamen. Öffentliche Next.js-Konfiguration erfordert nach Änderungen einen neuen Build.
 
 ## CI und Veröffentlichung
 
@@ -75,7 +80,9 @@ Vercel und Supabase Cloud bleiben die vorgesehenen späteren Hosting-Ziele. Das 
 
 ## Bekannte Voraussetzungen und Versionsentscheidungen
 
-- Docker Desktop 4.91.0 mit WSL 2.7.13 und der lokale Supabase-Stack sind eingerichtet. Dienstzustand, ausschließlich lokale Ports und Wiederanlauf wurden am 19.09.2026 geprüft; `.env.local` enthält nur öffentliche Verbindungskonfiguration. Ein beim Docker-Desktop-Neustart beobachteter Socket-Fehler wurde mit einem reversiblen Workaround behoben und bleibt als externe Einschränkung dokumentiert: [LOCAL_SUPABASE.md](LOCAL_SUPABASE.md). Anwendungsmigrationen und RLS folgen erst mit dem ersten Schema.
+Der Auth-Task vom 20.09.2026 ergänzt Profilmigration, RLS und lokale Mailtemplates. CI startet Supabase, führt `test:integration` und `test:auth` aus und stoppt die Testdatenbank. Der Start-Wrapper gibt keine CLI-Schlüssel aus. Auth-Berichte liegen unter `playwright-auth-report` und `test-results-auth`; Traces sind zum Schutz von Passwörtern, Codes und Cookies ausgeschaltet. Der private Fixture-Schlüssel wird nicht an den App-Testserver weitergegeben. Aktueller Prüfstand: [AUTH_PROFILE_STATUS.md](AUTH_PROFILE_STATUS.md).
+
+- Docker Desktop 4.91.0 mit WSL 2.7.13 und der lokale Supabase-Stack sind eingerichtet. Dienstzustand, ausschließlich lokale Ports und Wiederanlauf wurden am 19.09.2026 geprüft; `.env.local` enthält nur öffentliche Verbindungskonfiguration. Ein beim Docker-Desktop-Neustart beobachteter Socket-Fehler wurde mit einem reversiblen Workaround behoben und bleibt als externe Einschränkung dokumentiert: [LOCAL_SUPABASE.md](LOCAL_SUPABASE.md). Die erste Profilmigration und RLS sind inzwischen implementiert und geprüft.
 - GitHub ist angebunden; ein Supabase-Cloud-Projekt ist noch nicht konfiguriert. Die GitHub CLI 2.101.0 liegt auf diesem Rechner portabel unter dem ignorierten Pfad `.tools/gh/2.101.0/bin/gh.exe`; sie ist kein Projekt-Buildwerkzeug und keine Voraussetzung für CI. Die Anmeldung erfolgt über den GitHub-Browserflow, keine Tokens gehören in Projektdateien.
 - `jsdom` 29 ist auf die vorhandene Node-Patchversion abgestimmt. Version 30 verlangt eine neuere Patchversion; die Engine-Prüfung bleibt aktiv.
 - ESLint 9.39.5 wird von den derzeitigen Plugins in `eslint-config-next` unterstützt; ESLint 10 erzeugte inkompatible Peer-Abhängigkeiten. ESLint 9 ist bereits als nicht mehr unterstützt markiert. Die gemeinsame Aktualisierung von Next-Lint-Plugins und ESLint ist nach verfügbarer Kompatibilität erforderlich; es wurden keine Peer-Prüfungen oder Regeln unterdrückt.

@@ -2,13 +2,13 @@ import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <div className="space-y-4 py-12">
+    <main className="mx-auto max-w-lg space-y-4 px-6 py-12">
       <p className="text-sm text-muted-foreground">404</p>
       <h1 className="text-3xl font-semibold tracking-tight">
         Diese Seite gibt es nicht.
       </h1>
       <p className="text-muted-foreground">
-        Über die Navigation findest du zurück zu deinem Überblick.
+        Über den Link findest du zurück zu deinem Überblick.
       </p>
       <Link
         href="/"
@@ -16,6 +16,6 @@ export default function NotFound() {
       >
         Zur Startseite
       </Link>
-    </div>
+    </main>
   );
 }

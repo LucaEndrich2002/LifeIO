@@ -1,6 +1,6 @@
 # LifeOS – Systemarchitektur
 
-Stand: Projektfundament und Dashboard-Prototyp, 19.09.2026. Produktumfang: [PRD](../product/PRD.md).
+Stand: Projektfundament, Dashboard-Prototyp und erstes Auth-/Profil-Inkrement, 20.09.2026. Produktumfang: [PRD](../product/PRD.md).
 
 ## Aktuell implementiert
 
@@ -8,7 +8,7 @@ Eine Next.js-App mit App Router, React und TypeScript Strict Mode. Die fünf öf
 
 Die Dashboard-Inhalte bleiben Server Components. Nur `PreviewSwitcher` ist für die Umschaltung interaktiv; er erhält die beiden serverseitig gerenderten Ansichten als React-Nodes. Die Auswahl lebt ausschließlich im Komponentenstatus, ohne Speicherung oder Netzwerkaufruf. Beispielbeträge sind fertige Anzeigetexte, Fortschrittswerte feste Prozentangaben; es gibt hier keine Finanzberechnung oder persistierten Geldwerte. Der Beispieltag ist ausdrücklich der 19.09.2026, kein dynamisch ermitteltes persönliches „Heute“.
 
-Supabase-Clientfabriken und Konfigurationsvalidierung sind vorbereitet, aber in keiner Seite eingebunden. Es gibt keine Authentifizierung, geschützten Fachrouten, Datenbanktabellen oder KI-Aufrufe. Die öffentliche Vorschau darf erst mit Zugriffsschutz um persönliche Inhalte erweitert werden.
+`/auth/[mode]` bietet Anmeldung, Registrierung, Codebestätigung und Passwortwiederherstellung. `/account` und `/account/password` verlangen eine verifizierte Identität. Das Profil ist die erste private Tabelle mit RLS. Die öffentliche Vorschau liegt in der Routengruppe `(preview)` und bleibt statisch; Konto und Auth verwenden ein eigenes Layout. Geldwerte, Aufgaben und Ziele werden weiterhin nicht gespeichert. Siehe [AUTH_PROFILE_STATUS.md](../AUTH_PROFILE_STATUS.md).
 
 ## Modularer Monolith
 
@@ -30,10 +30,10 @@ Supabase Auth / PostgreSQL mit RLS
 | `src/features/home` | Dashboard-Prototyp mit Beispieldaten, Leerzustand und lokalem Ansichtswechsel           |
 | `src/lib`           | Konfiguration, Browserclient und allgemeine UI-Hilfen                                   |
 | `src/server`        | Durch `server-only` geschützte Infrastruktur; später autorisierte Repository-Funktionen |
-| `supabase`          | Versionierte lokale Konfiguration; Migrationen und Seeds kommen mit den ersten Tabellen |
+| `supabase`          | Lokale Konfiguration, Auth-Mailtemplates und Profilmigration mit RLS                    |
 | `tests/e2e`         | Playwright-Flows gegen den Produktionsbuild                                             |
 
-Die Module `auth`, `onboarding`, `money`, `goals`, `plan` und `ai` werden in `src/features` angelegt, sobald sie Fachcode enthalten. Reine Regeln kommen nach `src/domain`, Datenbanktypen nach `src/types` und Integrationstests nach `tests/integration`. Dafür werden keine leeren Verzeichnisse oder unnötigen Interfaces erzeugt.
+Die Featureordner `auth` und `profile` enthalten die Kontooberfläche; `src/domain` validiert Auth-/Profileingaben, `src/types` enthält generierte Datenbanktypen und `tests/integration` prüft Profilrechte. Weitere Module entstehen bei tatsächlichem Bedarf.
 
 Eine Route ruft einen konkreten Anwendungsfall auf. Dieser validiert Eingaben und Identität, nutzt reine Domain-Funktionen und führt autorisierte Datenzugriffe aus. Domain-Funktionen importieren weder React noch Next.js noch Supabase. Module teilen definierte Services und `EntityLink`, nicht beliebige interne Implementierungen. Kein Event-Bus, keine Microservices und kein generisches Repository-Framework im Fundament.
 
@@ -41,8 +41,8 @@ Eine Route ruft einen konkreten Anwendungsfall auf. Dieser validiert Eingaben un
 
 - Der Browserclient verwendet ausschließlich Projekt-URL und Publishable Key; ein alter lokaler `anon`-Key wird zur Kompatibilität ebenfalls akzeptiert. Private Schlüssel werden von der Konfigurationsprüfung abgewiesen.
 - `src/server/supabase.ts` erzeugt einen neuen Client pro Aufruf mit den Cookies der aktuellen Anfrage. Keine globalen, zwischen Nutzern geteilten Serverclients.
-- Diese Serverfabrik ist ausdrücklich für Route Handlers und Server Actions vorgesehen, in denen Cookies geschrieben werden dürfen. Fehler beim Cookie-Schreiben werden nicht verschluckt.
-- Mit Authentication sind eine Session-Refresh-Proxy, ein geeigneter Read-Client für Server Components und die Prüfung verifizierter Claims bzw. des Nutzers einzuführen. Ein aus Cookies gelesenes `getSession()` allein ist kein Autorisierungsnachweis.
+- Die schreibfähige Serverfabrik wird in Server Actions verwendet. Für Server Components gibt es einen separaten Read-Client ohne Cookie-Setter. Fehler beim Cookie-Schreiben werden nicht verschluckt.
+- Der Proxy erneuert Sitzungen über `getClaims()` und überträgt die aktualisierten Cookies in Anfrage und Antwort. `requireIdentity()` ruft für geschützte Seiten und Profilmutationen zusätzlich `getUser()` auf. Ein aus Cookies gelesenes `getSession()` wird nicht als Autorisierungsnachweis verwendet.
 - Jede Fachoperation prüft Identität und Eigentümerschaft serverseitig. RLS ist eine zusätzliche Datenbankgrenze; die Clientfabriken sind kein Ersatz dafür.
 - Personalisierte Antworten dürfen nicht in einen nutzerübergreifenden Cache gelangen. Der heute statische Home-Einstieg ist davon klar getrennt.
 - Die lokale API-Konfiguration deaktiviert die automatische Freigabe neuer Tabellen. Jede künftige Migration benötigt explizite Grants, aktivierte RLS und passende Policies; diese müssen auch in Cloud-Projekten eingerichtet werden.
@@ -78,7 +78,7 @@ Spätere Schreibaktionen wie `create_task`, `create_goal`, `update_goal` und `cr
 
 ## Qualität und Betrieb
 
-Vitest/RTL prüfen die Konfigurationsgrenze und zugängliche Navigation. Playwright prüft Navigation, direkte Routen, Theme-Persistenz, Tastaturzugang und 404 auf Desktop und Mobilgerät. Mit Datenpersistenz folgen Integrationstests gegen lokale Supabase mit mindestens zwei Nutzern und anonymem Zugriff.
+Vitest/RTL prüfen Konfiguration, Auth-/Profilvalidierung und Navigation. Die separate Integrationssuite prüft die Profilrechte gegen lokale Supabase mit zwei Nutzern und anonymem Zugriff. Playwright deckt die öffentliche Vorschau sowie Registrierung, Codes, Anmeldung, Profilspeicherung, Sitzungserneuerung, Passwortwiederherstellung und Abmeldung auf Desktop/Mobil ab. Auth-Traces mit möglichen Zugangsdaten werden nicht gespeichert.
 
 GitHub Actions installiert aus dem Lockfile und führt Formatterprüfung, Lint, Typecheck, Tests, Build und Browser-Smoke-Tests ohne Cloud-Secrets aus. Der Workflow läuft bei Push, Pull Request oder manueller Auslösung. Browserberichte und Screenshots werden als Artefakt für sieben Tage aufbewahrt. Der Workflow benötigt nur `contents: read` und führt keine Deployments aus. Hosting bleibt gemäß README für später Vercel plus Supabase Cloud.
 
