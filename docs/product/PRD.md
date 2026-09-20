@@ -285,6 +285,8 @@ Dies sind vorgeschlagene Messdefinitionen, keine erfundenen Zielwerte. Geschäft
 
 ## 9. Übergang zur Entwicklung
 
+Arbeitsannahmen für das erste Auth-/Profil-Inkrement vom 20.09.2026: EUR, deutschsprachige Oberfläche, Montag als Wochenbeginn und Europe/Berlin als änderbare Profilvoreinstellung; E-Mail und Passwort mit einmaligen Bestätigungs-/Wiederherstellungscodes. Diese Defaults wurden im Task vorgeschlagen und mangels abweichender Vorgabe verwendet. Die konkreten Abläufe und Grenzen stehen in [AUTH_PROFILE_STATUS.md](../AUTH_PROFILE_STATUS.md). O01 und der Auth-Teil von O07 sind damit für dieses Inkrement konkretisiert; Cloud-Datenschutzregion und die Regeln des finanziellen Onboardings bleiben vor ihrer Umsetzung offen.
+
 Der nächste Entwicklungsschritt ist das technische Fundament aus [ROADMAP.md](ROADMAP.md), Phase 1. Dabei werden Repository-Regeln, Tooling, Tests, CI und Supabase vorbereitet. Fachfunktionen dieses PRD werden anschließend in begrenzten Tasks mit den hier referenzierten Acceptance Criteria umgesetzt.
 
 Der Stack bleibt gemäß README Next.js, React, TypeScript Strict Mode, pnpm, Tailwind, shadcn/ui, Supabase/PostgreSQL, Zod, Vitest, React Testing Library und Playwright. Recharts und OpenAI folgen erst bei ihrem konkreten Einsatz. Die Architektur bleibt ein modularer Monolith mit separater UI, Anwendungslogik, Domain und Datenzugriff.

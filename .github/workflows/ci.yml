@@ -37,6 +37,13 @@ jobs:
       - run: pnpm build
       - run: pnpm exec playwright install --with-deps --only-shell chromium
       - run: pnpm test:e2e
+      - name: Start local database and apply migrations
+        run: node scripts/start-test-database.mjs
+      - run: pnpm test:integration
+      - run: pnpm test:auth
+      - name: Stop test database
+        if: ${{ always() }}
+        run: pnpm exec supabase stop
       - name: Upload browser test reports
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v7
@@ -45,5 +52,7 @@ jobs:
           path: |
             playwright-report/
             test-results/
+            playwright-auth-report/
+            test-results-auth/
           if-no-files-found: ignore
           retention-days: 7

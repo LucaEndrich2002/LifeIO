@@ -5,6 +5,8 @@ pnpm-lock.yaml
 coverage
 playwright-report
 test-results
+playwright-auth-report
+test-results-auth
 .cache
 .tools
 .pnpm-store

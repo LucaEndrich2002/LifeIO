@@ -18,6 +18,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "test:integration": "node scripts/test-supabase.mjs integration",
+    "test:auth": "node scripts/test-supabase.mjs e2e",
     "db:doctor": "node scripts/db-doctor.mjs",
     "db:start": "node scripts/db-network.mjs && supabase start --network-id lifeos-local",
     "db:stop": "supabase stop",

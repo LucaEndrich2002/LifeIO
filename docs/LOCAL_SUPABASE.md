@@ -1,6 +1,6 @@
 # Lokale Supabase-Umgebung unter Windows
 
-Stand der erneuten Systemprüfung: 19.09.2026. Dieser Task betrifft ausschließlich die lokale Laufzeit. Es gibt noch kein Anwendungsschema und keine Authentifizierungsoberfläche.
+Stand der erneuten Systemprüfung: 19.09.2026. Dieser Bericht beschreibt die damalige Einrichtung der lokalen Laufzeit; zu diesem Zeitpunkt gab es noch kein Anwendungsschema und keine Authentifizierungsoberfläche. Das Folgeinkrement vom 20.09.2026 ergänzt Profil, RLS und Auth-Mailtemplates, siehe [AUTH_PROFILE_STATUS.md](AUTH_PROFILE_STATUS.md).
 
 ## Tatsächlicher Ausgangspunkt
 

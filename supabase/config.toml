@@ -53,6 +53,18 @@ max_frequency = "1s"
 otp_length = 6
 otp_expiry = 3600
 
+# Development inbox only; no external delivery. Allows the complete local test suite.
+[auth.rate_limit]
+email_sent = 100
+
+[auth.email.template.confirmation]
+subject = "Bestätige dein LifeOS-Konto"
+content_path = "./supabase/templates/confirmation.html"
+
+[auth.email.template.recovery]
+subject = "Dein Code für ein neues LifeOS-Passwort"
+content_path = "./supabase/templates/recovery.html"
+
 [realtime]
 enabled = false
 

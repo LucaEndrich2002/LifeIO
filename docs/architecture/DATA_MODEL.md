@@ -1,6 +1,10 @@
 # LifeOS – beabsichtigtes V1-Datenmodell
 
-Dieses Dokument beschreibt die Entitäten aus der README. Es gibt noch kein Anwendungsschema und keine bereits bereitgestellten Tabellen. Felder sind ein Entwurf für spätere Migrationen; offene Produktregeln stehen im [PRD, Abschnitt 8](../product/PRD.md).
+Dieses Dokument beschreibt die Entitäten aus der README. Im ersten Auth-/Profil-Inkrement existiert `public.profiles`; die übrigen Entitäten bleiben Entwurf. Offene Produktregeln stehen im [PRD, Abschnitt 8](../product/PRD.md).
+
+## Bereits implementiert
+
+`profiles` verwendet `user_id` als Primär-/Fremdschlüssel zu `auth.users`, `display_name`, `time_zone`, `currency = EUR` sowie serverseitige Zeitstempel. Constraints, Eigentümer-RLS und explizite Spaltenrechte sind Teil derselben Migration. Die Löschung eines Auth-Nutzers entfernt sein Profil per Kaskade. Ein finanzieller Onboarding-Abschlussstatus wird erst mit dem entsprechenden Ablauf ergänzt; ein gespeichertes Profil bedeutet noch nicht abgeschlossenes Onboarding.
 
 ## Entitäten
 
@@ -75,6 +79,6 @@ Die Kombination aus Eigentümer, Quelle, Ziel und Beziehung muss eindeutig sein.
 
 ## Migrationsstrategie
 
-Die erste echte Migration folgt mit Authentication/Onboarding und führt nur benötigte Tabellen samt Constraints, Grants und RLS ein. Danach folgt jede Fachänderung in einer neuen versionierten Migration unter `supabase/migrations`. Generierte TypeScript-Datenbanktypen werden mit dem Schema aktualisiert.
+Die erste Migration unter `supabase/migrations` führt das Profil samt Constraints, Grants, Zeitstempel-Trigger und RLS ein. Jede weitere Fachänderung folgt in einer neuen versionierten Migration. Generierte TypeScript-Datenbanktypen werden mit dem Schema aktualisiert. `pnpm test:integration` prüft insbesondere die Isolation zwischen Nutzern über die normale Data API.
 
 Seeds enthalten ausschließlich fiktive Entwicklungsdaten und entstehen zusammen mit dem Schema. Derzeit ist Seeding deaktiviert. Ein lokaler Reset darf nur eine lokale Testdatenbank betreffen; produktive Migrationen und Wiederherstellung werden vor Beta separat geprüft.

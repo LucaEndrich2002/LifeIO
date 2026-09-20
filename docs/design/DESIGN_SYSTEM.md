@@ -41,4 +41,8 @@ Die Startseite zeigt Monatssaldo, Tagesplan, Zielfortschritt und einen begründe
 
 „Ohne Einträge“ ersetzt sämtliche Beispielwerte durch erklärende Leerzustände. Fehlende Daten erscheinen weder als 0 € noch als vermeintlich erledigte Aufgaben. Alle angebotenen Links führen zu vorhandenen Modulvorschauen; Aufgaben lassen sich noch nicht abhaken. Die gewählte Vorschau wird nicht gespeichert. Die Ladeansicht verwendet Platzhalter ohne erfundene Kennzahlen; Fehleransicht und Retry bleiben auf Routenebene.
 
-Die Umsetzung benötigt keine zusätzlichen Pakete. Formulare, echte Kontodaten, automatisch berechnete Hinweise und AI Insights gehören zu späteren Fachphasen. Die noch ausstehende Nutzerprüfung aus J05 wird durch den Prototyp und seine Browsertests nicht als erfüllt betrachtet.
+Die Umsetzung benötigt keine zusätzlichen Pakete. Finanzformulare, automatisch berechnete Hinweise und AI Insights gehören zu späteren Fachphasen. Die noch ausstehende Nutzerprüfung aus J05 wird durch den Prototyp und seine Browsertests nicht als erfüllt betrachtet.
+
+## Kontozugang und Profil
+
+`AccountShell` verwendet dieselben Farben und Typografie in einem fokussierten Layout. AuthForm und ProfileForm bieten Labels, Autofill, Pending-Zustände, verständliche Fehler und erhaltene Eingaben bei Fehlern. Bestätigungscodes sind per Tastatur oder Autofill eingebbar. Das Profil kennzeichnet tatsächliche Speicherung und verwendet keine Beispielwerte als Ausgangsdaten. Tastaturzugang, mobiles Layout und Sitzungsabläufe werden separat geprüft.

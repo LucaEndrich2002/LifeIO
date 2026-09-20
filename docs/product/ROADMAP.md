@@ -6,6 +6,8 @@ Quellen: [README](../../README.md), Abschnitte 9, 10 und 21, sowie [PRD](PRD.md)
 
 ## Aktueller Stand
 
+- Auf den Fortsetzungsauftrag folgt das erste Inkrement von Phase 3: Kontozugang, E-Mail-Codes, Passwortwiederherstellung und privates Profil mit RLS. Der Prüfstand steht in [AUTH_PROFILE_STATUS.md](../AUTH_PROFILE_STATUS.md). Einkommen, Fixkosten, Sparziel und der Abschluss des Onboardings bleiben der nächste begrenzte Schritt; R02/J01 sind noch nicht vollständig umgesetzt.
+
 - Die bereitgestellte README wurde unverändert in den Projektordner übernommen.
 - Phase 0 ist als PRD-Entwurf mit fünf Kernjourneys, Anforderungen R01–R14, Erfolgskriterien und gekennzeichneten offenen Entscheidungen ausgearbeitet.
 - Das lokale Projektfundament ist implementiert: Next.js-App, pnpm-Lockfile, Lint/Typecheck/Tests/Build, Formatter und GitHub-Actions-Workflow. Der Foundation-Commit liegt im vom Nutzer vorgegebenen GitHub-Repository auf `main`; der Dashboard-Task verwendet `codex/dashboard-and-ci`.

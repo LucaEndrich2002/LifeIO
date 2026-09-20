@@ -14,6 +14,8 @@ export default defineConfig([
     "coverage/**",
     "playwright-report/**",
     "test-results/**",
+    "playwright-auth-report/**",
+    "test-results-auth/**",
     ".cache/**",
     ".tools/**",
     "supabase/.temp/**",
