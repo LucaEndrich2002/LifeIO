@@ -18,6 +18,8 @@ Der Kontobereich ist separat: `/auth/login` und `/account` benötigen die lokale
 
 ## Qualitätsprüfungen
 
+Die laufende Finanzverwaltung unter `/account/money` benötigt auch die Migration `20260921120000_money_transactions.sql`. Sie verwendet dieselben Einkommen-/Ausgabentabellen wie die Einrichtung und bietet Einnahmen- und Ausgaben-CRUD mit Monatsübersicht. `/account/overview` führt inzwischen nach Money für den Startmonat. Details: [MONEY_TRANSACTIONS_STATUS.md](MONEY_TRANSACTIONS_STATUS.md).
+
 ```sh
 pnpm format:check
 pnpm lint

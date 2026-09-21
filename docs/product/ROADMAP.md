@@ -1,10 +1,12 @@
 # LifeOS – Roadmap
 
-Stand: 20.09.2026
+Stand: 21.09.2026
 
 Quellen: [README](../../README.md), Abschnitte 9, 10 und 21, sowie [PRD](PRD.md). Diese Roadmap beschreibt die Reihenfolge und Abnahmebedingungen, keine bereits implementierten Funktionen.
 
 ## Aktueller Stand
+
+- Der erste begrenzte Money-Core-Schritt ergänzt mehrere Einnahmen, variable Ausgaben mit Datum/Kategorie, bestätigtes Löschen und eine paginierte Monatsübersicht mit vollständigen Summen. Die persönliche Startübersicht führt jetzt nach Money. [MONEY_TRANSACTIONS_STATUS.md](../MONEY_TRANSACTIONS_STATUS.md) beschreibt Regeln und Abnahme. Die laufende Fixkostenpflege und Budgets bleiben offen; Phase 4 ist nicht insgesamt abgeschlossen.
 
 - Das zweite Inkrement von Phase 3 ergänzt die finanzielle Einrichtung: Einkommen, monatliche Fixkosten und ein Sparziel mit Auslassentscheidungen, Wiederaufnahme, atomarem Speichern und persönlicher Startübersicht. Umfang, Regeln und Abnahme stehen in [FINANCIAL_ONBOARDING_STATUS.md](../FINANCIAL_ONBOARDING_STATUS.md). Optionale Aufgaben und die vollständige laufende Verwaltung bleiben spätere Inkremente; R02/J01 sind noch nicht insgesamt erfüllt.
 - Kontozugang, E-Mail-Codes, Passwortwiederherstellung und privates Profil mit RLS sind implementiert und geprüft: [AUTH_PROFILE_STATUS.md](../AUTH_PROFILE_STATUS.md).

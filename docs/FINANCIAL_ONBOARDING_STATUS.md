@@ -2,6 +2,8 @@
 
 Stand: 20.09.2026. Task-Branch: `codex/financial-onboarding`, aufbauend auf `codex/auth-and-profile`.
 
+Dieser Bericht beschreibt den abgeschlossenen Einrichtungs-Task. Das Folgeinkrement [MONEY_TRANSACTIONS_STATUS.md](MONEY_TRANSACTIONS_STATUS.md) ergänzt inzwischen die laufende Pflege von Einnahmen und variablen Ausgaben. Nach Abschluss führt `/account/overview` zur aktuellen Money-Ansicht des Startmonats; eine separate, veraltete Startrechnung wird nicht weitergeführt.
+
 ## Umfang und Abnahme
 
 Nach dem gespeicherten Profil führt „Weiter zur finanziellen Einrichtung“ zu Einkommen, monatlichen Fixkosten, einem ersten Sparziel und einer Abschlussübersicht. Jeder Finanzbereich kann ausdrücklich ausgelassen werden. Gespeicherte Schritte lassen sich vor dem Abschluss erneut öffnen, korrigieren und nach einer Unterbrechung fortsetzen. Der Abschluss führt zu einer persönlichen Startübersicht aus echten eigenen Angaben. Die öffentliche Vorschau bleibt als fiktiv gekennzeichnet.
