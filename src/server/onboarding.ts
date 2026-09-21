@@ -23,7 +23,7 @@ export async function loadOnboarding() {
     state: data.onboarding,
     income: data.incomes[0] ?? null,
     expenses: data.expenses.sort(
-      (a, b) => a.onboarding_slot - b.onboarding_slot,
+      (a, b) => (a.onboarding_slot ?? 0) - (b.onboarding_slot ?? 0),
     ),
     goal: data.goals[0] ?? null,
   };

@@ -12,6 +12,8 @@ Die Dashboard-Inhalte bleiben Server Components. Nur `PreviewSwitcher` ist für 
 
 ## Modularer Monolith
 
+`/account/money` ergänzt die laufende Monatsübersicht; `/account/money/[kind]/[id]` enthält Erfassung, Bearbeitung und Löschbestätigung. Die Übersicht nach dem Onboarding verwendet nun diese aktuelle Datenbasis. `src/features/money`, `src/domain/transactions.ts` und die Money-Servermodule folgen denselben Schichtgrenzen. Die öffentliche Money-Seite ist ein statischer Einstieg in den privaten Bereich. Umfang und Datenbank-RPCs stehen in [MONEY_TRANSACTIONS_STATUS.md](../MONEY_TRANSACTIONS_STATUS.md).
+
 ```text
 UI / Next.js-Routen
         ↓

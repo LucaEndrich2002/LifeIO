@@ -10,6 +10,8 @@ Dieses Dokument beschreibt die Entitäten aus der README. Implementiert sind `pr
 
 ## Entitäten
 
+Im ersten Money-Inkrement sind die Onboarding-Slots von `incomes` und `expenses` optional für zusätzliche Einträge. Ein Constraint trennt monatliche Fixkosten (`start_month`) von variablen Ausgaben (`spent_on`, feste `category`). Revisionen schützen bearbeitete Zeilen. Ein autorisiertes Mutations-RPC ergänzt CRUD; ein Invoker-RPC liefert vollständige Monatssummen und getrennte 25er-Seiten. Details: [MONEY_TRANSACTIONS_STATUS.md](../MONEY_TRANSACTIONS_STATUS.md). Fixkosten und Goals werden in diesem Task weiter nur aus dem Onboarding übernommen.
+
 | Entität         | Zweck und vorgesehene Kerndaten                                                                         | Einführung             |
 | --------------- | ------------------------------------------------------------------------------------------------------- | ---------------------- |
 | User            | Identität in Supabase `auth.users`; keine eigene Passworttabelle                                        | Authentication         |

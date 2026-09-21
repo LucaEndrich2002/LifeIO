@@ -57,14 +57,14 @@ test("financial setup persists, allows corrections and finishes with real plan v
     await page.getByRole("link", { name: "4. Übersicht" }).click();
     await expect(page.getByText("−439,99 €", { exact: true })).toBeVisible();
     await page.getByRole("button", { name: "Einrichtung abschließen" }).click();
-    await expect(page).toHaveURL("/account/overview");
+    await expect(page).toHaveURL("/account/money?month=2026-09");
     await page.reload();
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-      "Dein Start, Alex Test.",
+      "Dein Geld im Überblick.",
     );
     await expect(page.getByText("−439,99 €", { exact: true })).toBeVisible();
     await expect(
-      page.getByText(/Variable Ausgaben sind noch nicht erfasst/),
+      page.getByText(/Nur gespeicherte Angaben fließen ein/),
     ).toBeVisible();
     expect(
       (await fixture.client.from("incomes").select("*")).data,
@@ -94,7 +94,7 @@ test("financial setup persists, allows corrections and finishes with real plan v
       fullPage: true,
     });
     await page.goto("/account/onboarding/income");
-    await expect(page).toHaveURL("/account/overview");
+    await expect(page).toHaveURL("/account/money?month=2026-09");
   } finally {
     await removeFixture(fixture.id);
   }
@@ -129,7 +129,7 @@ test("explicit omissions resume and finish without invented financial records", 
       page.getByText("Noch unvollständig", { exact: true }),
     ).toBeVisible();
     await page.getByRole("button", { name: "Einrichtung abschließen" }).click();
-    await expect(page).toHaveURL("/account/overview");
+    await expect(page).toHaveURL(/\/account\/money\?month=\d{4}-\d{2}$/);
     for (const table of ["incomes", "expenses", "goals"] as const)
       expect((await fixture.client.from(table).select("*")).data).toEqual([]);
     await expect(

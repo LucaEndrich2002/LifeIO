@@ -12,35 +12,44 @@ export type Database = {
       expenses: {
         Row: {
           amount_minor: number;
+          category: string | null;
           created_at: string;
           currency: string;
           id: string;
           name: string;
-          onboarding_slot: number;
+          onboarding_slot: number | null;
           recurrence: string;
-          start_month: string;
+          revision: number;
+          spent_on: string | null;
+          start_month: string | null;
           user_id: string;
         };
         Insert: {
           amount_minor: number;
+          category?: string | null;
           created_at?: string;
           currency?: string;
           id?: string;
           name: string;
-          onboarding_slot: number;
+          onboarding_slot?: number | null;
           recurrence?: string;
-          start_month: string;
+          revision?: number;
+          spent_on?: string | null;
+          start_month?: string | null;
           user_id: string;
         };
         Update: {
           amount_minor?: number;
+          category?: string | null;
           created_at?: string;
           currency?: string;
           id?: string;
           name?: string;
-          onboarding_slot?: number;
+          onboarding_slot?: number | null;
           recurrence?: string;
-          start_month?: string;
+          revision?: number;
+          spent_on?: string | null;
+          start_month?: string | null;
           user_id?: string;
         };
         Relationships: [
@@ -105,7 +114,8 @@ export type Database = {
           id: string;
           month: string;
           name: string;
-          onboarding_slot: number;
+          onboarding_slot: number | null;
+          revision: number;
           user_id: string;
         };
         Insert: {
@@ -115,7 +125,8 @@ export type Database = {
           id?: string;
           month: string;
           name: string;
-          onboarding_slot?: number;
+          onboarding_slot?: number | null;
+          revision?: number;
           user_id: string;
         };
         Update: {
@@ -125,7 +136,8 @@ export type Database = {
           id?: string;
           month?: string;
           name?: string;
-          onboarding_slot?: number;
+          onboarding_slot?: number | null;
+          revision?: number;
           user_id?: string;
         };
         Relationships: [
@@ -209,9 +221,27 @@ export type Database = {
     };
     Functions: {
       is_supported_time_zone: { Args: { candidate: string }; Returns: boolean };
+      mutate_money: {
+        Args: {
+          p_id: string;
+          p_kind: string;
+          p_operation: string;
+          p_payload: Json;
+          p_revision: number;
+        };
+        Returns: undefined;
+      };
       onboarding_amount: {
         Args: { allow_zero?: boolean; value: Json };
         Returns: number;
+      };
+      read_money_month: {
+        Args: {
+          p_expense_page?: number;
+          p_income_page?: number;
+          p_month: string;
+        };
+        Returns: Json;
       };
       save_onboarding_step: {
         Args: { p_payload: Json; p_revision: number; p_step: string };

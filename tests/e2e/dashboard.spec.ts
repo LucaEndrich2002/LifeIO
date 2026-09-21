@@ -34,9 +34,15 @@ test("example dashboard makes its data source and goal progress clear", async ({
   ] as const) {
     await page.getByRole("link", { name: label }).click();
     await expect(page).toHaveURL(path);
-    await expect(
-      page.getByText("In Vorbereitung", { exact: true }),
-    ).toBeVisible();
+    if (path === "/money") {
+      await expect(
+        page.getByRole("link", { name: "Private Finanzübersicht öffnen" }),
+      ).toHaveAttribute("href", "/account/money");
+    } else {
+      await expect(
+        page.getByText("In Vorbereitung", { exact: true }),
+      ).toBeVisible();
+    }
     await page.getByRole("link", { name: "Zum Überblick" }).click();
   }
 });

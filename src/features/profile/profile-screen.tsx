@@ -60,7 +60,7 @@ export async function ProfileScreen({
           className="flex min-h-12 items-center justify-center rounded-xl border border-primary px-5 py-3 text-sm font-medium text-primary"
         >
           {onboarding?.data?.completed_at
-            ? "Meine Startübersicht öffnen"
+            ? "Meine Finanzübersicht öffnen"
             : "Weiter zur finanziellen Einrichtung"}
         </Link>
       ) : (
