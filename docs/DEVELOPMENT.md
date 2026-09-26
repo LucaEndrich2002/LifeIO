@@ -18,6 +18,8 @@ Der Kontobereich ist separat: `/auth/login` und `/account` benötigen die lokale
 
 ## Qualitätsprüfungen
 
+Die laufende Sparzielverwaltung benötigt außerdem `20260926160000_savings_goals.sql` und `20260926161000_goal_currency.sql`. Alle Migrationen mit `pnpm exec supabase migration up --local` anwenden; ein Datenbankreset ist dafür nicht nötig. Bestehende Ziele bleiben erhalten und erhalten ihren bisherigen Startmonat als erste Sparrate. Details: [SAVINGS_GOALS_STATUS.md](SAVINGS_GOALS_STATUS.md).
+
 Fixkostenpflege und Monatsbudgets benötigen zusätzlich `20260921150000_fixed_costs_and_budgets.sql`; ebenfalls mit `pnpm exec supabase migration up --local` anwenden. Bestehende Nutzerdaten bleiben dabei erhalten. Die gemeinsame Monatsübersicht zeigt anschließend gültige Fixkosten und das Budget. Details: [FIXED_COSTS_BUDGET_STATUS.md](FIXED_COSTS_BUDGET_STATUS.md).
 
 Die laufende Finanzverwaltung unter `/account/money` benötigt auch die Migration `20260921120000_money_transactions.sql`. Sie verwendet dieselben Einkommen-/Ausgabentabellen wie die Einrichtung und bietet Einnahmen- und Ausgaben-CRUD mit Monatsübersicht. `/account/overview` führt inzwischen nach Money für den Startmonat. Details: [MONEY_TRANSACTIONS_STATUS.md](MONEY_TRANSACTIONS_STATUS.md).

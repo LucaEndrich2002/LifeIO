@@ -116,15 +116,93 @@ export type Database = {
           },
         ];
       };
+      goal_contributions: {
+        Row: {
+          amount_minor: number;
+          cancelled_at: string | null;
+          created_at: string;
+          currency: string;
+          goal_id: string;
+          id: string;
+          note: string;
+          paid_on: string;
+          user_id: string;
+        };
+        Insert: {
+          amount_minor: number;
+          cancelled_at?: string | null;
+          created_at?: string;
+          currency?: string;
+          goal_id: string;
+          id: string;
+          note?: string;
+          paid_on: string;
+          user_id: string;
+        };
+        Update: {
+          amount_minor?: number;
+          cancelled_at?: string | null;
+          created_at?: string;
+          currency?: string;
+          goal_id?: string;
+          id?: string;
+          note?: string;
+          paid_on?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "goal_contributions_user_id_goal_id_fkey";
+            columns: ["user_id", "goal_id"];
+            isOneToOne: false;
+            referencedRelation: "goals";
+            referencedColumns: ["user_id", "id"];
+          },
+        ];
+      };
+      goal_rates: {
+        Row: {
+          amount_minor: number;
+          currency: string;
+          goal_id: string;
+          month: string;
+          user_id: string;
+        };
+        Insert: {
+          amount_minor: number;
+          currency?: string;
+          goal_id: string;
+          month: string;
+          user_id: string;
+        };
+        Update: {
+          amount_minor?: number;
+          currency?: string;
+          goal_id?: string;
+          month?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "goal_rates_user_id_goal_id_fkey";
+            columns: ["user_id", "goal_id"];
+            isOneToOne: false;
+            referencedRelation: "goals";
+            referencedColumns: ["user_id", "id"];
+          },
+        ];
+      };
       goals: {
         Row: {
           created_at: string;
           currency: string;
           current_minor: number;
+          deadline: string | null;
           id: string;
           monthly_minor: number;
           name: string;
-          onboarding_slot: number;
+          onboarding_slot: number | null;
+          revision: number;
           target_minor: number;
           user_id: string;
         };
@@ -132,10 +210,12 @@ export type Database = {
           created_at?: string;
           currency?: string;
           current_minor: number;
+          deadline?: string | null;
           id?: string;
           monthly_minor: number;
           name: string;
-          onboarding_slot?: number;
+          onboarding_slot?: number | null;
+          revision?: number;
           target_minor: number;
           user_id: string;
         };
@@ -143,10 +223,12 @@ export type Database = {
           created_at?: string;
           currency?: string;
           current_minor?: number;
+          deadline?: string | null;
           id?: string;
           monthly_minor?: number;
           name?: string;
-          onboarding_slot?: number;
+          onboarding_slot?: number | null;
+          revision?: number;
           target_minor?: number;
           user_id?: string;
         };
@@ -294,6 +376,16 @@ export type Database = {
         };
         Returns: undefined;
       };
+      mutate_goal: {
+        Args: {
+          p_entry_id: string;
+          p_id: string;
+          p_operation: string;
+          p_payload: Json;
+          p_revision: number;
+        };
+        Returns: undefined;
+      };
       mutate_money: {
         Args: {
           p_id: string;
@@ -308,6 +400,7 @@ export type Database = {
         Args: { allow_zero?: boolean; value: Json };
         Returns: number;
       };
+      read_goal: { Args: { p_id: string; p_page?: number }; Returns: Json };
       read_money_month: {
         Args: {
           p_expense_page?: number;

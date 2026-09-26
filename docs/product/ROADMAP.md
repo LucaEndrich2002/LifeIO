@@ -1,12 +1,14 @@
 # LifeOS – Roadmap
 
-Stand: 21.09.2026
+Stand: 26.09.2026
 
 Quellen: [README](../../README.md), Abschnitte 9, 10 und 21, sowie [PRD](PRD.md). Diese Roadmap beschreibt die Reihenfolge und Abnahmebedingungen, keine bereits implementierten Funktionen.
 
 ## Aktueller Stand
 
-- Das nächste Money-Inkrement ergänzt Fixkosten mit Gültigkeitszeiträumen und erhaltenen früheren Beträgen sowie ein Monatsbudget für alle variablen Ausgaben. Regeln, Grenzen und Abnahme stehen in [FIXED_COSTS_BUDGET_STATUS.md](../FIXED_COSTS_BUDGET_STATUS.md). Das persönliche Home-Dashboard und die laufende Sparzielverwaltung bleiben weitere Schritte.
+- Die laufende Sparzielverwaltung ergänzt mehrere finanzielle Ziele, tatsächliche Einzahlungen mit bestätigter Stornierung und historische Sparraten für die gemeinsame Money-Monatsrechnung. [SAVINGS_GOALS_STATUS.md](../SAVINGS_GOALS_STATUS.md) beschreibt Umfang und Abnahme. Prognosen, persönliche Ziele und Milestones bleiben eigene nächste Schritte; Phase 5 ist nicht insgesamt abgeschlossen.
+
+- Das zweite Money-Inkrement ergänzt Fixkosten mit Gültigkeitszeiträumen und erhaltenen früheren Beträgen sowie ein Monatsbudget für alle variablen Ausgaben. Regeln, Grenzen und Abnahme stehen in [FIXED_COSTS_BUDGET_STATUS.md](../FIXED_COSTS_BUDGET_STATUS.md). Das persönliche Home-Dashboard bleibt ein weiterer Schritt.
 
 - Der erste begrenzte Money-Core-Schritt ergänzt mehrere Einnahmen, variable Ausgaben mit Datum/Kategorie, bestätigtes Löschen und eine paginierte Monatsübersicht mit vollständigen Summen. Die persönliche Startübersicht führt jetzt nach Money. [MONEY_TRANSACTIONS_STATUS.md](../MONEY_TRANSACTIONS_STATUS.md) beschreibt Regeln und Abnahme. Phase 4 ist nicht insgesamt abgeschlossen.
 
