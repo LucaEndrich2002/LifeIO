@@ -10,6 +10,7 @@ import {
 } from "@/domain/money";
 import { availableMinor, categories } from "@/domain/transactions";
 import { SignOutButton } from "@/features/auth/sign-out-button";
+import { BudgetCard } from "@/features/money/budget-card";
 import { loadMoneyMonth, requireMoneyAccount } from "@/server/money";
 
 export type MoneyQuery = {
@@ -65,7 +66,7 @@ function Pages({
   );
 }
 export async function MoneyScreen({ query }: { query: MoneyQuery }) {
-  const { supabase, profile, onboarding } = await requireMoneyAccount();
+  const { supabase, profile } = await requireMoneyAccount();
   const month = monthSchema.safeParse(
     query.month ?? monthInZone(new Date(), profile.time_zone),
   );
@@ -92,8 +93,7 @@ export async function MoneyScreen({ query }: { query: MoneyQuery }) {
   );
   const goal = profile.goals[0];
   const value = availableMinor(data.totals);
-  const completeBasis =
-    data.totals.income_count > 0 && onboarding.expenses_status === "saved";
+  const completeBasis = data.totals.income_count > 0 && data.fixed_known;
   const entries = [
     {
       kind: "income" as const,
@@ -161,7 +161,7 @@ export async function MoneyScreen({ query }: { query: MoneyQuery }) {
               ],
               [
                 "Monatliche Fixkosten",
-                onboarding.expenses_status === "saved"
+                data.fixed_known
                   ? formatEuro(data.totals.fixed)
                   : "Nicht angegeben",
               ],
@@ -203,6 +203,7 @@ export async function MoneyScreen({ query }: { query: MoneyQuery }) {
           </p>
         </CardContent>
       </Card>
+      <BudgetCard data={data} month={month.data} />
       {entries.map((section) => (
         <section
           key={section.kind}
@@ -281,17 +282,37 @@ export async function MoneyScreen({ query }: { query: MoneyQuery }) {
       ))}
       <section className="space-y-3 rounded-xl border p-5">
         <h2 className="font-semibold">Eingeplante Fixkosten</h2>
+        <Link
+          href={`/account/money/fixed?month=${month.data}`}
+          className="inline-flex min-h-11 items-center text-sm underline"
+        >
+          Fixkosten verwalten
+        </Link>
         {data.fixed.length ? (
           <ul className="space-y-3 text-sm">
             {data.fixed.map((item) => (
-              <li
-                key={item.id}
-                className="flex flex-wrap justify-between gap-2"
-              >
-                <span className="min-w-0 break-words">{item.name}</span>
-                <span className="tabular-nums">
-                  {formatEuro(item.amount_minor)}
-                </span>
+              <li key={item.id} className="space-y-2 border-t pt-3">
+                <div className="flex flex-wrap justify-between gap-2">
+                  <span className="min-w-0 break-words">{item.name}</span>
+                  <span className="tabular-nums">
+                    {formatEuro(item.amount_minor)}
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Ab {monthLabel(item.start_month)}
+                  {item.end_month
+                    ? ` bis einschließlich ${monthLabel(item.end_month)}`
+                    : " · ohne Endmonat"}
+                </p>
+                <Link
+                  href={`/account/money/fixed/${item.id}?month=${month.data}`}
+                  className="inline-flex min-h-11 items-center text-xs underline"
+                  aria-label={`${item.name} ${item.superseded_by ? "Verlauf öffnen" : "ändern"}`}
+                >
+                  {item.superseded_by
+                    ? "Verlauf öffnen"
+                    : "Ab späterem Monat ändern"}
+                </Link>
               </li>
             ))}
           </ul>
@@ -301,9 +322,8 @@ export async function MoneyScreen({ query }: { query: MoneyQuery }) {
           </p>
         )}
         <p className="text-xs leading-relaxed text-muted-foreground">
-          Monatlich ab ihrem Startmonat berücksichtigt. Sie werden hier einmal
-          abgezogen. Die laufende Pflege von Fixkosten folgt im nächsten
-          Schritt.
+          In jedem gültigen Monat einmal berücksichtigt, einschließlich des
+          letzten Monats. Frühere Beträge bleiben bei einer Änderung erhalten.
         </p>
       </section>
       <section className="space-y-3 rounded-xl border p-5">

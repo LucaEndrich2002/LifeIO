@@ -18,6 +18,8 @@ Der Kontobereich ist separat: `/auth/login` und `/account` benötigen die lokale
 
 ## Qualitätsprüfungen
 
+Fixkostenpflege und Monatsbudgets benötigen zusätzlich `20260921150000_fixed_costs_and_budgets.sql`; ebenfalls mit `pnpm exec supabase migration up --local` anwenden. Bestehende Nutzerdaten bleiben dabei erhalten. Die gemeinsame Monatsübersicht zeigt anschließend gültige Fixkosten und das Budget. Details: [FIXED_COSTS_BUDGET_STATUS.md](FIXED_COSTS_BUDGET_STATUS.md).
+
 Die laufende Finanzverwaltung unter `/account/money` benötigt auch die Migration `20260921120000_money_transactions.sql`. Sie verwendet dieselben Einkommen-/Ausgabentabellen wie die Einrichtung und bietet Einnahmen- und Ausgaben-CRUD mit Monatsübersicht. `/account/overview` führt inzwischen nach Money für den Startmonat. Details: [MONEY_TRANSACTIONS_STATUS.md](MONEY_TRANSACTIONS_STATUS.md).
 
 ```sh

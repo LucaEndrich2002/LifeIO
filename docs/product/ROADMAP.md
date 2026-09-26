@@ -6,7 +6,9 @@ Quellen: [README](../../README.md), Abschnitte 9, 10 und 21, sowie [PRD](PRD.md)
 
 ## Aktueller Stand
 
-- Der erste begrenzte Money-Core-Schritt ergänzt mehrere Einnahmen, variable Ausgaben mit Datum/Kategorie, bestätigtes Löschen und eine paginierte Monatsübersicht mit vollständigen Summen. Die persönliche Startübersicht führt jetzt nach Money. [MONEY_TRANSACTIONS_STATUS.md](../MONEY_TRANSACTIONS_STATUS.md) beschreibt Regeln und Abnahme. Die laufende Fixkostenpflege und Budgets bleiben offen; Phase 4 ist nicht insgesamt abgeschlossen.
+- Das nächste Money-Inkrement ergänzt Fixkosten mit Gültigkeitszeiträumen und erhaltenen früheren Beträgen sowie ein Monatsbudget für alle variablen Ausgaben. Regeln, Grenzen und Abnahme stehen in [FIXED_COSTS_BUDGET_STATUS.md](../FIXED_COSTS_BUDGET_STATUS.md). Das persönliche Home-Dashboard und die laufende Sparzielverwaltung bleiben weitere Schritte.
+
+- Der erste begrenzte Money-Core-Schritt ergänzt mehrere Einnahmen, variable Ausgaben mit Datum/Kategorie, bestätigtes Löschen und eine paginierte Monatsübersicht mit vollständigen Summen. Die persönliche Startübersicht führt jetzt nach Money. [MONEY_TRANSACTIONS_STATUS.md](../MONEY_TRANSACTIONS_STATUS.md) beschreibt Regeln und Abnahme. Phase 4 ist nicht insgesamt abgeschlossen.
 
 - Das zweite Inkrement von Phase 3 ergänzt die finanzielle Einrichtung: Einkommen, monatliche Fixkosten und ein Sparziel mit Auslassentscheidungen, Wiederaufnahme, atomarem Speichern und persönlicher Startübersicht. Umfang, Regeln und Abnahme stehen in [FINANCIAL_ONBOARDING_STATUS.md](../FINANCIAL_ONBOARDING_STATUS.md). Optionale Aufgaben und die vollständige laufende Verwaltung bleiben spätere Inkremente; R02/J01 sind noch nicht insgesamt erfüllt.
 - Kontozugang, E-Mail-Codes, Passwortwiederherstellung und privates Profil mit RLS sind implementiert und geprüft: [AUTH_PROFILE_STATUS.md](../AUTH_PROFILE_STATUS.md).

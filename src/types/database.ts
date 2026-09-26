@@ -9,12 +9,54 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      budgets: {
+        Row: {
+          amount_minor: number;
+          created_at: string;
+          currency: string;
+          id: string;
+          month: string;
+          name: string;
+          revision: number;
+          user_id: string;
+        };
+        Insert: {
+          amount_minor: number;
+          created_at?: string;
+          currency?: string;
+          id: string;
+          month: string;
+          name: string;
+          revision?: number;
+          user_id: string;
+        };
+        Update: {
+          amount_minor?: number;
+          created_at?: string;
+          currency?: string;
+          id?: string;
+          month?: string;
+          name?: string;
+          revision?: number;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "budgets_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["user_id"];
+          },
+        ];
+      };
       expenses: {
         Row: {
           amount_minor: number;
           category: string | null;
           created_at: string;
           currency: string;
+          end_month: string | null;
           id: string;
           name: string;
           onboarding_slot: number | null;
@@ -22,6 +64,7 @@ export type Database = {
           revision: number;
           spent_on: string | null;
           start_month: string | null;
+          superseded_by: string | null;
           user_id: string;
         };
         Insert: {
@@ -29,6 +72,7 @@ export type Database = {
           category?: string | null;
           created_at?: string;
           currency?: string;
+          end_month?: string | null;
           id?: string;
           name: string;
           onboarding_slot?: number | null;
@@ -36,6 +80,7 @@ export type Database = {
           revision?: number;
           spent_on?: string | null;
           start_month?: string | null;
+          superseded_by?: string | null;
           user_id: string;
         };
         Update: {
@@ -43,6 +88,7 @@ export type Database = {
           category?: string | null;
           created_at?: string;
           currency?: string;
+          end_month?: string | null;
           id?: string;
           name?: string;
           onboarding_slot?: number | null;
@@ -50,9 +96,17 @@ export type Database = {
           revision?: number;
           spent_on?: string | null;
           start_month?: string | null;
+          superseded_by?: string | null;
           user_id?: string;
         };
         Relationships: [
+          {
+            foreignKeyName: "expenses_successor_owner";
+            columns: ["user_id", "superseded_by"];
+            isOneToOne: false;
+            referencedRelation: "expenses";
+            referencedColumns: ["user_id", "id"];
+          },
           {
             foreignKeyName: "expenses_user_id_fkey";
             columns: ["user_id"];
@@ -221,6 +275,25 @@ export type Database = {
     };
     Functions: {
       is_supported_time_zone: { Args: { candidate: string }; Returns: boolean };
+      mutate_budget: {
+        Args: {
+          p_id: string;
+          p_operation: string;
+          p_payload: Json;
+          p_revision: number;
+        };
+        Returns: undefined;
+      };
+      mutate_fixed_cost: {
+        Args: {
+          p_id: string;
+          p_new_id: string;
+          p_operation: string;
+          p_payload: Json;
+          p_revision: number;
+        };
+        Returns: undefined;
+      };
       mutate_money: {
         Args: {
           p_id: string;
