@@ -38,6 +38,10 @@ test("example dashboard makes its data source and goal progress clear", async ({
       await expect(
         page.getByRole("link", { name: "Private Finanzübersicht öffnen" }),
       ).toHaveAttribute("href", "/account/money");
+    } else if (path === "/goals") {
+      await expect(
+        page.getByRole("link", { name: "Private Sparziele öffnen" }),
+      ).toHaveAttribute("href", "/account/goals");
     } else {
       await expect(
         page.getByText("In Vorbereitung", { exact: true }),

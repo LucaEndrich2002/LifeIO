@@ -29,6 +29,10 @@ test("all five areas are reachable and distinguish the preview from real data", 
       await expect(
         page.getByRole("link", { name: "Private Finanzübersicht öffnen" }),
       ).toHaveAttribute("href", "/account/money");
+    } else if (label === "Goals") {
+      await expect(
+        page.getByRole("link", { name: "Private Sparziele öffnen" }),
+      ).toHaveAttribute("href", "/account/goals");
     } else {
       await expect(
         page.getByText("In Vorbereitung", { exact: true }),

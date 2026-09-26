@@ -98,6 +98,14 @@ export const moneySnapshotSchema = z.object({
   ),
   budget: incomeRowSchema.nullable(),
   fixed_known: z.boolean(),
+  goal_count: z.number().int().nonnegative(),
+  savings_plans: z.array(
+    z.object({
+      id: z.uuid(),
+      name: z.string(),
+      amount_minor: z.number().int().min(0).max(99999999999),
+    }),
+  ),
   totals: z.object({
     income: totalSchema,
     variable: totalSchema,

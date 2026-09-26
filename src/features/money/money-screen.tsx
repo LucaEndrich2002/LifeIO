@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { z } from "zod";
 import { Card, CardContent } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import {
   formatEuro,
   monthInZone,
@@ -91,7 +90,6 @@ export async function MoneyScreen({ query }: { query: MoneyQuery }) {
     incomePage.data,
     expensePage.data,
   );
-  const goal = profile.goals[0];
   const value = availableMinor(data.totals);
   const completeBasis = data.totals.income_count > 0 && data.fixed_known;
   const entries = [
@@ -173,7 +171,7 @@ export async function MoneyScreen({ query }: { query: MoneyQuery }) {
               ],
               [
                 "Geplante Sparrate",
-                goal
+                data.goal_count
                   ? formatEuro(data.totals.savings)
                   : "Kein Sparziel angegeben",
               ],
@@ -327,31 +325,44 @@ export async function MoneyScreen({ query }: { query: MoneyQuery }) {
         </p>
       </section>
       <section className="space-y-3 rounded-xl border p-5">
-        <h2 className="font-semibold">Dein Sparziel</h2>
-        {goal ? (
-          <>
-            <p className="break-words font-medium">{goal.name}</p>
-            <p className="text-sm">
-              {formatEuro(goal.current_minor)} von{" "}
-              {formatEuro(goal.target_minor)}
-            </p>
-            <Progress
-              label={`Fortschritt für ${goal.name}`}
-              value={Math.min(
-                100,
-                (goal.current_minor / goal.target_minor) * 100,
-              )}
-            />
-            <p className="text-xs text-muted-foreground">
-              Die monatliche Sparrate ist ab deinem Startmonat eingeplant und
-              wird nicht als tatsächliche Einzahlung gezählt.
-            </p>
-          </>
+        <h2 className="font-semibold">Deine Sparziele</h2>
+        {data.savings_plans.length ? (
+          <ul className="space-y-3 text-sm">
+            {data.savings_plans.map((goal) => (
+              <li
+                key={goal.id}
+                className="flex flex-wrap justify-between gap-2"
+              >
+                <Link
+                  href={`/account/goals/${goal.id}`}
+                  className="inline-flex min-h-11 min-w-0 items-center break-words underline"
+                >
+                  {goal.name}
+                </Link>
+                <span className="py-3 tabular-nums">
+                  {formatEuro(goal.amount_minor)} geplant
+                </span>
+              </li>
+            ))}
+          </ul>
         ) : (
           <p className="text-sm text-muted-foreground">
-            Du hast noch kein Sparziel angegeben.
+            {data.goal_count
+              ? "Für diesen Monat ist noch keine Sparrate geplant."
+              : "Du hast noch kein Sparziel angegeben."}
           </p>
         )}
+        <p className="text-xs text-muted-foreground">
+          Die im gewählten Monat gültigen Sparraten zählen einmal zum
+          Monatsplan. Den tatsächlichen Sparstand und Einzahlungen findest du
+          beim jeweiligen Ziel.
+        </p>
+        <Link
+          href="/account/goals"
+          className="inline-flex min-h-11 items-center text-sm underline"
+        >
+          Sparziele verwalten
+        </Link>
       </section>
       <Link
         href="/account"

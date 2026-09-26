@@ -4,6 +4,7 @@ import type { Json } from "../../src/types/database";
 export async function createPlanFixture({
   complete = true,
   skipFixed = false,
+  skipGoal = false,
 } = {}) {
   const user = await createFixture();
   try {
@@ -32,13 +33,15 @@ export async function createPlanFixture({
         ],
         [
           "goal",
-          {
-            decision: "saved",
-            name: "Reserve",
-            target: 1000000,
-            current: 350000,
-            monthly: 50000,
-          },
+          skipGoal
+            ? { decision: "skipped" }
+            : {
+                decision: "saved",
+                name: "Reserve",
+                target: 1000000,
+                current: 350000,
+                monthly: 50000,
+              },
         ],
         ["complete", {}],
       ];

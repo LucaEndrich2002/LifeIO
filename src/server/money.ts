@@ -8,9 +8,7 @@ export async function requireMoneyAccount() {
   const identity = await requireIdentity();
   const { data, error } = await identity.supabase
     .from("profiles")
-    .select(
-      "display_name,time_zone,onboarding(*),goals(id,name,target_minor,current_minor,monthly_minor)",
-    )
+    .select("display_name,time_zone,onboarding(*)")
     .eq("user_id", identity.user.id)
     .maybeSingle();
   if (error) throw new Error("Account unavailable.");
