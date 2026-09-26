@@ -1,6 +1,6 @@
 # LifeOS – beabsichtigtes V1-Datenmodell
 
-Dieses Dokument beschreibt die Entitäten aus der README. Implementiert sind `profiles` sowie die initialen Finanzdatensätze `incomes`, `expenses`, `goals` und der Einrichtungsstatus `onboarding`. Die übrigen Entitäten bleiben Entwurf. Offene Produktregeln stehen im [PRD, Abschnitt 8](../product/PRD.md).
+Dieses Dokument beschreibt die Entitäten aus der README. Implementiert sind `profiles`, `incomes`, `expenses`, `budgets`, die initialen `goals` und der Einrichtungsstatus `onboarding`. Die übrigen Entitäten bleiben Entwurf. Offene Produktregeln stehen im [PRD, Abschnitt 8](../product/PRD.md).
 
 ## Bereits implementiert
 
@@ -9,6 +9,8 @@ Dieses Dokument beschreibt die Entitäten aus der README. Implementiert sind `pr
 `incomes` speichert einen positiven EUR-Betrag mit Monat, `expenses` die monatlichen Fixkostenregeln ab einem Startmonat, `goals` Zielbetrag, Sparstand und geplanten Beitrag. Beträge sind `bigint` mit Obergrenze 99.999.999.999 Cent; die drei Fachtabellen haben stabile UUIDs und eindeutige Slots für die initialen Einträge. `onboarding` speichert ausschließlich Schrittentscheidungen, Startmonat, Revision und finanziellen Abschlusszeitpunkt. Ein eng begrenztes, authentifiziertes Datenbank-RPC verändert die Fachdatensätze und den Status gemeinsam in einer Transaktion; direkte Schreibrechte sind entzogen, Lesen ist durch Eigentümer-RLS geschützt. Vollständige Details und die spätere Erweiterung der Slots: [FINANCIAL_ONBOARDING_STATUS.md](../FINANCIAL_ONBOARDING_STATUS.md).
 
 ## Entitäten
+
+Das Fixkosten-/Budget-Inkrement ergänzt `expenses.end_month` und `superseded_by` mit Eigentümer-Fremdschlüssel. Gültigkeitsintervalle ersetzen keine historischen Beträge; ein enges Mutations-RPC erstellt atomar die nachfolgende Fassung. `budgets` ist eine eigene RLS-Tabelle mit genau einem EUR-Limit pro Nutzer/Monat und Revision. Derselbe Monats-Snapshot enthält Budget, vollständige Ausgabensumme und Fixkostenbasis. Details: [FIXED_COSTS_BUDGET_STATUS.md](../FIXED_COSTS_BUDGET_STATUS.md).
 
 Im ersten Money-Inkrement sind die Onboarding-Slots von `incomes` und `expenses` optional für zusätzliche Einträge. Ein Constraint trennt monatliche Fixkosten (`start_month`) von variablen Ausgaben (`spent_on`, feste `category`). Revisionen schützen bearbeitete Zeilen. Ein autorisiertes Mutations-RPC ergänzt CRUD; ein Invoker-RPC liefert vollständige Monatssummen und getrennte 25er-Seiten. Details: [MONEY_TRANSACTIONS_STATUS.md](../MONEY_TRANSACTIONS_STATUS.md). Fixkosten und Goals werden in diesem Task weiter nur aus dem Onboarding übernommen.
 

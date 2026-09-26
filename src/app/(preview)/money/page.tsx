@@ -28,8 +28,8 @@ export default function MoneyPage() {
           </h2>
           <p className="text-sm leading-relaxed text-muted-foreground">
             Melde dich an und schließe deine Einrichtung ab, um mit deinen
-            eigenen Angaben zu arbeiten. Budgets und die laufende Pflege von
-            Fixkosten folgen im nächsten Ausbau.
+            eigenen Angaben zu arbeiten. Verwalte laufende Fixkosten und plane
+            ein Monatsbudget für deine variablen Ausgaben.
           </p>
           <Link
             href="/account/money"

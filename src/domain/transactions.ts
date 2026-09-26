@@ -92,8 +92,12 @@ export const moneySnapshotSchema = z.object({
       name: z.string(),
       amount_minor: rowBase.amount_minor,
       start_month: z.string(),
+      end_month: z.string().nullable(),
+      superseded_by: z.uuid().nullable(),
     }),
   ),
+  budget: incomeRowSchema.nullable(),
+  fixed_known: z.boolean(),
   totals: z.object({
     income: totalSchema,
     variable: totalSchema,

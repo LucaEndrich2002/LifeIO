@@ -12,6 +12,8 @@ Die Dashboard-Inhalte bleiben Server Components. Nur `PreviewSwitcher` ist für 
 
 ## Modularer Monolith
 
+Die Fixkostenverwaltung unter `/account/money/fixed` und Planformulare für `fixed`/`budget` ergänzen Money. `src/domain/plans.ts` enthält reine Validierung und Budgetarithmetik, `src/server/plan-actions.ts` die autorisierten Mutationen. Die Tabellen und RPCs sind in [FIXED_COSTS_BUDGET_STATUS.md](../FIXED_COSTS_BUDGET_STATUS.md) beschrieben. Die übrigen Modulgrenzen bleiben gleich.
+
 `/account/money` ergänzt die laufende Monatsübersicht; `/account/money/[kind]/[id]` enthält Erfassung, Bearbeitung und Löschbestätigung. Die Übersicht nach dem Onboarding verwendet nun diese aktuelle Datenbasis. `src/features/money`, `src/domain/transactions.ts` und die Money-Servermodule folgen denselben Schichtgrenzen. Die öffentliche Money-Seite ist ein statischer Einstieg in den privaten Bereich. Umfang und Datenbank-RPCs stehen in [MONEY_TRANSACTIONS_STATUS.md](../MONEY_TRANSACTIONS_STATUS.md).
 
 ```text
