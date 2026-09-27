@@ -18,6 +18,8 @@ Der Kontobereich ist separat: `/auth/login` und `/account` benötigen die lokale
 
 ## Qualitätsprüfungen
 
+Meilensteine für vorhandene Sparziele benötigen die additive Migration `20260927090000_goal_milestones.sql`. Mit `pnpm exec supabase migration up --local` anwenden; bestehende Finanzdaten bleiben erhalten. Regeln und Abnahme: [GOAL_MILESTONES_STATUS.md](GOAL_MILESTONES_STATUS.md).
+
 Die Sparziel-Prognose benötigt keine weitere Migration oder Konfiguration. Sie verwendet vorhandene Ziele, Sparraten und tatsächliche Einzahlungen. Regeln und Abnahme: [GOAL_FORECAST_STATUS.md](GOAL_FORECAST_STATUS.md).
 
 Die laufende Sparzielverwaltung benötigt außerdem `20260926160000_savings_goals.sql` und `20260926161000_goal_currency.sql`. Alle Migrationen mit `pnpm exec supabase migration up --local` anwenden; ein Datenbankreset ist dafür nicht nötig. Bestehende Ziele bleiben erhalten und erhalten ihren bisherigen Startmonat als erste Sparrate. Details: [SAVINGS_GOALS_STATUS.md](SAVINGS_GOALS_STATUS.md).

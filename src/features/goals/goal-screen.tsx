@@ -5,6 +5,7 @@ import { z } from "zod";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { goalProgress } from "@/domain/goals";
+import { milestonePageSchema } from "@/domain/milestones";
 import {
   amountInput,
   formatEuro,
@@ -15,6 +16,8 @@ import { dateInZone } from "@/domain/transactions";
 import { GoalForm, type GoalInitial } from "@/features/goals/goal-form";
 import { GoalForecastCard } from "@/features/goals/goal-forecast-card";
 import { loadGoal } from "@/server/goals";
+import { loadMilestones } from "@/server/milestones";
+import { MilestonesSection } from "@/features/goals/milestones-section";
 import { requireMoneyAccount } from "@/server/money";
 
 export type GoalQuery = {
@@ -22,6 +25,7 @@ export type GoalQuery = {
   deposit?: string;
   cancel?: string;
   page?: string;
+  milestone_page?: string;
 };
 export async function GoalScreen({
   id,
@@ -43,6 +47,10 @@ export async function GoalScreen({
   )
     notFound();
   const page = Number(query.page ?? 0);
+  const milestonePage = milestonePageSchema.safeParse(
+    query.milestone_page ?? "0",
+  );
+  if (!milestonePage.success) notFound();
   const data = id === "new" ? null : await loadGoal(supabase, id, page);
   const today = dateInZone(new Date(), profile.time_zone);
   const latest = data?.rates[0];
@@ -109,6 +117,7 @@ export async function GoalScreen({
     );
   }
   const { goal, balance, rates, entries, count } = data;
+  const milestones = await loadMilestones(supabase, id, milestonePage.data);
   const progress = goalProgress(goal.target_minor, balance);
   return (
     <div className="space-y-6">
@@ -165,6 +174,11 @@ export async function GoalScreen({
         data={data}
         today={today}
         timeZone={profile.time_zone}
+      />
+      <MilestonesSection
+        goalId={id}
+        data={milestones}
+        page={milestonePage.data}
       />
       <section className="space-y-3 rounded-xl border p-5">
         <h2 className="font-semibold">Geplante Sparraten</h2>
