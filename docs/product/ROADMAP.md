@@ -6,7 +6,9 @@ Quellen: [README](../../README.md), Abschnitte 9, 10 und 21, sowie [PRD](PRD.md)
 
 ## Aktueller Stand
 
-- Bestehende Sparziele haben eine eigene Meilenstein-Verwaltung mit getrenntem Fortschritt, Wiederöffnen und bestätigtem Entfernen. [GOAL_MILESTONES_STATUS.md](../GOAL_MILESTONES_STATUS.md) beschreibt Umfang, Isolation und Abnahme. Persönliche Ziele ohne Geldbetrag und Modulverknüpfungen bleiben weitere Schritte.
+- Persönliche Ziele ohne Geldbetrag lassen sich neben Sparzielen anlegen und bearbeiten. Ein optionales Zieldatum und die gemeinsame Meilenstein-Verwaltung machen ihren Fortschritt sichtbar; finanzielle Berechnungen bleiben unverändert. [PERSONAL_GOALS_STATUS.md](../PERSONAL_GOALS_STATUS.md) beschreibt Regeln, Trennung und Abnahme. Modulverknüpfungen und Plan bleiben weitere Schritte.
+
+- Bestehende Sparziele haben eine eigene Meilenstein-Verwaltung mit getrenntem Fortschritt, Wiederöffnen und bestätigtem Entfernen. [GOAL_MILESTONES_STATUS.md](../GOAL_MILESTONES_STATUS.md) beschreibt das ursprüngliche Inkrement; persönliche Ziele nutzen diese Verwaltung inzwischen ebenfalls.
 
 - Die Sparziel-Prognose berechnet künftige Beiträge aus dem tatsächlichen Stand und dem Ratenverlauf, zeigt Annahmen und vergleicht den Termin taggenau mit dem Zieldatum. [GOAL_FORECAST_STATUS.md](../GOAL_FORECAST_STATUS.md) beschreibt die Beitragskonvention nach O03 und die Abnahme.
 

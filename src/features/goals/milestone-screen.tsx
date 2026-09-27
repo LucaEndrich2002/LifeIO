@@ -31,7 +31,7 @@ export async function MilestoneScreen({
     notFound();
   const { data: goal, error } = await supabase
     .from("goals")
-    .select("id,name")
+    .select("id,name,kind")
     .eq("user_id", user.id)
     .eq("id", goalId)
     .maybeSingle();
@@ -71,7 +71,8 @@ export async function MilestoneScreen({
             : "Meilenstein bearbeiten"}
       </h1>
       <p className="break-words text-sm text-muted-foreground">
-        Sparziel: {goal.name}
+        {goal.kind === "personal" ? "Persönliches Ziel" : "Sparziel"}:{" "}
+        {goal.name}
       </p>
       <MilestoneForm initial={initial} />
     </div>

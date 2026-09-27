@@ -14,6 +14,17 @@ export async function loadOnboarding() {
     .maybeSingle();
   if (error) throw new Error("Onboarding unavailable.");
   if (!data) redirect("/account");
+  // Only the original financial setup record belongs in the onboarding summary.
+  const goal = data.goals.find(
+    (item) => item.kind === "financial" && item.onboarding_slot === 0,
+  );
+  if (
+    goal &&
+    (goal.target_minor === null ||
+      goal.current_minor === null ||
+      goal.monthly_minor === null)
+  )
+    throw new Error("Incomplete financial goal.");
   return {
     profile: {
       display_name: data.display_name,
@@ -25,7 +36,14 @@ export async function loadOnboarding() {
     expenses: data.expenses.sort(
       (a, b) => (a.onboarding_slot ?? 0) - (b.onboarding_slot ?? 0),
     ),
-    goal: data.goals[0] ?? null,
+    goal: goal
+      ? {
+          ...goal,
+          target_minor: goal.target_minor!,
+          current_minor: goal.current_minor!,
+          monthly_minor: goal.monthly_minor!,
+        }
+      : null,
   };
 }
 

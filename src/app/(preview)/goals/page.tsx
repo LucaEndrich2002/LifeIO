@@ -12,24 +12,24 @@ export default function GoalsPage() {
         Aus Wünschen werden Ziele.
       </h1>
       <p className="max-w-xl text-muted-foreground">
-        Plane deine Sparziele und halte echte Einzahlungen fest.
+        Plane persönliche Ziele mit Meilensteinen und Sparziele mit echten
+        Einzahlungen.
       </p>
       <Card className="max-w-3xl">
         <CardContent className="space-y-5">
           <Target className="size-8 text-primary" aria-hidden="true" />
-          <h2 className="text-xl font-semibold">
-            Dein persönlicher Sparfortschritt
-          </h2>
+          <h2 className="text-xl font-semibold">Dein Fortschritt im Blick</h2>
           <p className="text-sm leading-relaxed text-muted-foreground">
             Melde dich an und schließe die Einrichtung ab. Danach kannst du
-            Sparziele verwalten, Sparraten planen und Einzahlungen erfassen.
+            persönliche Ziele mit Meilensteinen verfolgen, Sparziele verwalten
+            und Einzahlungen erfassen.
           </p>
           <Link
             href="/account/goals"
             prefetch={false}
             className="inline-flex min-h-12 items-center rounded-xl bg-primary px-5 text-sm font-medium text-primary-foreground"
           >
-            Private Sparziele öffnen
+            Private Ziele öffnen
           </Link>
         </CardContent>
       </Card>

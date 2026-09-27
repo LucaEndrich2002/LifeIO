@@ -18,6 +18,8 @@ Der Kontobereich ist separat: `/auth/login` und `/account` benötigen die lokale
 
 ## Qualitätsprüfungen
 
+Persönliche Ziele ohne Geldbetrag benötigen zusätzlich `20260927120000_personal_goals.sql`. Die additive Migration erhält vorhandene Sparziele und nutzt die bestehende Meilenstein-Verwaltung. Nach `pnpm exec supabase migration up --local` steht unter `/account/goals` der Bereich „Persönliche Ziele“ bereit. Regeln und Abnahme: [PERSONAL_GOALS_STATUS.md](PERSONAL_GOALS_STATUS.md).
+
 Meilensteine für vorhandene Sparziele benötigen die additive Migration `20260927090000_goal_milestones.sql`. Mit `pnpm exec supabase migration up --local` anwenden; bestehende Finanzdaten bleiben erhalten. Regeln und Abnahme: [GOAL_MILESTONES_STATUS.md](GOAL_MILESTONES_STATUS.md).
 
 Die Sparziel-Prognose benötigt keine weitere Migration oder Konfiguration. Sie verwendet vorhandene Ziele, Sparraten und tatsächliche Einzahlungen. Regeln und Abnahme: [GOAL_FORECAST_STATUS.md](GOAL_FORECAST_STATUS.md).

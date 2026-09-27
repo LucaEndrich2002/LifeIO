@@ -19,8 +19,11 @@ import { loadGoal } from "@/server/goals";
 import { loadMilestones } from "@/server/milestones";
 import { MilestonesSection } from "@/features/goals/milestones-section";
 import { requireMoneyAccount } from "@/server/money";
+import { goalKindSchema } from "@/domain/personal-goals";
+import { PersonalGoalScreen } from "@/features/goals/personal-goal-screen";
 
 export type GoalQuery = {
+  kind?: string;
   edit?: string;
   deposit?: string;
   cancel?: string;
@@ -34,7 +37,8 @@ export async function GoalScreen({
   id: string;
   query: GoalQuery;
 }) {
-  const { supabase, user, profile } = await requireMoneyAccount();
+  const account = await requireMoneyAccount();
+  const { supabase, user, profile } = account;
   const editing = query.edit === "1";
   const deposit = query.deposit === "1";
   if (
@@ -51,6 +55,31 @@ export async function GoalScreen({
     query.milestone_page ?? "0",
   );
   if (!milestonePage.success) notFound();
+  let kind = goalKindSchema.safeParse(query.kind ?? "financial");
+  if (!kind.success) notFound();
+  if (id !== "new") {
+    const { data: record, error } = await supabase
+      .from("goals")
+      .select("kind")
+      .eq("user_id", user.id)
+      .eq("id", id)
+      .maybeSingle();
+    if (error) throw new Error("Goal unavailable.");
+    if (!record) notFound();
+    kind = goalKindSchema.safeParse(record.kind);
+    if (!kind.success) throw new Error("Unsupported goal kind.");
+  }
+  if (kind.data === "personal") {
+    if (deposit || query.cancel || query.page !== undefined) notFound();
+    return (
+      <PersonalGoalScreen
+        account={account}
+        id={id}
+        editing={editing}
+        page={milestonePage.data}
+      />
+    );
+  }
   const data = id === "new" ? null : await loadGoal(supabase, id, page);
   const today = dateInZone(new Date(), profile.time_zone);
   const latest = data?.rates[0];
