@@ -11,10 +11,12 @@ export function MilestonesSection({
   goalId,
   data,
   page,
+  kind = "financial",
 }: {
   goalId: string;
   data: z.output<typeof milestoneSnapshotSchema>;
   page: number;
+  kind?: "financial" | "personal";
 }) {
   const progress = milestoneProgress(data.total, data.completed);
   const base = `/account/goals/${goalId}`;
@@ -28,8 +30,9 @@ export function MilestonesSection({
         Deine Meilensteine
       </h2>
       <p className="text-sm text-muted-foreground">
-        Halte die Schritte zu deinem Ziel fest. Abhaken verändert weder deinen
-        Sparstand noch die Sparprognose.
+        {kind === "personal"
+          ? "Halte die Schritte zu deinem Ziel fest. Dein Fortschritt ergibt sich aus den erledigten Meilensteinen."
+          : "Halte die Schritte zu deinem Ziel fest. Abhaken verändert weder deinen Sparstand noch die Sparprognose."}
       </p>
       {progress !== null ? (
         <div className="space-y-3">
@@ -38,8 +41,9 @@ export function MilestonesSection({
           </p>
           <Progress label="Fortschritt deiner Meilensteine" value={progress} />
           <p className="text-xs text-muted-foreground">
-            Alle Meilensteine zählen gleich; der Balken ist gerundet. Dein
-            Sparfortschritt steht separat oben.
+            Alle Meilensteine zählen gleich; der Balken ist gerundet.
+            {kind === "financial" &&
+              " Dein Sparfortschritt steht separat oben."}
           </p>
         </div>
       ) : (

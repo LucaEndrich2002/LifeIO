@@ -71,7 +71,7 @@ export function MilestoneForm({ initial }: { initial: MilestoneInitial }) {
             </p>
             <p className="text-sm text-muted-foreground">
               Der Meilenstein zählt danach nicht mehr zum
-              Meilenstein-Fortschritt. Dein Sparstand bleibt unverändert.
+              Meilenstein-Fortschritt.
             </p>
             <label className="flex min-h-12 items-start gap-3 rounded-xl border p-4 text-sm">
               <input

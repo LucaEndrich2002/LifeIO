@@ -285,11 +285,13 @@ Dies sind vorgeschlagene Messdefinitionen, keine erfundenen Zielwerte. Geschäft
 
 ## 9. Übergang zur Entwicklung
 
-Das Meilenstein-Inkrement ergänzt benannte, gleich gewichtete Schritte für vorhandene finanzielle Ziele. Erledigen, Wiederöffnen und bestätigtes Entfernen ändern nur die Meilenstein-Zählung, keine Finanzwerte. Persönliche Ziele ohne Geldbetrag bleiben ein eigener Schritt. Regeln und Abnahme: [GOAL_MILESTONES_STATUS.md](../GOAL_MILESTONES_STATUS.md).
+Das persönliche Goals-Inkrement ergänzt R07 um Ziele ohne Geldfelder mit Namen, optionalem Zieldatum und Fortschritt aus den gemeinsamen Meilensteinen. Sparziele und persönliche Ziele haben getrennte Listen; Finanzoperationen bleiben auf Sparziele begrenzt. Umfang, ausgeschlossene Folgeschritte und Abnahme: [PERSONAL_GOALS_STATUS.md](../PERSONAL_GOALS_STATUS.md).
+
+Das ursprüngliche Meilenstein-Inkrement ergänzt benannte, gleich gewichtete Schritte für vorhandene finanzielle Ziele. Erledigen, Wiederöffnen und bestätigtes Entfernen ändern nur die Meilenstein-Zählung, keine Finanzwerte. Persönliche Ziele verwenden inzwischen dieselbe Verwaltung. Regeln und Abnahme des ursprünglichen Schritts: [GOAL_MILESTONES_STATUS.md](../GOAL_MILESTONES_STATUS.md).
 
 Die Sparziel-Prognose konkretisiert O03 als Arbeitsannahme: erster angenommener Beitrag am Ende des Folgemonats in der Profilzeitzone, danach die jeweils gültige Rate mit zukünftigen Änderungen/Pausen. Vergangene Beiträge werden nicht automatisch nachgeholt; der tatsächliche Sparstand bleibt die Grundlage. Prognose und Annahmen sowie die taggenaue Abweichung vom Zieldatum stehen in der Zielansicht. Umfang, Grenzen und Abnahme: [GOAL_FORECAST_STATUS.md](../GOAL_FORECAST_STATUS.md).
 
-Die laufende Sparzielverwaltung setzt die finanziellen Basisfälle von R07 mit mehreren Zielen, tatsächlichen Einzahlungen und erhaltenen monatlichen Sparraten um. Startguthaben, Einzahlungen und Planung bleiben getrennt; Einzahlungen verändern das Monatsbudget nicht. Persönliche Ziele bleiben ein späteres Inkrement; Prognose nach O03 und Meilensteine für Sparziele sind in den oben beschriebenen Folgeschritten ergänzt. Details und Arbeitsannahmen: [SAVINGS_GOALS_STATUS.md](../SAVINGS_GOALS_STATUS.md).
+Die laufende Sparzielverwaltung setzt die finanziellen Basisfälle von R07 mit mehreren Zielen, tatsächlichen Einzahlungen und erhaltenen monatlichen Sparraten um. Startguthaben, Einzahlungen und Planung bleiben getrennt; Einzahlungen verändern das Monatsbudget nicht. Persönliche Ziele, Prognose nach O03 und Meilensteine sind in den oben beschriebenen Folgeschritten ergänzt. Details und Arbeitsannahmen: [SAVINGS_GOALS_STATUS.md](../SAVINGS_GOALS_STATUS.md).
 
 Das Fixkosten-/Budget-Inkrement konkretisiert O02/O04 als Arbeitsannahmen: Änderungen erzeugen eine neue Fixkostenfassung ab einem späteren Monat, der Endmonat zählt einschließlich und frühere Beträge bleiben erhalten. Historische Korrekturen bleiben offen. Ein Monatsbudget je Nutzer umfasst alle variablen Ausgaben aller Kategorien ohne zusätzliche Belastung der Monatsrechnung. Details und Grenzen: [FIXED_COSTS_BUDGET_STATUS.md](../FIXED_COSTS_BUDGET_STATUS.md).
 

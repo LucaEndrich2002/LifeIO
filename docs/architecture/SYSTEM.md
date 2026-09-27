@@ -12,6 +12,8 @@ Die Dashboard-Inhalte bleiben Server Components. Nur `PreviewSwitcher` ist für 
 
 ## Modularer Monolith
 
+Persönliche Ziele nutzen dieselben privaten Zielrouten und Meilensteine. `src/domain/personal-goals.ts` validiert Namen, Datum und Zielart; `src/server/personal-goal-actions.ts` autorisiert ihre Erfassung und Bearbeitung. Server Components wählen anhand des eigenen gespeicherten Zieltyps die passende Ansicht. Money und die Finanzprognose bleiben auf Sparziele begrenzt. Details: [PERSONAL_GOALS_STATUS.md](../PERSONAL_GOALS_STATUS.md).
+
 Der Meilensteinbereich in der Zielansicht liest eigene Liste und Gesamtzählungen in einem SQL-Snapshot. `src/domain/milestones.ts` enthält reine Regeln, die Servermodule `milestones.ts` und `milestone-actions.ts` den autorisierten Zugriff. Featurekomponenten bleiben in `src/features/goals`; Meilensteine ändern keine Finanzdaten. Details: [GOAL_MILESTONES_STATUS.md](../GOAL_MILESTONES_STATUS.md).
 
 Die Zielansicht berechnet ihre rein lesende Prognose mit `src/domain/goal-forecast.ts` aus demselben autorisierten Snapshot wie den tatsächlichen Fortschritt. `GoalForecastCard` bleibt eine Server Component; zusätzliche Datenzugriffe, gespeicherte Prognosen und neue Berechtigungen sind nicht nötig. Kalenderkonvention und Grenzen: [GOAL_FORECAST_STATUS.md](../GOAL_FORECAST_STATUS.md).

@@ -236,41 +236,44 @@ export type Database = {
       goals: {
         Row: {
           created_at: string;
-          currency: string;
-          current_minor: number;
+          currency: string | null;
+          current_minor: number | null;
           deadline: string | null;
           id: string;
-          monthly_minor: number;
+          kind: string;
+          monthly_minor: number | null;
           name: string;
           onboarding_slot: number | null;
           revision: number;
-          target_minor: number;
+          target_minor: number | null;
           user_id: string;
         };
         Insert: {
           created_at?: string;
-          currency?: string;
-          current_minor: number;
+          currency?: string | null;
+          current_minor?: number | null;
           deadline?: string | null;
           id?: string;
-          monthly_minor: number;
+          kind?: string;
+          monthly_minor?: number | null;
           name: string;
           onboarding_slot?: number | null;
           revision?: number;
-          target_minor: number;
+          target_minor?: number | null;
           user_id: string;
         };
         Update: {
           created_at?: string;
-          currency?: string;
-          current_minor?: number;
+          currency?: string | null;
+          current_minor?: number | null;
           deadline?: string | null;
           id?: string;
-          monthly_minor?: number;
+          kind?: string;
+          monthly_minor?: number | null;
           name?: string;
           onboarding_slot?: number | null;
           revision?: number;
-          target_minor?: number;
+          target_minor?: number | null;
           user_id?: string;
         };
         Relationships: [
@@ -443,6 +446,16 @@ export type Database = {
           p_kind: string;
           p_operation: string;
           p_payload: Json;
+          p_revision: number;
+        };
+        Returns: undefined;
+      };
+      mutate_personal_goal: {
+        Args: {
+          p_deadline?: string;
+          p_id: string;
+          p_name: string;
+          p_operation: string;
           p_revision: number;
         };
         Returns: undefined;

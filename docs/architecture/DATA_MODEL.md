@@ -10,6 +10,8 @@ Dieses Dokument beschreibt die Entitäten aus der README. Implementiert sind `pr
 
 ## Entitäten
 
+`goals.kind` unterscheidet `financial` und `personal`. Persönliche Ziele verwenden Namen, optionales Zieldatum, Revision und dieselben Meilensteine; ihre Beträge und Währung müssen `NULL` sein. Finanzielle Ziele behalten verpflichtende Geldfelder. Finanz-RPCs schließen persönliche Ziele aus; Money zählt ausschließlich finanzielle Ziele. Details und additive Migration: [PERSONAL_GOALS_STATUS.md](../PERSONAL_GOALS_STATUS.md).
+
 `goal_milestones` ergänzt benannte, gleich gewichtete Schritte bestehender Sparziele. Revision, Erledigungs- und Entfernungszeitpunkt schützen gegen konkurrierende und wiederholte Änderungen. Ein zusammengesetzter Fremdschlüssel bindet Nutzer und Ziel; RLS verbirgt fremde und entfernte Einträge. Die Meilenstein-Zählung verändert weder Sparstand noch Rate. Details: [GOAL_MILESTONES_STATUS.md](../GOAL_MILESTONES_STATUS.md).
 
 Die laufende Sparzielverwaltung erweitert `goals` um Revision/Zieldatum und zusätzliche Ziele ohne Onboarding-Slot. `current_minor` ist das korrigierbare Startguthaben; `goal_contributions` enthält tatsächliche Einzahlungen einschließlich Stornokennzeichnung. `goal_rates` enthält Monatsraten ab ihrem Gültigkeitsmonat. Beide Kindtabellen verwenden EUR-Cent, Eigentümer-Fremdschlüssel und RLS. Details: [SAVINGS_GOALS_STATUS.md](../SAVINGS_GOALS_STATUS.md).
