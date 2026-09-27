@@ -10,6 +10,8 @@ Dieses Dokument beschreibt die Entitäten aus der README. Implementiert sind `pr
 
 ## Entitäten
 
+`goal_milestones` ergänzt benannte, gleich gewichtete Schritte bestehender Sparziele. Revision, Erledigungs- und Entfernungszeitpunkt schützen gegen konkurrierende und wiederholte Änderungen. Ein zusammengesetzter Fremdschlüssel bindet Nutzer und Ziel; RLS verbirgt fremde und entfernte Einträge. Die Meilenstein-Zählung verändert weder Sparstand noch Rate. Details: [GOAL_MILESTONES_STATUS.md](../GOAL_MILESTONES_STATUS.md).
+
 Die laufende Sparzielverwaltung erweitert `goals` um Revision/Zieldatum und zusätzliche Ziele ohne Onboarding-Slot. `current_minor` ist das korrigierbare Startguthaben; `goal_contributions` enthält tatsächliche Einzahlungen einschließlich Stornokennzeichnung. `goal_rates` enthält Monatsraten ab ihrem Gültigkeitsmonat. Beide Kindtabellen verwenden EUR-Cent, Eigentümer-Fremdschlüssel und RLS. Details: [SAVINGS_GOALS_STATUS.md](../SAVINGS_GOALS_STATUS.md).
 
 Das Fixkosten-/Budget-Inkrement ergänzt `expenses.end_month` und `superseded_by` mit Eigentümer-Fremdschlüssel. Gültigkeitsintervalle ersetzen keine historischen Beträge; ein enges Mutations-RPC erstellt atomar die nachfolgende Fassung. `budgets` ist eine eigene RLS-Tabelle mit genau einem EUR-Limit pro Nutzer/Monat und Revision. Derselbe Monats-Snapshot enthält Budget, vollständige Ausgabensumme und Fixkostenbasis. Details: [FIXED_COSTS_BUDGET_STATUS.md](../FIXED_COSTS_BUDGET_STATUS.md).

@@ -160,6 +160,47 @@ export type Database = {
           },
         ];
       };
+      goal_milestones: {
+        Row: {
+          completed_at: string | null;
+          created_at: string;
+          goal_id: string;
+          id: string;
+          removed_at: string | null;
+          revision: number;
+          title: string;
+          user_id: string;
+        };
+        Insert: {
+          completed_at?: string | null;
+          created_at?: string;
+          goal_id: string;
+          id: string;
+          removed_at?: string | null;
+          revision?: number;
+          title: string;
+          user_id: string;
+        };
+        Update: {
+          completed_at?: string | null;
+          created_at?: string;
+          goal_id?: string;
+          id?: string;
+          removed_at?: string | null;
+          revision?: number;
+          title?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "goal_milestones_user_id_goal_id_fkey";
+            columns: ["user_id", "goal_id"];
+            isOneToOne: false;
+            referencedRelation: "goals";
+            referencedColumns: ["user_id", "id"];
+          },
+        ];
+      };
       goal_rates: {
         Row: {
           amount_minor: number;
@@ -386,6 +427,16 @@ export type Database = {
         };
         Returns: undefined;
       };
+      mutate_goal_milestone: {
+        Args: {
+          p_goal_id: string;
+          p_id: string;
+          p_operation: string;
+          p_revision: number;
+          p_title?: string;
+        };
+        Returns: undefined;
+      };
       mutate_money: {
         Args: {
           p_id: string;
@@ -401,6 +452,10 @@ export type Database = {
         Returns: number;
       };
       read_goal: { Args: { p_id: string; p_page?: number }; Returns: Json };
+      read_goal_milestones: {
+        Args: { p_goal_id: string; p_page?: number };
+        Returns: Json;
+      };
       read_money_month: {
         Args: {
           p_expense_page?: number;

@@ -12,6 +12,8 @@ Die Dashboard-Inhalte bleiben Server Components. Nur `PreviewSwitcher` ist für 
 
 ## Modularer Monolith
 
+Der Meilensteinbereich in der Zielansicht liest eigene Liste und Gesamtzählungen in einem SQL-Snapshot. `src/domain/milestones.ts` enthält reine Regeln, die Servermodule `milestones.ts` und `milestone-actions.ts` den autorisierten Zugriff. Featurekomponenten bleiben in `src/features/goals`; Meilensteine ändern keine Finanzdaten. Details: [GOAL_MILESTONES_STATUS.md](../GOAL_MILESTONES_STATUS.md).
+
 Die Zielansicht berechnet ihre rein lesende Prognose mit `src/domain/goal-forecast.ts` aus demselben autorisierten Snapshot wie den tatsächlichen Fortschritt. `GoalForecastCard` bleibt eine Server Component; zusätzliche Datenzugriffe, gespeicherte Prognosen und neue Berechtigungen sind nicht nötig. Kalenderkonvention und Grenzen: [GOAL_FORECAST_STATUS.md](../GOAL_FORECAST_STATUS.md).
 
 `/account/goals` und `/account/goals/[id]` ergänzen die laufende Sparzielverwaltung. Featurekomponenten liegen in `src/features/goals`, reine Regeln in `src/domain/goals.ts`, privater Zugriff und Server Actions in `src/server/goals.ts` bzw. `goal-actions.ts`. Die Money-Übersicht liest Sparraten für denselben gewählten Monat aus deren Verlauf; tatsächlicher Fortschritt erscheint in der Zielansicht. Details: [SAVINGS_GOALS_STATUS.md](../SAVINGS_GOALS_STATUS.md).

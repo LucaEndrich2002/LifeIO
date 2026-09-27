@@ -6,7 +6,9 @@ Quellen: [README](../../README.md), Abschnitte 9, 10 und 21, sowie [PRD](PRD.md)
 
 ## Aktueller Stand
 
-- Die Sparziel-Prognose berechnet künftige Beiträge aus dem tatsächlichen Stand und dem Ratenverlauf, zeigt Annahmen und vergleicht den Termin taggenau mit dem Zieldatum. [GOAL_FORECAST_STATUS.md](../GOAL_FORECAST_STATUS.md) beschreibt die Beitragskonvention nach O03 und die Abnahme. Persönliche Ziele, Milestones und Modulverknüpfungen bleiben weitere Schritte.
+- Bestehende Sparziele haben eine eigene Meilenstein-Verwaltung mit getrenntem Fortschritt, Wiederöffnen und bestätigtem Entfernen. [GOAL_MILESTONES_STATUS.md](../GOAL_MILESTONES_STATUS.md) beschreibt Umfang, Isolation und Abnahme. Persönliche Ziele ohne Geldbetrag und Modulverknüpfungen bleiben weitere Schritte.
+
+- Die Sparziel-Prognose berechnet künftige Beiträge aus dem tatsächlichen Stand und dem Ratenverlauf, zeigt Annahmen und vergleicht den Termin taggenau mit dem Zieldatum. [GOAL_FORECAST_STATUS.md](../GOAL_FORECAST_STATUS.md) beschreibt die Beitragskonvention nach O03 und die Abnahme.
 
 - Die laufende Sparzielverwaltung ergänzt mehrere finanzielle Ziele, tatsächliche Einzahlungen mit bestätigter Stornierung und historische Sparraten für die gemeinsame Money-Monatsrechnung. [SAVINGS_GOALS_STATUS.md](../SAVINGS_GOALS_STATUS.md) beschreibt Umfang und Abnahme. Phase 5 ist nicht insgesamt abgeschlossen.
 
