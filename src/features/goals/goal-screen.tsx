@@ -13,6 +13,7 @@ import {
 } from "@/domain/money";
 import { dateInZone } from "@/domain/transactions";
 import { GoalForm, type GoalInitial } from "@/features/goals/goal-form";
+import { GoalForecastCard } from "@/features/goals/goal-forecast-card";
 import { loadGoal } from "@/server/goals";
 import { requireMoneyAccount } from "@/server/money";
 
@@ -144,14 +145,6 @@ export async function GoalScreen({
             stornierte Einzahlungen. Geplante Sparraten verändern diesen Stand
             nicht automatisch. Prozentwerte sind gerundet.
           </p>
-          {goal.deadline && (
-            <p className="text-sm">
-              Zieldatum: {goal.deadline}
-              {!progress.reached && goal.deadline < today
-                ? " · Zieldatum überschritten"
-                : ""}
-            </p>
-          )}
         </CardContent>
       </Card>
       <div className="flex flex-wrap gap-3">
@@ -168,6 +161,11 @@ export async function GoalScreen({
           Sparziel bearbeiten
         </Link>
       </div>
+      <GoalForecastCard
+        data={data}
+        today={today}
+        timeZone={profile.time_zone}
+      />
       <section className="space-y-3 rounded-xl border p-5">
         <h2 className="font-semibold">Geplante Sparraten</h2>
         <p className="text-sm">
