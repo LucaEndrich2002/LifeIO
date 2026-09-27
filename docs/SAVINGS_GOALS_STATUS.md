@@ -4,7 +4,7 @@
 
 Die bisher nur im Onboarding angelegten Sparziele lassen sich unter `/account/goals` laufend verwalten. Dieser Task ergänzt mehrere finanzielle Ziele, Änderungen von Name, Zielbetrag, Startguthaben und optionalem Zieldatum, den Verlauf geplanter Sparraten sowie tatsächliche Einzahlungen mit bestätigter Stornierung. Die öffentliche Goals-Seite bietet einen Einstieg in diesen privaten Bereich.
 
-Persönliche Ziele, Milestones, Zielprognosen nach O03, Entnahmen, Archivierung/Löschung von Zielen und Verknüpfungen zwischen Modulen folgen in eigenen Inkrementen. R07 und Phase 5 sind deshalb nicht insgesamt abgeschlossen.
+Die Zielprognose nach O03 ist inzwischen im separaten [Prognose-Inkrement](GOAL_FORECAST_STATUS.md) ergänzt. Persönliche Ziele, Milestones, Entnahmen, Archivierung/Löschung von Zielen und Verknüpfungen zwischen Modulen bleiben weitere Schritte. R07 und Phase 5 sind deshalb nicht insgesamt abgeschlossen.
 
 ## Fachregeln
 

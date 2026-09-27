@@ -1,12 +1,14 @@
 # LifeOS – Roadmap
 
-Stand: 26.09.2026
+Stand: 27.09.2026
 
 Quellen: [README](../../README.md), Abschnitte 9, 10 und 21, sowie [PRD](PRD.md). Diese Roadmap beschreibt die Reihenfolge und Abnahmebedingungen, keine bereits implementierten Funktionen.
 
 ## Aktueller Stand
 
-- Die laufende Sparzielverwaltung ergänzt mehrere finanzielle Ziele, tatsächliche Einzahlungen mit bestätigter Stornierung und historische Sparraten für die gemeinsame Money-Monatsrechnung. [SAVINGS_GOALS_STATUS.md](../SAVINGS_GOALS_STATUS.md) beschreibt Umfang und Abnahme. Prognosen, persönliche Ziele und Milestones bleiben eigene nächste Schritte; Phase 5 ist nicht insgesamt abgeschlossen.
+- Die Sparziel-Prognose berechnet künftige Beiträge aus dem tatsächlichen Stand und dem Ratenverlauf, zeigt Annahmen und vergleicht den Termin taggenau mit dem Zieldatum. [GOAL_FORECAST_STATUS.md](../GOAL_FORECAST_STATUS.md) beschreibt die Beitragskonvention nach O03 und die Abnahme. Persönliche Ziele, Milestones und Modulverknüpfungen bleiben weitere Schritte.
+
+- Die laufende Sparzielverwaltung ergänzt mehrere finanzielle Ziele, tatsächliche Einzahlungen mit bestätigter Stornierung und historische Sparraten für die gemeinsame Money-Monatsrechnung. [SAVINGS_GOALS_STATUS.md](../SAVINGS_GOALS_STATUS.md) beschreibt Umfang und Abnahme. Phase 5 ist nicht insgesamt abgeschlossen.
 
 - Das zweite Money-Inkrement ergänzt Fixkosten mit Gültigkeitszeiträumen und erhaltenen früheren Beträgen sowie ein Monatsbudget für alle variablen Ausgaben. Regeln, Grenzen und Abnahme stehen in [FIXED_COSTS_BUDGET_STATUS.md](../FIXED_COSTS_BUDGET_STATUS.md). Das persönliche Home-Dashboard bleibt ein weiterer Schritt.
 

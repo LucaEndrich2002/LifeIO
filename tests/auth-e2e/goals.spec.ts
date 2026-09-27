@@ -1,6 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 import { createPlanFixture } from "../supabase/plan-fixtures";
 import { removeFixture } from "../supabase/fixtures";
+import { dateInZone } from "../../src/domain/transactions";
 
 async function login(
   page: Page,
@@ -141,6 +142,12 @@ test("real deposits can exceed the target and are cancelled only after confirmat
     await expect(
       page.getByText("Ziel erreicht", { exact: true }),
     ).toBeVisible();
+    await expect(page.getByTestId("goal-forecast")).toContainText(
+      "Bereits angespart",
+    );
+    await expect(page.getByTestId("goal-forecast")).not.toContainText(
+      "Voraussichtlich",
+    );
     await page.screenshot({
       path: testInfo.outputPath("goal-light.png"),
       fullPage: true,
@@ -177,11 +184,133 @@ test("real deposits can exceed the target and are cancelled only after confirmat
       .click();
     await expect(page).toHaveURL(url);
     await expect(page.getByTestId("goal-balance")).toHaveText("3.500,00 €");
+    await expect(page.getByTestId("goal-forecast")).toContainText(
+      "Noch 13 geplante Beiträge.",
+    );
     await expect(
       page.getByText("Storniert · zählt nicht zum Sparstand", { exact: true }),
     ).toBeVisible();
     await page.goto("/account/money?month=2026-09");
     await expect(page.getByTestId("month-available")).toHaveText("1.400,00 €");
+  } finally {
+    await removeFixture(user.id);
+  }
+});
+
+test("forecast explains future contributions, flags deadlines and follows saved pauses and restarts", async ({
+  page,
+}, testInfo) => {
+  const user = await createPlanFixture();
+  try {
+    const today = dateInZone(new Date(), "Europe/Berlin");
+    const year = Number(today.slice(0, 4));
+    const month = Number(today.slice(5, 7));
+    const futureEnd = (offset: number) =>
+      new Date(Date.UTC(year, month + offset, 0));
+    const label = (date: Date) =>
+      new Intl.DateTimeFormat("de-DE", {
+        dateStyle: "long",
+        timeZone: "UTC",
+      }).format(date);
+    await login(page, user);
+    await openOriginal(page);
+    const forecast = page.getByTestId("goal-forecast");
+    await expect(forecast).toContainText("Noch offen: 6.500,00 €");
+    await expect(forecast).toContainText("Noch 13 geplante Beiträge.");
+    await expect(forecast).toContainText(
+      `Voraussichtlich am ${label(futureEnd(13))}`,
+    );
+    await expect(forecast).toContainText(
+      `Nächster angenommener Beitrag: ${label(futureEnd(1))}`,
+    );
+    await page
+      .getByRole("link", { name: "Sparziel bearbeiten", exact: true })
+      .click();
+    const deadline = futureEnd(13);
+    deadline.setUTCDate(deadline.getUTCDate() - 1);
+    await page
+      .getByLabel("Zieldatum (optional)")
+      .fill(deadline.toISOString().slice(0, 10));
+    await saveGoal(page);
+    await page.reload();
+    await expect(page.getByTestId("goal-deadline")).toContainText(
+      "erst nach deinem Zieldatum",
+    );
+    const explanation = page
+      .locator("summary")
+      .filter({ hasText: "So wird die Prognose berechnet" });
+    await explanation.click();
+    await expect(
+      page.getByText("Ab dem Folgemonat", { exact: false }),
+    ).toBeVisible();
+    await explanation.press("Space");
+    await expect(
+      page.getByText("Ab dem Folgemonat", { exact: false }),
+    ).toBeHidden();
+    await page
+      .getByRole("link", { name: "Sparziel bearbeiten", exact: true })
+      .focus();
+    await page.keyboard.press("Tab");
+    await expect(explanation).toBeFocused();
+    await page.keyboard.press("Enter");
+    await expect(explanation).toBeFocused();
+    await expect(
+      page.getByText("Ab dem Folgemonat", { exact: false }),
+    ).toBeVisible();
+    await expect(
+      page.getByText("Sie prüft nicht, ob dein Monatsbudget", { exact: false }),
+    ).toBeVisible();
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= window.innerWidth,
+      ),
+    ).toBe(true);
+    await page.screenshot({
+      path: testInfo.outputPath("forecast-light.png"),
+      fullPage: true,
+    });
+    await page.getByRole("button", { name: "Farbschema wechseln" }).click();
+    await page.screenshot({
+      path: testInfo.outputPath("forecast-dark.png"),
+      fullPage: true,
+    });
+
+    await page
+      .getByRole("link", { name: "Sparziel bearbeiten", exact: true })
+      .click();
+    await page.getByLabel("Geplante monatliche Sparrate (€)").fill("0");
+    await page
+      .getByLabel("Sparrate gültig ab")
+      .fill(futureEnd(1).toISOString().slice(0, 7));
+    await saveGoal(page);
+    await expect(forecast).toContainText(
+      "noch kein Erreichungsdatum berechenbar",
+    );
+    await expect(forecast).not.toContainText("Voraussichtlich");
+    await expect(page.getByTestId("goal-deadline")).toContainText(
+      "nicht bestätigen",
+    );
+
+    await page
+      .getByRole("link", { name: "Sparziel bearbeiten", exact: true })
+      .click();
+    await page.getByLabel("Geplante monatliche Sparrate (€)").fill("1000");
+    await page
+      .getByLabel("Sparrate gültig ab")
+      .fill(futureEnd(2).toISOString().slice(0, 7));
+    await saveGoal(page);
+    await page.reload();
+    await expect(forecast).toContainText("Noch 7 geplante Beiträge.");
+    await expect(forecast).toContainText(
+      `Voraussichtlich am ${label(futureEnd(8))}`,
+    );
+    await expect(forecast).toContainText(
+      `Nächster angenommener Beitrag: ${label(futureEnd(2))}`,
+    );
+    await expect(page.getByTestId("goal-deadline")).toContainText(
+      "bis zu deinem Zieldatum",
+    );
+    await expect(page.getByTestId("goal-balance")).toHaveText("3.500,00 €");
   } finally {
     await removeFixture(user.id);
   }
