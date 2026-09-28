@@ -33,6 +33,10 @@ test("all five areas are reachable and distinguish the preview from real data", 
       await expect(
         page.getByRole("link", { name: "Private Ziele öffnen" }),
       ).toHaveAttribute("href", "/account/goals");
+    } else if (label === "Plan") {
+      await expect(
+        page.getByRole("link", { name: "Private Aufgaben öffnen" }),
+      ).toHaveAttribute("href", "/account/plan");
     } else {
       await expect(
         page.getByText("In Vorbereitung", { exact: true }),

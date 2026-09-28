@@ -440,6 +440,50 @@ export type Database = {
         };
         Relationships: [];
       };
+      tasks: {
+        Row: {
+          completed_at: string | null;
+          created_at: string;
+          due_on: string | null;
+          id: string;
+          priority: string;
+          removed_at: string | null;
+          revision: number;
+          title: string;
+          user_id: string;
+        };
+        Insert: {
+          completed_at?: string | null;
+          created_at?: string;
+          due_on?: string | null;
+          id: string;
+          priority: string;
+          removed_at?: string | null;
+          revision?: number;
+          title: string;
+          user_id: string;
+        };
+        Update: {
+          completed_at?: string | null;
+          created_at?: string;
+          due_on?: string | null;
+          id?: string;
+          priority?: string;
+          removed_at?: string | null;
+          revision?: number;
+          title?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tasks_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["user_id"];
+          },
+        ];
+      };
     };
     Views: {
       [_ in never]: never;
@@ -514,6 +558,17 @@ export type Database = {
         };
         Returns: undefined;
       };
+      mutate_task: {
+        Args: {
+          p_due_on?: string;
+          p_id: string;
+          p_operation: string;
+          p_priority?: string;
+          p_revision: number;
+          p_title?: string;
+        };
+        Returns: undefined;
+      };
       onboarding_amount: {
         Args: { allow_zero?: boolean; value: Json };
         Returns: number;
@@ -528,6 +583,15 @@ export type Database = {
           p_expense_page?: number;
           p_income_page?: number;
           p_month: string;
+        };
+        Returns: Json;
+      };
+      read_tasks: {
+        Args: {
+          p_day: string;
+          p_page?: number;
+          p_status?: string;
+          p_view?: string;
         };
         Returns: Json;
       };

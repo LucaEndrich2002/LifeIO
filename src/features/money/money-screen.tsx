@@ -371,6 +371,12 @@ export async function MoneyScreen({ query }: { query: MoneyQuery }) {
         Profil bearbeiten
       </Link>
       <SignOutButton />
+      <Link
+        href="/account/plan"
+        className="inline-flex min-h-11 items-center text-sm underline"
+      >
+        Zu deinen Aufgaben
+      </Link>
     </div>
   );
 }

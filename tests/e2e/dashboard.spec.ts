@@ -44,8 +44,8 @@ test("example dashboard makes its data source and goal progress clear", async ({
       ).toHaveAttribute("href", "/account/goals");
     } else {
       await expect(
-        page.getByText("In Vorbereitung", { exact: true }),
-      ).toBeVisible();
+        page.getByRole("link", { name: "Private Aufgaben öffnen" }),
+      ).toHaveAttribute("href", "/account/plan");
     }
     await page.getByRole("link", { name: "Zum Überblick" }).click();
   }
