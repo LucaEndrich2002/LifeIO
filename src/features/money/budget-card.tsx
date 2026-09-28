@@ -17,7 +17,7 @@ export function BudgetCard({
     ? budgetStatus(budget.amount_minor, data.totals.variable)
     : null;
   return (
-    <Card>
+    <Card id="budget">
       <CardContent className="space-y-4">
         <h2 className="text-lg font-semibold">Dein Monatsbudget</h2>
         {budget && status ? (
@@ -46,6 +46,12 @@ export function BudgetCard({
               </p>
             )}
             <div className="flex flex-wrap gap-5 text-sm">
+              <Link
+                href={`/account/money/budget/${budget.id}/goals`}
+                className="inline-flex min-h-11 items-center underline"
+              >
+                Verknüpfte Ziele ansehen
+              </Link>
               <Link
                 href={`/account/money/budget/${budget.id}?month=${month}`}
                 className="inline-flex min-h-11 items-center underline"

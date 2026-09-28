@@ -10,17 +10,20 @@ import { PersonalGoalForm } from "@/features/goals/personal-goal-form";
 import { MilestonesSection } from "@/features/goals/milestones-section";
 import { loadMilestones } from "@/server/milestones";
 import type { requireMoneyAccount } from "@/server/money";
+import { GoalBudgetsSection } from "@/features/goals/goal-budgets-section";
 
 export async function PersonalGoalScreen({
   account,
   id,
   editing,
   page,
+  budgetPage,
 }: {
   account: Awaited<ReturnType<typeof requireMoneyAccount>>;
   id: string;
   editing: boolean;
   page: number;
+  budgetPage: number;
 }) {
   let goal: z.output<typeof personalGoalSchema> | null = null;
   if (id !== "new") {
@@ -76,6 +79,7 @@ export async function PersonalGoalScreen({
         page={page}
         kind="personal"
       />
+      <GoalBudgetsSection account={account} goalId={id} page={budgetPage} />
       <Link
         href="/account/goals?kind=personal"
         className="inline-flex min-h-11 items-center text-sm underline"

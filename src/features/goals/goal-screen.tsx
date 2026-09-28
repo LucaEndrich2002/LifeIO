@@ -21,6 +21,8 @@ import { MilestonesSection } from "@/features/goals/milestones-section";
 import { requireMoneyAccount } from "@/server/money";
 import { goalKindSchema } from "@/domain/personal-goals";
 import { PersonalGoalScreen } from "@/features/goals/personal-goal-screen";
+import { GoalBudgetsSection } from "@/features/goals/goal-budgets-section";
+import { linkPageSchema } from "@/domain/goal-budget-links";
 
 export type GoalQuery = {
   kind?: string;
@@ -29,6 +31,7 @@ export type GoalQuery = {
   cancel?: string;
   page?: string;
   milestone_page?: string;
+  budget_page?: string;
 };
 export async function GoalScreen({
   id,
@@ -55,6 +58,8 @@ export async function GoalScreen({
     query.milestone_page ?? "0",
   );
   if (!milestonePage.success) notFound();
+  const budgetPage = linkPageSchema.safeParse(query.budget_page ?? "0");
+  if (!budgetPage.success) notFound();
   let kind = goalKindSchema.safeParse(query.kind ?? "financial");
   if (!kind.success) notFound();
   if (id !== "new") {
@@ -77,6 +82,7 @@ export async function GoalScreen({
         id={id}
         editing={editing}
         page={milestonePage.data}
+        budgetPage={budgetPage.data}
       />
     );
   }
@@ -298,6 +304,11 @@ export async function GoalScreen({
           </nav>
         )}
       </section>
+      <GoalBudgetsSection
+        account={account}
+        goalId={id}
+        page={budgetPage.data}
+      />
       <div className="flex flex-wrap gap-5 text-sm">
         <Link
           href="/account/goals"
