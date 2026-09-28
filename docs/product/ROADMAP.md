@@ -6,6 +6,8 @@ Quellen: [README](../../README.md), Abschnitte 9, 10 und 21, sowie [PRD](PRD.md)
 
 ## Aktueller Stand
 
+- Der erste Plan-Schritt verwaltet eigene Aufgaben mit Priorität, optionaler Fälligkeit, Status und bestätigtem Löschen. Tages-/Wochenfilter, Aufgaben ohne Datum und vollständige Folgeseiten sind enthalten. [TASKS_STATUS.md](../TASKS_STATUS.md) beschreibt R08; Kalender, Goal–Task-Links und die Aufgaben-Ergänzung im Onboarding bleiben weitere Schritte.
+
 - Ziele und Monatsbudgets lassen sich mit beidseitiger Navigation und bestätigtem Entfernen verbinden. Diese Zuordnung reserviert kein Geld und verändert keine Finanzberechnung. [GOAL_BUDGET_LINKS_STATUS.md](../GOAL_BUDGET_LINKS_STATUS.md) beschreibt den ersten typisierten Life-Core-Link und seine Isolation. Verknüpfungen zu Aufgaben und Terminen bleiben spätere Schritte.
 
 - Persönliche Ziele ohne Geldbetrag lassen sich neben Sparzielen anlegen und bearbeiten. Ein optionales Zieldatum und die gemeinsame Meilenstein-Verwaltung machen ihren Fortschritt sichtbar; finanzielle Berechnungen bleiben unverändert. [PERSONAL_GOALS_STATUS.md](../PERSONAL_GOALS_STATUS.md) beschreibt Regeln, Trennung und Abnahme. Modulverknüpfungen und Plan bleiben weitere Schritte.

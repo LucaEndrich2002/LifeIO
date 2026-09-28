@@ -131,6 +131,12 @@ export async function GoalsScreen({
       >
         Zur Finanzübersicht
       </Link>
+      <Link
+        href="/account/plan"
+        className="ml-5 inline-flex min-h-11 items-center text-sm underline"
+      >
+        Zu deinen Aufgaben
+      </Link>
     </div>
   );
 }

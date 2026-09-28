@@ -41,6 +41,8 @@ Alle eigenen Datensätze erhalten eine stabile ID und erforderliche Zeitstempel.
 
 ## Eigentum und Integrität
 
+`tasks` ist als erste Plan-Entität implementiert: Eigentümer, Titel, Priorität, optionaler Kalendertag `due_on`, Revision sowie Erfassungs-, Erledigungs- und Löschzeitpunkt. Entfernte IDs bleiben gegen verspätete Wiederholungen erhalten, sind aber über RLS unsichtbar. Der Fremdschlüssel auf das Profil räumt alle Aufgaben bei Kontolöschung auf. Details: [TASKS_STATUS.md](../TASKS_STATUS.md).
+
 - Authentifizierung ersetzt keine Eigentumsprüfung. `user_id` wird aus verifizierter Identität abgeleitet und nicht ungeprüft aus einer Nutzereingabe übernommen.
 - Eigene Tabellen benötigen RLS mit `USING` für bestehende Zeilen und `WITH CHECK` für neue bzw. geänderte Zeilen, eingeschränkt auf den angemeldeten Eigentümer. Policies, Grants und Indizes gehören zur selben Migration wie die Tabelle.
 - Bei Beziehungen zwischen eigenen Tabellen müssen Fremdschlüssel bzw. weitere Constraints auch übereinstimmende Eigentümer sichern, z. B. über zusammengesetzte Referenzen `(user_id, id)`. Eine gültige fremde ID darf nicht zu einer gültigen eigenen Beziehung werden.
