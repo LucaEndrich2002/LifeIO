@@ -285,6 +285,8 @@ Dies sind vorgeschlagene Messdefinitionen, keine erfundenen Zielwerte. Geschäft
 
 ## 9. Übergang zur Entwicklung
 
+Der erste R10-Schritt verbindet Ziele und bestehende Monatsbudgets mit der typisierten Beziehung `funded_by`. Weil das aktuelle Budget alle variablen Monatsausgaben umfasst, dient der Link ausdrücklich als Planungskontext ohne Geldreservierung oder Änderung von Finanzwerten. Beide Navigationsrichtungen, bestätigtes Entfernen und Integrität beim Löschen von Endpunkten sind beschrieben in [GOAL_BUDGET_LINKS_STATUS.md](../GOAL_BUDGET_LINKS_STATUS.md). Aufgaben und Kalender bleiben außerhalb dieses Schritts.
+
 Das persönliche Goals-Inkrement ergänzt R07 um Ziele ohne Geldfelder mit Namen, optionalem Zieldatum und Fortschritt aus den gemeinsamen Meilensteinen. Sparziele und persönliche Ziele haben getrennte Listen; Finanzoperationen bleiben auf Sparziele begrenzt. Umfang, ausgeschlossene Folgeschritte und Abnahme: [PERSONAL_GOALS_STATUS.md](../PERSONAL_GOALS_STATUS.md).
 
 Das ursprüngliche Meilenstein-Inkrement ergänzt benannte, gleich gewichtete Schritte für vorhandene finanzielle Ziele. Erledigen, Wiederöffnen und bestätigtes Entfernen ändern nur die Meilenstein-Zählung, keine Finanzwerte. Persönliche Ziele verwenden inzwischen dieselbe Verwaltung. Regeln und Abnahme des ursprünglichen Schritts: [GOAL_MILESTONES_STATUS.md](../GOAL_MILESTONES_STATUS.md).

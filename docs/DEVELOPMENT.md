@@ -18,6 +18,8 @@ Der Kontobereich ist separat: `/auth/login` und `/account` benötigen die lokale
 
 ## Qualitätsprüfungen
 
+Die Ziel-Budget-Verknüpfung benötigt `20260928090000_goal_budget_links.sql`. Mit `pnpm exec supabase migration up --local` anwenden; vorhandene Ziele, Budgets und Beträge bleiben erhalten. Danach bietet jede Zielansicht „Monatsbudget verknüpfen“ und jedes vorhandene Monatsbudget die Gegenrichtung. Details: [GOAL_BUDGET_LINKS_STATUS.md](GOAL_BUDGET_LINKS_STATUS.md).
+
 Persönliche Ziele ohne Geldbetrag benötigen zusätzlich `20260927120000_personal_goals.sql`. Die additive Migration erhält vorhandene Sparziele und nutzt die bestehende Meilenstein-Verwaltung. Nach `pnpm exec supabase migration up --local` steht unter `/account/goals` der Bereich „Persönliche Ziele“ bereit. Regeln und Abnahme: [PERSONAL_GOALS_STATUS.md](PERSONAL_GOALS_STATUS.md).
 
 Meilensteine für vorhandene Sparziele benötigen die additive Migration `20260927090000_goal_milestones.sql`. Mit `pnpm exec supabase migration up --local` anwenden; bestehende Finanzdaten bleiben erhalten. Regeln und Abnahme: [GOAL_MILESTONES_STATUS.md](GOAL_MILESTONES_STATUS.md).

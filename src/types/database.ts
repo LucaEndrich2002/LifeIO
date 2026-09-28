@@ -50,6 +50,51 @@ export type Database = {
           },
         ];
       };
+      entity_links: {
+        Row: {
+          budget_id: string;
+          created_at: string;
+          goal_id: string;
+          id: string;
+          relationship: string;
+          removed_at: string | null;
+          user_id: string;
+        };
+        Insert: {
+          budget_id: string;
+          created_at?: string;
+          goal_id: string;
+          id: string;
+          relationship?: string;
+          removed_at?: string | null;
+          user_id: string;
+        };
+        Update: {
+          budget_id?: string;
+          created_at?: string;
+          goal_id?: string;
+          id?: string;
+          relationship?: string;
+          removed_at?: string | null;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "entity_links_user_id_budget_id_fkey";
+            columns: ["user_id", "budget_id"];
+            isOneToOne: false;
+            referencedRelation: "budgets";
+            referencedColumns: ["user_id", "id"];
+          },
+          {
+            foreignKeyName: "entity_links_user_id_goal_id_fkey";
+            columns: ["user_id", "goal_id"];
+            isOneToOne: false;
+            referencedRelation: "goals";
+            referencedColumns: ["user_id", "id"];
+          },
+        ];
+      };
       expenses: {
         Row: {
           amount_minor: number;
@@ -427,6 +472,15 @@ export type Database = {
           p_operation: string;
           p_payload: Json;
           p_revision: number;
+        };
+        Returns: undefined;
+      };
+      mutate_goal_budget_link: {
+        Args: {
+          p_budget_id: string;
+          p_goal_id: string;
+          p_id: string;
+          p_operation: string;
         };
         Returns: undefined;
       };

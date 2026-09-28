@@ -12,6 +12,8 @@ Die Dashboard-Inhalte bleiben Server Components. Nur `PreviewSwitcher` ist für 
 
 ## Modularer Monolith
 
+Der erste Life-Core-Link verbindet eigene Ziele und Monatsbudgets. Reine Eingaberegeln liegen in `src/domain/goal-budget-links.ts`, autorisierte Zugriffe und Mutationen in `src/server/goal-budget-links.ts` und `goal-budget-link-actions.ts`. Goal- und Money-Ansichten verwenden dieselben typisierten Beziehungen mit beidseitiger Navigation; finanzielle Berechnungen bleiben unabhängig davon. Details: [GOAL_BUDGET_LINKS_STATUS.md](../GOAL_BUDGET_LINKS_STATUS.md).
+
 Persönliche Ziele nutzen dieselben privaten Zielrouten und Meilensteine. `src/domain/personal-goals.ts` validiert Namen, Datum und Zielart; `src/server/personal-goal-actions.ts` autorisiert ihre Erfassung und Bearbeitung. Server Components wählen anhand des eigenen gespeicherten Zieltyps die passende Ansicht. Money und die Finanzprognose bleiben auf Sparziele begrenzt. Details: [PERSONAL_GOALS_STATUS.md](../PERSONAL_GOALS_STATUS.md).
 
 Der Meilensteinbereich in der Zielansicht liest eigene Liste und Gesamtzählungen in einem SQL-Snapshot. `src/domain/milestones.ts` enthält reine Regeln, die Servermodule `milestones.ts` und `milestone-actions.ts` den autorisierten Zugriff. Featurekomponenten bleiben in `src/features/goals`; Meilensteine ändern keine Finanzdaten. Details: [GOAL_MILESTONES_STATUS.md](../GOAL_MILESTONES_STATUS.md).
