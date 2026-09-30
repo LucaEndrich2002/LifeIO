@@ -18,6 +18,8 @@ Der Kontobereich ist separat: `/auth/login` und `/account` benötigen die lokale
 
 ## Qualitätsprüfungen
 
+Der private Kalender unter `/account/plan/calendar` benötigt `20260929090000_calendar_events.sql`. Mit `pnpm exec supabase migration up --local` additiv anwenden; kein Reset erforderlich. Nach Anmeldung und abgeschlossener Einrichtung führen die öffentliche Plan-Seite und die Aufgabenliste zum Kalender. `pnpm install --frozen-lockfile` installiert zusätzlich die verwendete Temporal-Zeitlogik. Regeln und Abnahme: [CALENDAR_STATUS.md](CALENDAR_STATUS.md).
+
 Die private Aufgabenverwaltung unter `/account/plan` benötigt `20260928120000_tasks.sql`. Mit `pnpm exec supabase migration up --local` additiv anwenden; kein Reset erforderlich. Nach Anmeldung und abgeschlossener Einrichtung führt auch die öffentliche Plan-Seite zur Aufgabenliste. Regeln und Abnahme: [TASKS_STATUS.md](TASKS_STATUS.md).
 
 Die Ziel-Budget-Verknüpfung benötigt `20260928090000_goal_budget_links.sql`. Mit `pnpm exec supabase migration up --local` anwenden; vorhandene Ziele, Budgets und Beträge bleiben erhalten. Danach bietet jede Zielansicht „Monatsbudget verknüpfen“ und jedes vorhandene Monatsbudget die Gegenrichtung. Details: [GOAL_BUDGET_LINKS_STATUS.md](GOAL_BUDGET_LINKS_STATUS.md).

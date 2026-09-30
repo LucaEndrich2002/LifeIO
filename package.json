@@ -27,6 +27,7 @@
     "db:reset": "supabase db reset --local"
   },
   "dependencies": {
+    "@js-temporal/polyfill": "0.5.1",
     "@supabase/ssr": "0.12.7",
     "@supabase/supabase-js": "2.116.0",
     "clsx": "2.1.1",

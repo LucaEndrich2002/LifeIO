@@ -21,8 +21,9 @@ export default function PlanPage() {
           <h2 className="text-xl font-semibold">Deine Aufgaben, dein Tempo</h2>
           <p className="text-sm leading-relaxed text-muted-foreground">
             Melde dich an und schließe die Einrichtung ab. Danach kannst du
-            Aufgaben verwalten, erledigen und nach Tag oder Woche anzeigen.
-            Kalendertermine und Zielverknüpfungen folgen später.
+            Aufgaben verwalten, erledigen und nach Tag oder Woche anzeigen. Im
+            Kalender verwaltest du eigene Termine mit Zeitzone und Tages- oder
+            Wochenansicht. Zielverknüpfungen folgen später.
           </p>
           <Link
             href="/account/plan"
@@ -30,6 +31,13 @@ export default function PlanPage() {
             className="inline-flex min-h-12 items-center rounded-xl bg-primary px-5 text-sm font-medium text-primary-foreground"
           >
             Private Aufgaben öffnen
+          </Link>
+          <Link
+            href="/account/plan/calendar"
+            prefetch={false}
+            className="ml-4 inline-flex min-h-12 items-center text-sm underline"
+          >
+            Privaten Kalender öffnen
           </Link>
         </CardContent>
       </Card>

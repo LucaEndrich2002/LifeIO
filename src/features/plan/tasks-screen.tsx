@@ -35,6 +35,12 @@ export async function TasksScreen({ query }: { query: TaskSearch }) {
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-semibold">Deine Aufgaben</h1>
+      <Link
+        href="/account/plan/calendar"
+        className="inline-flex min-h-11 items-center text-sm underline"
+      >
+        Kalender öffnen
+      </Link>
       <p className="text-sm text-muted-foreground">
         Ein nächster Schritt nach dem anderen. Heute ist der{" "}
         {taskDateLabel(today)} in deiner Profilzeitzone{" "}
