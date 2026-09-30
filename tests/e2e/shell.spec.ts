@@ -35,6 +35,9 @@ test("all five areas are reachable and distinguish the preview from real data", 
       ).toHaveAttribute("href", "/account/goals");
     } else if (label === "Plan") {
       await expect(
+        page.getByRole("link", { name: "Privaten Kalender öffnen" }),
+      ).toHaveAttribute("href", "/account/plan/calendar");
+      await expect(
         page.getByRole("link", { name: "Private Aufgaben öffnen" }),
       ).toHaveAttribute("href", "/account/plan");
     } else {

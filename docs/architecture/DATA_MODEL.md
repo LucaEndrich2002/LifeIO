@@ -1,6 +1,8 @@
 # LifeOS – beabsichtigtes V1-Datenmodell
 
-Dieses Dokument beschreibt die Entitäten aus der README. Implementiert sind `profiles`, `incomes`, `expenses`, `budgets`, die initialen `goals` und der Einrichtungsstatus `onboarding`. Die übrigen Entitäten bleiben Entwurf. Offene Produktregeln stehen im [PRD, Abschnitt 8](../product/PRD.md).
+Dieses Dokument beschreibt die Entitäten aus der README. Die folgenden Abschnitte kennzeichnen den implementierten Stand und die weiterhin vorgesehenen Entitäten. Offene Produktregeln stehen im [PRD, Abschnitt 8](../product/PRD.md).
+
+`calendar_events` ergänzt eigene Termine mit Titel, `starts_at`/`ends_at` als `timestamptz`, ursprünglicher IANA-`time_zone`, Revision und Löschmarkierung. Beide lokalen Endpunkte liegen zwischen 2000 und 2100; Zeitpunktwerte sind endlich und minutengenau, das Ende folgt dem Beginn. RLS verbirgt fremde und entfernte Zeilen, direkte Schreibrechte fehlen. `mutate_calendar_event` prüft Eigentümer und Revision; `read_calendar_events` liest in einem Snapshot eindeutige überlappende Termine mit vollständiger Anzahl und 25er-Seiten. Darstellung und Tagesgrenzen folgen der Profilzeitzone; deren Änderung schreibt Termine nicht um. Details: [CALENDAR_STATUS.md](../CALENDAR_STATUS.md).
 
 ## Bereits implementiert
 

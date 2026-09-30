@@ -1,12 +1,14 @@
 # LifeOS – Roadmap
 
-Stand: 28.09.2026
+Stand: 30.09.2026
 
 Quellen: [README](../../README.md), Abschnitte 9, 10 und 21, sowie [PRD](PRD.md). Diese Roadmap beschreibt die Reihenfolge und Abnahmebedingungen, keine bereits implementierten Funktionen.
 
 ## Aktueller Stand
 
-- Der erste Plan-Schritt verwaltet eigene Aufgaben mit Priorität, optionaler Fälligkeit, Status und bestätigtem Löschen. Tages-/Wochenfilter, Aufgaben ohne Datum und vollständige Folgeseiten sind enthalten. [TASKS_STATUS.md](../TASKS_STATUS.md) beschreibt R08; Kalender, Goal–Task-Links und die Aufgaben-Ergänzung im Onboarding bleiben weitere Schritte.
+- Der zweite Plan-Schritt ergänzt eigene Kalendertermine mit Bearbeiten, bestätigtem Löschen und Tages-/Wochenansicht. Profil- und Terminzeitzone, mehrtägige Intervalle sowie fehlende/doppelte Uhrzeiten sind explizit behandelt. [CALENDAR_STATUS.md](../CALENDAR_STATUS.md) beschreibt R09. Goal–Task-/Event-Links bleiben für den Abschluss von Phase 6 offen.
+
+- Der erste Plan-Schritt verwaltet eigene Aufgaben mit Priorität, optionaler Fälligkeit, Status und bestätigtem Löschen. Tages-/Wochenfilter, Aufgaben ohne Datum und vollständige Folgeseiten sind enthalten. [TASKS_STATUS.md](../TASKS_STATUS.md) beschreibt R08; Goal–Task-Links und die Aufgaben-Ergänzung im Onboarding bleiben weitere Schritte.
 
 - Ziele und Monatsbudgets lassen sich mit beidseitiger Navigation und bestätigtem Entfernen verbinden. Diese Zuordnung reserviert kein Geld und verändert keine Finanzberechnung. [GOAL_BUDGET_LINKS_STATUS.md](../GOAL_BUDGET_LINKS_STATUS.md) beschreibt den ersten typisierten Life-Core-Link und seine Isolation. Verknüpfungen zu Aufgaben und Terminen bleiben spätere Schritte.
 

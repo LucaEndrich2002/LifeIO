@@ -50,6 +50,50 @@ export type Database = {
           },
         ];
       };
+      calendar_events: {
+        Row: {
+          created_at: string;
+          ends_at: string;
+          id: string;
+          removed_at: string | null;
+          revision: number;
+          starts_at: string;
+          time_zone: string;
+          title: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          ends_at: string;
+          id: string;
+          removed_at?: string | null;
+          revision?: number;
+          starts_at: string;
+          time_zone: string;
+          title: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          ends_at?: string;
+          id?: string;
+          removed_at?: string | null;
+          revision?: number;
+          starts_at?: string;
+          time_zone?: string;
+          title?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "calendar_events_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["user_id"];
+          },
+        ];
+      };
       entity_links: {
         Row: {
           budget_id: string;
@@ -499,6 +543,18 @@ export type Database = {
         };
         Returns: undefined;
       };
+      mutate_calendar_event: {
+        Args: {
+          p_ends_at?: string;
+          p_id: string;
+          p_operation: string;
+          p_revision: number;
+          p_starts_at?: string;
+          p_time_zone?: string;
+          p_title?: string;
+        };
+        Returns: undefined;
+      };
       mutate_fixed_cost: {
         Args: {
           p_id: string;
@@ -572,6 +628,10 @@ export type Database = {
       onboarding_amount: {
         Args: { allow_zero?: boolean; value: Json };
         Returns: number;
+      };
+      read_calendar_events: {
+        Args: { p_end: string; p_page?: number; p_start: string };
+        Returns: Json;
       };
       read_goal: { Args: { p_id: string; p_page?: number }; Returns: Json };
       read_goal_milestones: {

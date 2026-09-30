@@ -53,6 +53,8 @@ Nach Beenden der fehlgeschlagenen Desktop-Prozesse wurden ausschließlich diese 
 
 `EnableDockerAI` steht auf `false`. Die Docker-Anwendung wurde danach direkt gestartet; Engine und Supabase liefen wieder. Diese Einstellung betrifft Docker-eigene Funktionen, nicht die geplante LifeOS-KI. Die Sicherungsverzeichnisse bleiben erhalten; Images und Datenbankvolumes wurden nicht zurückgesetzt. Ein mögliches erneutes Auftreten bei späteren Docker-Desktop-Neustarts bleibt eine externe Einschränkung. Der normale Supabase-Stop-/Start-Ablauf wurde anschließend erfolgreich geprüft und benötigt keinen Desktop-Neustart.
 
+Am 29.09.2026 hing die Engine nach einem früheren Speicherplatzfehler beim Beenden; vor der Reparatur waren wieder 7,8 GiB frei. Ein normaler Desktop-Neustart lief in ein Timeout. Nach gezieltem Beenden der geprüften Docker-Prozesse und ausschließlich der Distribution `docker-desktop` trat erneut der dokumentierte Socket-Fehler auf. Die beiden geprüften Laufzeitordner wurden reversibel mit dem Zusatz `.lifeos-socket-backup-20260929-213608` umbenannt. Danach starteten Docker und die vorhandene Supabase-Datenbank erfolgreich; die Kalender-Migration wurde additiv angewendet. Images und Datenbankvolumes wurden nicht zurückgesetzt.
+
 ## Wiederholbare Vorprüfung
 
 Am 26.09.2026 trat derselbe `sailor-ingest.sock`-Fehler beim erneuten Docker-Start auf. Nach Prüfung der Fehlermeldung und der betroffenen Verzeichnisse wurde derselbe reversible Workaround erneut angewendet. Die beiden Sicherungen tragen den Zusatz `.lifeos-socket-backup-20260926-172634`. Docker 29.8.0 und die vorhandene Supabase-Datenbank starteten anschließend erfolgreich; Datenbankvolumes wurden nicht zurückgesetzt.

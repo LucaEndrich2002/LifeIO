@@ -1,6 +1,6 @@
 # LifeOS – Systemarchitektur
 
-Stand: Projektfundament, Dashboard-Prototyp und erstes Auth-/Profil-Inkrement, 20.09.2026. Produktumfang: [PRD](../product/PRD.md).
+Stand: 30.09.2026, einschließlich Kalender-Inkrement. Produktumfang: [PRD](../product/PRD.md).
 
 ## Aktuell implementiert
 
@@ -12,7 +12,9 @@ Die Dashboard-Inhalte bleiben Server Components. Nur `PreviewSwitcher` ist für 
 
 ## Modularer Monolith
 
-Plan-Aufgaben nutzen reine Regeln in `src/domain/tasks.ts`, autorisierte Lese- und Schreibzugriffe in `src/server/tasks.ts`/`task-actions.ts` sowie Featureansichten unter `src/features/plan`. Listen und vollständige Zählungen entstehen gemeinsam im RLS-geschützten Snapshot. Kalender und Modulverknüpfungen sind nicht vorweggenommen. Details: [TASKS_STATUS.md](../TASKS_STATUS.md).
+Plan-Aufgaben nutzen reine Regeln in `src/domain/tasks.ts`, autorisierte Lese- und Schreibzugriffe in `src/server/tasks.ts`/`task-actions.ts` sowie Featureansichten unter `src/features/plan`. Listen und vollständige Zählungen entstehen gemeinsam im RLS-geschützten Snapshot. Details: [TASKS_STATUS.md](../TASKS_STATUS.md).
+
+Der Kalender verwendet `src/domain/calendar.ts` für Eingaben und `calendar-time.ts` für reine Intervall- und Zeitzonenregeln. Die tatsächlich verwendete Abhängigkeit `@js-temporal/polyfill` 0.5.1 liefert IANA-Umrechnung und Tagesanfänge mit Sommerzeitregeln; nur Serveransichten, Server Actions und Tests importieren die Zeitlogik. Das Clientformular erhält bereits aufgelöste lokale Werte. Autorisierte Zugriffe liegen in `src/server/calendar.ts`/`calendar-actions.ts`; dünne Routen und Featureansichten folgen der bestehenden Plan-Struktur. Goal-Verknüpfungen bleiben separat. Details: [CALENDAR_STATUS.md](../CALENDAR_STATUS.md).
 
 Der erste Life-Core-Link verbindet eigene Ziele und Monatsbudgets. Reine Eingaberegeln liegen in `src/domain/goal-budget-links.ts`, autorisierte Zugriffe und Mutationen in `src/server/goal-budget-links.ts` und `goal-budget-link-actions.ts`. Goal- und Money-Ansichten verwenden dieselben typisierten Beziehungen mit beidseitiger Navigation; finanzielle Berechnungen bleiben unabhängig davon. Details: [GOAL_BUDGET_LINKS_STATUS.md](../GOAL_BUDGET_LINKS_STATUS.md).
 
