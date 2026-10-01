@@ -18,6 +18,8 @@ Der Kontobereich ist separat: `/auth/login` und `/account` benötigen die lokale
 
 ## Qualitätsprüfungen
 
+Das persönliche Dashboard unter `/account/home` benötigt die additive Lese-Erweiterung `20261001090000_home_goals.sql`. Mit `pnpm exec supabase migration up --local` anwenden. `/account/overview` führt nach abgeschlossener Einrichtung zum Dashboard mit dem Startmonat; der normale Home-Link verwendet den aktuellen Monat der Profilzeitzone. Regeln und offene Verständlichkeitsprüfung: [HOME_STATUS.md](HOME_STATUS.md).
+
 Ziele können unter `/account/goals/[id]/plan` mit Aufgaben oder Terminen verbunden werden. Voraussetzung ist die additive Migration `20260930190000_goal_plan_links.sql`, anzuwenden mit `pnpm exec supabase migration up --local`. Bestehende Budget-Links bleiben erhalten; ein Reset oder neue Abhängigkeiten sind nicht nötig. Aufgaben-/Terminansichten bieten mit „Verknüpfte Ziele“ die Gegenrichtung. Regeln und Abnahme: [GOAL_PLAN_LINKS_STATUS.md](GOAL_PLAN_LINKS_STATUS.md).
 
 Der private Kalender unter `/account/plan/calendar` benötigt `20260929090000_calendar_events.sql`. Mit `pnpm exec supabase migration up --local` additiv anwenden; kein Reset erforderlich. Nach Anmeldung und abgeschlossener Einrichtung führen die öffentliche Plan-Seite und die Aufgabenliste zum Kalender. `pnpm install --frozen-lockfile` installiert zusätzlich die verwendete Temporal-Zeitlogik. Regeln und Abnahme: [CALENDAR_STATUS.md](CALENDAR_STATUS.md).
@@ -36,7 +38,7 @@ Die laufende Sparzielverwaltung benötigt außerdem `20260926160000_savings_goal
 
 Fixkostenpflege und Monatsbudgets benötigen zusätzlich `20260921150000_fixed_costs_and_budgets.sql`; ebenfalls mit `pnpm exec supabase migration up --local` anwenden. Bestehende Nutzerdaten bleiben dabei erhalten. Die gemeinsame Monatsübersicht zeigt anschließend gültige Fixkosten und das Budget. Details: [FIXED_COSTS_BUDGET_STATUS.md](FIXED_COSTS_BUDGET_STATUS.md).
 
-Die laufende Finanzverwaltung unter `/account/money` benötigt auch die Migration `20260921120000_money_transactions.sql`. Sie verwendet dieselben Einkommen-/Ausgabentabellen wie die Einrichtung und bietet Einnahmen- und Ausgaben-CRUD mit Monatsübersicht. `/account/overview` führt inzwischen nach Money für den Startmonat. Details: [MONEY_TRANSACTIONS_STATUS.md](MONEY_TRANSACTIONS_STATUS.md).
+Die laufende Finanzverwaltung unter `/account/money` benötigt auch die Migration `20260921120000_money_transactions.sql`. Sie verwendet dieselben Einkommen-/Ausgabentabellen wie die Einrichtung und bietet Einnahmen- und Ausgaben-CRUD mit Monatsübersicht. Das Home-Dashboard führt mit dem gewählten Monat nach Money. Details: [MONEY_TRANSACTIONS_STATUS.md](MONEY_TRANSACTIONS_STATUS.md).
 
 ```sh
 pnpm format:check

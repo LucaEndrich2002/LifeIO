@@ -668,6 +668,10 @@ export type Database = {
         Args: { p_goal_id: string; p_page?: number };
         Returns: Json;
       };
+      read_home_goals: {
+        Args: { p_day: string; p_page?: number };
+        Returns: Json;
+      };
       read_money_month: {
         Args: {
           p_expense_page?: number;

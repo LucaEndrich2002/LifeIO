@@ -285,6 +285,8 @@ Dies sind vorgeschlagene Messdefinitionen, keine erfundenen Zielwerte. Geschäft
 
 ## 9. Übergang zur Entwicklung
 
+Das erste Home-Inkrement ergänzt den privaten Überblick aus R11 mit echten Daten, gemeinsamen Money-Berechnungen, Tagesgrenzen der Profilzeitzone, Zielfortschritt und nachvollziehbaren Hinweisen. Details: [HOME_STATUS.md](../HOME_STATUS.md). Die manuelle Verständlichkeitsprüfung J05 bleibt offen; KI und wiederkehrende Hinweise folgen in eigenen Phasen.
+
 Der dritte Plan-Schritt ergänzt R10 um `requires` und `scheduled_as`: beide Zielarten können mit vorhandenen eigenen Aufgaben und Terminen verbunden werden. Verknüpfungen verändern keine Fortschritte oder Beträge; bestätigtes Entfernen und Löschung von Endpunkten sind getrennt geregelt. Auswahl, beide Navigationsrichtungen, Konkurrenz und vollständige Seiten: [GOAL_PLAN_LINKS_STATUS.md](../GOAL_PLAN_LINKS_STATUS.md).
 
 Der zweite Plan-Schritt setzt R09 mit eigenen Terminen, expliziter Zeitzone und Tages-/Wochenansicht um. Mehrtägige Intervalle, Sommerzeitlücken, doppelte Uhrzeiten und Profilzeitzonen sind geregelt. Regeln und Abnahme: [CALENDAR_STATUS.md](../CALENDAR_STATUS.md).

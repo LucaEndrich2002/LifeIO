@@ -20,7 +20,7 @@ export async function ProfileScreen({
   const onboarding = profile
     ? await supabase
         .from("onboarding")
-        .select("completed_at")
+        .select("completed_at,month")
         .eq("user_id", user.id)
         .maybeSingle()
     : null;
@@ -56,7 +56,11 @@ export async function ProfileScreen({
       </Card>
       {profile ? (
         <Link
-          href="/account/onboarding"
+          href={
+            onboarding?.data?.completed_at
+              ? `/account/money?month=${onboarding.data.month.slice(0, 7)}`
+              : "/account/onboarding"
+          }
           className="flex min-h-12 items-center justify-center rounded-xl border border-primary px-5 py-3 text-sm font-medium text-primary"
         >
           {onboarding?.data?.completed_at
@@ -68,6 +72,14 @@ export async function ProfileScreen({
           Speichere zuerst dein Profil. Danach kannst du Einkommen, Fixkosten
           und dein erstes Sparziel einrichten.
         </p>
+      )}
+      {onboarding?.data?.completed_at && (
+        <Link
+          href="/account/home"
+          className="flex min-h-12 items-center justify-center rounded-xl bg-primary px-5 text-sm font-medium text-primary-foreground"
+        >
+          Mein Dashboard öffnen
+        </Link>
       )}
       <SignOutButton />
     </div>
