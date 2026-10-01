@@ -1,10 +1,12 @@
 # LifeOS – Roadmap
 
-Stand: 30.09.2026
+Stand: 01.10.2026
 
 Quellen: [README](../../README.md), Abschnitte 9, 10 und 21, sowie [PRD](PRD.md). Diese Roadmap beschreibt die Reihenfolge und Abnahmebedingungen, keine bereits implementierten Funktionen.
 
 ## Aktueller Stand
+
+- Das erste Life-AI-Inkrement ergänzt die sechs autorisierten, ausschließlich lesenden Anwendungstools aus R12. Strikte Argumente, aktuelle Anmeldung, Nutzerrechte und reduzierte Ergebnisse mit Zeitraum/Herkunft bilden die Grundlage. Es gibt noch keine Modellanbindung oder echten KI-Antworten; R12 bleibt offen. Umfang und Prüfstand: [AI_READ_TOOLS_STATUS.md](../AI_READ_TOOLS_STATUS.md).
 
 - Das erste Home-Inkrement ergänzt einen privaten Überblick über heute, den gewählten Finanzmonat, beide Zielarten und begründete Hinweise. Es verwendet echte eigene Daten und bestehende Fachberechnungen. Umfang, Grenzen und Prüfstand: [HOME_STATUS.md](../HOME_STATUS.md). Die Verständlichkeitsprüfung J05 mit fünf Personen bleibt offen; Phase 7 ist noch nicht insgesamt abgenommen.
 

@@ -83,7 +83,7 @@ Die fachliche Strategie steht in [DATA_MODEL.md](DATA_MODEL.md). Geld wird als g
 
 Absolute Zeitpunkte werden als UTC-Zeitpunkte gespeichert, die Profilzeitzone bestimmt die Anzeige. Ein Kalendertag, eine Monatszuordnung und ein Zeitpunkt sind unterschiedliche Fachbegriffe. Keine implizite Serverzeitzone für Monatsberechnungen.
 
-## Künftige KI-Schicht
+## Lesende KI-Grundlage
 
 ```text
 Nutzeranfrage
@@ -95,6 +95,8 @@ Nutzeranfrage
 ```
 
 Zuerst nur lesend: `get_financial_summary`, `get_budget_status`, `get_goals`, `get_goal_projection`, `get_tasks`, `get_upcoming_events`. Finanzwerte werden berechnet, nicht vom Modell erfunden. Inhalte aus Datenbankfeldern sind Daten, keine Rechte oder Anweisungen für die Tool-Schicht.
+
+Diese sechs Werkzeuge sind in `src/server/ai-tools.ts` über einen Sitzungsklienten erreichbar. Der Serverkern in `src/server/ai/read-tools.ts` verlangt eine separat vom vertrauenswürdigen Aufrufer gelieferte Freigabeliste, strikt validierte Argumente, aktuelle Identität und abgeschlossene Einrichtung. Er verwendet bestehende lesende Fachzugriffe mit RLS und gibt reduzierte Ergebnisse mit Zeitraum und Herkunft aus. Geldbeträge verlassen die Schicht als ganzzahlige Minor-Unit-Zeichenfolgen mit Währung. Verträge und Terminzeiträume liegen rein in `src/domain/ai-read-tools.ts` und `ai-event-range.ts`. Es gibt noch keinen HTTP-Endpunkt, Provider, Modellaufruf oder privaten KI-Chat; die spätere Anfrageverarbeitung muss die benötigten Tools explizit auswählen. Details: [AI_READ_TOOLS_STATUS.md](../AI_READ_TOOLS_STATUS.md).
 
 Spätere Schreibaktionen wie `create_task`, `create_goal`, `update_goal` und `create_event` benötigen validierte Argumente, serverseitige Autorisierung, Fachlogik und vor Ausführung eine sichtbare Bestätigung der konkreten Aktion. Bestätigung ist an Nutzer und Argumente zu binden; Wiederholung darf keine unbeabsichtigten Duplikate erzeugen. Kein beliebiges SQL und keine Service-Role-Zugangsdaten für das Modell. Ein KI-Ausfall darf den übrigen Core nicht blockieren.
 

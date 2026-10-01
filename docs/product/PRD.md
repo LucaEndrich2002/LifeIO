@@ -285,7 +285,9 @@ Dies sind vorgeschlagene Messdefinitionen, keine erfundenen Zielwerte. Geschäft
 
 ## 9. Übergang zur Entwicklung
 
-Das erste Home-Inkrement ergänzt den privaten Überblick aus R11 mit echten Daten, gemeinsamen Money-Berechnungen, Tagesgrenzen der Profilzeitzone, Zielfortschritt und nachvollziehbaren Hinweisen. Details: [HOME_STATUS.md](../HOME_STATUS.md). Die manuelle Verständlichkeitsprüfung J05 bleibt offen; KI und wiederkehrende Hinweise folgen in eigenen Phasen.
+Die sechs lesenden Anwendungstools aus R12 sind als serverseitige Grundlage mit expliziter Freigabe, aktueller Identitätsprüfung, RLS und reduzierten Ergebnissen implementiert. Details: [AI_READ_TOOLS_STATUS.md](../AI_READ_TOOLS_STATUS.md). Modellanbindung, Anfrageauswahl und nutzbare KI-Antworten bleiben offen; R12 ist noch nicht insgesamt erfüllt.
+
+Das erste Home-Inkrement ergänzt den privaten Überblick aus R11 mit echten Daten, gemeinsamen Money-Berechnungen, Tagesgrenzen der Profilzeitzone, Zielfortschritt und nachvollziehbaren Hinweisen. Details: [HOME_STATUS.md](../HOME_STATUS.md). Die manuelle Verständlichkeitsprüfung J05 bleibt offen; wiederkehrende Hinweise folgen in einer eigenen Phase.
 
 Der dritte Plan-Schritt ergänzt R10 um `requires` und `scheduled_as`: beide Zielarten können mit vorhandenen eigenen Aufgaben und Terminen verbunden werden. Verknüpfungen verändern keine Fortschritte oder Beträge; bestätigtes Entfernen und Löschung von Endpunkten sind getrennt geregelt. Auswahl, beide Navigationsrichtungen, Konkurrenz und vollständige Seiten: [GOAL_PLAN_LINKS_STATUS.md](../GOAL_PLAN_LINKS_STATUS.md).
 

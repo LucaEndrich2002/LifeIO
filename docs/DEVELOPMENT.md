@@ -88,6 +88,8 @@ Die lokale Auth-Konfiguration verwendet bestätigte E-Mail-Adressen, sechsstelli
 
 ## Projektstruktur und Grenzen
 
+Die sechs serverseitigen KI-Lesewerkzeuge werden durch `pnpm test` und `pnpm test:integration` geprüft. Sie verwenden den bestehenden lokalen Datenbestand und normale Nutzerrechte; es sind keine zusätzliche Migration, Modellanfrage, Abhängigkeit oder KI-Zugangsdaten nötig. Funktionsumfang und noch offene Modellanbindung: [AI_READ_TOOLS_STATUS.md](AI_READ_TOOLS_STATUS.md).
+
 Siehe [SYSTEM.md](architecture/SYSTEM.md), [DATA_MODEL.md](architecture/DATA_MODEL.md) und [DESIGN_SYSTEM.md](design/DESIGN_SYSTEM.md). Reine Domain-Regeln, weitere Featuremodule, Datenbanktypen und Integrationstests entstehen erst mit ihren tatsächlichen Funktionen.
 
 Kein Service-Role-Key und kein OpenAI-Key sind für normale App-Anfragen nötig. Nur der lokale Test-Runner liest einen privilegierten Schlüssel im Speicher für die Erzeugung und Bereinigung eigener Testkonten. Die Rechteprüfungen verwenden normale Nutzerrechte. `.env*` ist bis auf `.env.example` ignoriert; Konfigurationsfehler zeigen nur Variablennamen. Öffentliche Next.js-Konfiguration erfordert nach Änderungen einen neuen Build.
