@@ -22,6 +22,7 @@ import { requireMoneyAccount } from "@/server/money";
 import { goalKindSchema } from "@/domain/personal-goals";
 import { PersonalGoalScreen } from "@/features/goals/personal-goal-screen";
 import { GoalBudgetsSection } from "@/features/goals/goal-budgets-section";
+import { GoalPlanEntry } from "@/features/goals/goal-plan-entry";
 import { linkPageSchema } from "@/domain/goal-budget-links";
 
 export type GoalQuery = {
@@ -309,6 +310,7 @@ export async function GoalScreen({
         goalId={id}
         page={budgetPage.data}
       />
+      <GoalPlanEntry goalId={id} />
       <div className="flex flex-wrap gap-5 text-sm">
         <Link
           href="/account/goals"

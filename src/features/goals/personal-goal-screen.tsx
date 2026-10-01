@@ -11,6 +11,7 @@ import { MilestonesSection } from "@/features/goals/milestones-section";
 import { loadMilestones } from "@/server/milestones";
 import type { requireMoneyAccount } from "@/server/money";
 import { GoalBudgetsSection } from "@/features/goals/goal-budgets-section";
+import { GoalPlanEntry } from "@/features/goals/goal-plan-entry";
 
 export async function PersonalGoalScreen({
   account,
@@ -80,6 +81,7 @@ export async function PersonalGoalScreen({
         kind="personal"
       />
       <GoalBudgetsSection account={account} goalId={id} page={budgetPage} />
+      <GoalPlanEntry goalId={id} />
       <Link
         href="/account/goals?kind=personal"
         className="inline-flex min-h-11 items-center text-sm underline"

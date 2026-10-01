@@ -23,7 +23,8 @@ export default function PlanPage() {
             Melde dich an und schließe die Einrichtung ab. Danach kannst du
             Aufgaben verwalten, erledigen und nach Tag oder Woche anzeigen. Im
             Kalender verwaltest du eigene Termine mit Zeitzone und Tages- oder
-            Wochenansicht. Zielverknüpfungen folgen später.
+            Wochenansicht. In deinen Zielen kannst du passende Aufgaben und
+            Termine verknüpfen.
           </p>
           <Link
             href="/account/plan"

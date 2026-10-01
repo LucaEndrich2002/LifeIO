@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { z } from "zod";
 import { taskQuerySchema } from "@/domain/tasks";
@@ -57,6 +58,14 @@ export async function TaskScreen({
             : "Aufgabe bearbeiten"}
       </h1>
       <TaskForm initial={initial} />
+      {id !== "new" && action !== "remove" && (
+        <Link
+          href={`/account/plan/${id}/goals`}
+          className="inline-flex min-h-11 items-center text-sm underline"
+        >
+          Verknüpfte Ziele
+        </Link>
+      )}
     </div>
   );
 }

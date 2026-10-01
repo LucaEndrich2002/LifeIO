@@ -285,9 +285,11 @@ Dies sind vorgeschlagene Messdefinitionen, keine erfundenen Zielwerte. Geschäft
 
 ## 9. Übergang zur Entwicklung
 
-Der zweite Plan-Schritt setzt R09 mit eigenen Terminen, expliziter Zeitzone und Tages-/Wochenansicht um. Mehrtägige Intervalle, Sommerzeitlücken, doppelte Uhrzeiten und Profilzeitzonen sind geregelt; Goal–Event-Links folgen separat. Regeln und Abnahme: [CALENDAR_STATUS.md](../CALENDAR_STATUS.md).
+Der dritte Plan-Schritt ergänzt R10 um `requires` und `scheduled_as`: beide Zielarten können mit vorhandenen eigenen Aufgaben und Terminen verbunden werden. Verknüpfungen verändern keine Fortschritte oder Beträge; bestätigtes Entfernen und Löschung von Endpunkten sind getrennt geregelt. Auswahl, beide Navigationsrichtungen, Konkurrenz und vollständige Seiten: [GOAL_PLAN_LINKS_STATUS.md](../GOAL_PLAN_LINKS_STATUS.md).
 
-Der erste Plan-Schritt setzt R08 mit eigener Aufgabenverwaltung, offen/erledigt, Priorität, optionalem Kalendertag und Tages-/Wochenfiltern um. Aufgaben ohne Datum bleiben auffindbar; Goal–Task-Links folgen separat. Regeln und Abnahme: [TASKS_STATUS.md](../TASKS_STATUS.md).
+Der zweite Plan-Schritt setzt R09 mit eigenen Terminen, expliziter Zeitzone und Tages-/Wochenansicht um. Mehrtägige Intervalle, Sommerzeitlücken, doppelte Uhrzeiten und Profilzeitzonen sind geregelt. Regeln und Abnahme: [CALENDAR_STATUS.md](../CALENDAR_STATUS.md).
+
+Der erste Plan-Schritt setzt R08 mit eigener Aufgabenverwaltung, offen/erledigt, Priorität, optionalem Kalendertag und Tages-/Wochenfiltern um. Aufgaben ohne Datum bleiben auffindbar. Regeln und Abnahme: [TASKS_STATUS.md](../TASKS_STATUS.md).
 
 Der erste R10-Schritt verbindet Ziele und bestehende Monatsbudgets mit der typisierten Beziehung `funded_by`. Weil das aktuelle Budget alle variablen Monatsausgaben umfasst, dient der Link ausdrücklich als Planungskontext ohne Geldreservierung oder Änderung von Finanzwerten. Beide Navigationsrichtungen, bestätigtes Entfernen und Integrität beim Löschen von Endpunkten sind beschrieben in [GOAL_BUDGET_LINKS_STATUS.md](../GOAL_BUDGET_LINKS_STATUS.md). Aufgaben und Kalender bleiben außerhalb dieses Schritts.
 

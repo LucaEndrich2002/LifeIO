@@ -54,7 +54,7 @@ Alle eigenen Datensätze erhalten eine stabile ID und erforderliche Zeitstempel.
 
 ## EntityLink
 
-Der erste implementierte Link verwendet `entity_links` mit `id`, `user_id`, typisierten `goal_id`/`budget_id`, `relationship = funded_by`, `created_at` und `removed_at`. Eigentümer-Fremdschlüssel und ein eindeutiger Index für aktive Paare ersetzen für diesen begrenzten Umfang freie polymorphe IDs. Beim Löschen eines Endpunkts werden nur seine Links entfernt. Die Beziehung ist Planungskontext ohne Geldreservierung. Regeln: [GOAL_BUDGET_LINKS_STATUS.md](../GOAL_BUDGET_LINKS_STATUS.md). Die folgende allgemeine Form bleibt Entwurf für weitere Beziehungstypen.
+`entity_links` verwendet `id`, `user_id`, `goal_id`, `created_at`, `removed_at` und genau eine zum Beziehungstyp passende Referenz: `budget_id` bei `funded_by`, `task_id` bei `requires`, `calendar_event_id` bei `scheduled_as`. Ein CHECK erzwingt die Kombinationen; zusammengesetzte Eigentümer-Fremdschlüssel und eindeutige Indizes für aktive Paare sichern Identität, Existenz und Duplikatfreiheit. Physisches Löschen eines Endpunkts entfernt nur seine Links. Soft-Delete von Aufgaben/Terminen markiert deren Links in derselben Transaktion ebenfalls als entfernt; eine gemeinsame Onboarding-Sperre serialisiert dies mit dem Anlegen. Die Beziehungen sind Planungskontext ohne Veränderung von Fortschritten oder Beträgen. Regeln: [GOAL_BUDGET_LINKS_STATUS.md](../GOAL_BUDGET_LINKS_STATUS.md), [GOAL_PLAN_LINKS_STATUS.md](../GOAL_PLAN_LINKS_STATUS.md). Die folgende allgemeine Form bleibt Entwurf für weitere Beziehungstypen.
 
 Beabsichtigte Form aus der README:
 
