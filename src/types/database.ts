@@ -96,30 +96,36 @@ export type Database = {
       };
       entity_links: {
         Row: {
-          budget_id: string;
+          budget_id: string | null;
+          calendar_event_id: string | null;
           created_at: string;
           goal_id: string;
           id: string;
           relationship: string;
           removed_at: string | null;
+          task_id: string | null;
           user_id: string;
         };
         Insert: {
-          budget_id: string;
+          budget_id?: string | null;
+          calendar_event_id?: string | null;
           created_at?: string;
           goal_id: string;
           id: string;
           relationship?: string;
           removed_at?: string | null;
+          task_id?: string | null;
           user_id: string;
         };
         Update: {
-          budget_id?: string;
+          budget_id?: string | null;
+          calendar_event_id?: string | null;
           created_at?: string;
           goal_id?: string;
           id?: string;
           relationship?: string;
           removed_at?: string | null;
+          task_id?: string | null;
           user_id?: string;
         };
         Relationships: [
@@ -131,10 +137,24 @@ export type Database = {
             referencedColumns: ["user_id", "id"];
           },
           {
+            foreignKeyName: "entity_links_user_id_calendar_event_id_fkey";
+            columns: ["user_id", "calendar_event_id"];
+            isOneToOne: false;
+            referencedRelation: "calendar_events";
+            referencedColumns: ["user_id", "id"];
+          },
+          {
             foreignKeyName: "entity_links_user_id_goal_id_fkey";
             columns: ["user_id", "goal_id"];
             isOneToOne: false;
             referencedRelation: "goals";
+            referencedColumns: ["user_id", "id"];
+          },
+          {
+            foreignKeyName: "entity_links_user_id_task_id_fkey";
+            columns: ["user_id", "task_id"];
+            isOneToOne: false;
+            referencedRelation: "tasks";
             referencedColumns: ["user_id", "id"];
           },
         ];
@@ -591,6 +611,16 @@ export type Database = {
           p_operation: string;
           p_revision: number;
           p_title?: string;
+        };
+        Returns: undefined;
+      };
+      mutate_goal_plan_link: {
+        Args: {
+          p_goal_id: string;
+          p_id: string;
+          p_kind: string;
+          p_operation: string;
+          p_target_id: string;
         };
         Returns: undefined;
       };

@@ -64,10 +64,11 @@ export async function GoalBudgetLinkScreen({
       .select("budget_id")
       .eq("user_id", account.user.id)
       .eq("goal_id", goalId)
+      .eq("relationship", "funded_by")
       .eq("id", id)
       .maybeSingle();
     if (result.error) throw new Error("Link unavailable.");
-    if (!result.data) notFound();
+    if (!result.data?.budget_id) notFound();
     budget = await loadLinkBudget(account, result.data.budget_id);
   }
   return (

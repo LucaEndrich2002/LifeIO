@@ -3,11 +3,13 @@ export function LinkPages({
   count,
   label,
   href,
+  unit = "Verknüpfungen",
 }: {
   page: number;
   count: number;
   label: string;
   href: (page: number) => string;
+  unit?: string;
 }) {
   if (count <= 25 && page === 0) return null;
   return (
@@ -21,7 +23,7 @@ export function LinkPages({
         </a>
       )}
       <span className="py-3">
-        Seite {page + 1} · {count} Verknüpfungen
+        Seite {page + 1} · {count} {unit}
       </span>
       {(page + 1) * 25 < count && (
         <a

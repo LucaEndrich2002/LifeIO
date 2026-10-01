@@ -6,13 +6,15 @@ Quellen: [README](../../README.md), Abschnitte 9, 10 und 21, sowie [PRD](PRD.md)
 
 ## Aktueller Stand
 
-- Der zweite Plan-Schritt ergänzt eigene Kalendertermine mit Bearbeiten, bestätigtem Löschen und Tages-/Wochenansicht. Profil- und Terminzeitzone, mehrtägige Intervalle sowie fehlende/doppelte Uhrzeiten sind explizit behandelt. [CALENDAR_STATUS.md](../CALENDAR_STATUS.md) beschreibt R09. Goal–Task-/Event-Links bleiben für den Abschluss von Phase 6 offen.
+- Der dritte Plan-Schritt verbindet Sparziele und persönliche Ziele mit eigenen Aufgaben (`requires`) und Terminen (`scheduled_as`). Auswahl, vollständige Seiten, beidseitige Navigation und bestätigtes Entfernen sind enthalten. Mit den vorhandenen Budget-Links sind R08–R10 und der funktionale Umfang von Phase 6 umgesetzt. Regeln und Abnahme: [GOAL_PLAN_LINKS_STATUS.md](../GOAL_PLAN_LINKS_STATUS.md). Der nächste getrennte Produktabschnitt ist Phase 7 – Home; optionale Onboarding-Aufgaben bleiben außerhalb dieses Plan-Inkrements offen.
 
-- Der erste Plan-Schritt verwaltet eigene Aufgaben mit Priorität, optionaler Fälligkeit, Status und bestätigtem Löschen. Tages-/Wochenfilter, Aufgaben ohne Datum und vollständige Folgeseiten sind enthalten. [TASKS_STATUS.md](../TASKS_STATUS.md) beschreibt R08; Goal–Task-Links und die Aufgaben-Ergänzung im Onboarding bleiben weitere Schritte.
+- Der zweite Plan-Schritt ergänzt eigene Kalendertermine mit Bearbeiten, bestätigtem Löschen und Tages-/Wochenansicht. Profil- und Terminzeitzone, mehrtägige Intervalle sowie fehlende/doppelte Uhrzeiten sind explizit behandelt. [CALENDAR_STATUS.md](../CALENDAR_STATUS.md) beschreibt R09.
 
-- Ziele und Monatsbudgets lassen sich mit beidseitiger Navigation und bestätigtem Entfernen verbinden. Diese Zuordnung reserviert kein Geld und verändert keine Finanzberechnung. [GOAL_BUDGET_LINKS_STATUS.md](../GOAL_BUDGET_LINKS_STATUS.md) beschreibt den ersten typisierten Life-Core-Link und seine Isolation. Verknüpfungen zu Aufgaben und Terminen bleiben spätere Schritte.
+- Der erste Plan-Schritt verwaltet eigene Aufgaben mit Priorität, optionaler Fälligkeit, Status und bestätigtem Löschen. Tages-/Wochenfilter, Aufgaben ohne Datum und vollständige Folgeseiten sind enthalten. [TASKS_STATUS.md](../TASKS_STATUS.md) beschreibt R08; die Aufgaben-Ergänzung im Onboarding bleibt ein weiterer Schritt.
 
-- Persönliche Ziele ohne Geldbetrag lassen sich neben Sparzielen anlegen und bearbeiten. Ein optionales Zieldatum und die gemeinsame Meilenstein-Verwaltung machen ihren Fortschritt sichtbar; finanzielle Berechnungen bleiben unverändert. [PERSONAL_GOALS_STATUS.md](../PERSONAL_GOALS_STATUS.md) beschreibt Regeln, Trennung und Abnahme. Modulverknüpfungen und Plan bleiben weitere Schritte.
+- Ziele und Monatsbudgets lassen sich mit beidseitiger Navigation und bestätigtem Entfernen verbinden. Diese Zuordnung reserviert kein Geld und verändert keine Finanzberechnung. [GOAL_BUDGET_LINKS_STATUS.md](../GOAL_BUDGET_LINKS_STATUS.md) beschreibt den ersten typisierten Life-Core-Link und seine Isolation; der Plan-Schritt ergänzt die beiden weiteren R10-Beziehungen.
+
+- Persönliche Ziele ohne Geldbetrag lassen sich neben Sparzielen anlegen und bearbeiten. Ein optionales Zieldatum und die gemeinsame Meilenstein-Verwaltung machen ihren Fortschritt sichtbar; finanzielle Berechnungen bleiben unverändert. [PERSONAL_GOALS_STATUS.md](../PERSONAL_GOALS_STATUS.md) beschreibt Regeln, Trennung und Abnahme.
 
 - Bestehende Sparziele haben eine eigene Meilenstein-Verwaltung mit getrenntem Fortschritt, Wiederöffnen und bestätigtem Entfernen. [GOAL_MILESTONES_STATUS.md](../GOAL_MILESTONES_STATUS.md) beschreibt das ursprüngliche Inkrement; persönliche Ziele nutzen diese Verwaltung inzwischen ebenfalls.
 

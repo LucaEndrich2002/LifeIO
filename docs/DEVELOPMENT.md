@@ -18,6 +18,8 @@ Der Kontobereich ist separat: `/auth/login` und `/account` benötigen die lokale
 
 ## Qualitätsprüfungen
 
+Ziele können unter `/account/goals/[id]/plan` mit Aufgaben oder Terminen verbunden werden. Voraussetzung ist die additive Migration `20260930190000_goal_plan_links.sql`, anzuwenden mit `pnpm exec supabase migration up --local`. Bestehende Budget-Links bleiben erhalten; ein Reset oder neue Abhängigkeiten sind nicht nötig. Aufgaben-/Terminansichten bieten mit „Verknüpfte Ziele“ die Gegenrichtung. Regeln und Abnahme: [GOAL_PLAN_LINKS_STATUS.md](GOAL_PLAN_LINKS_STATUS.md).
+
 Der private Kalender unter `/account/plan/calendar` benötigt `20260929090000_calendar_events.sql`. Mit `pnpm exec supabase migration up --local` additiv anwenden; kein Reset erforderlich. Nach Anmeldung und abgeschlossener Einrichtung führen die öffentliche Plan-Seite und die Aufgabenliste zum Kalender. `pnpm install --frozen-lockfile` installiert zusätzlich die verwendete Temporal-Zeitlogik. Regeln und Abnahme: [CALENDAR_STATUS.md](CALENDAR_STATUS.md).
 
 Die private Aufgabenverwaltung unter `/account/plan` benötigt `20260928120000_tasks.sql`. Mit `pnpm exec supabase migration up --local` additiv anwenden; kein Reset erforderlich. Nach Anmeldung und abgeschlossener Einrichtung führt auch die öffentliche Plan-Seite zur Aufgabenliste. Regeln und Abnahme: [TASKS_STATUS.md](TASKS_STATUS.md).

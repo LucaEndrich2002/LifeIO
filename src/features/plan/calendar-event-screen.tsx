@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { z } from "zod";
 import { calendarQuerySchema, type CalendarSearch } from "@/domain/calendar";
@@ -89,6 +90,14 @@ export async function CalendarEventScreen({
         </div>
       )}
       <CalendarForm initial={initial} timeZones={supportedTimeZones} />
+      {id !== "new" && action !== "remove" && (
+        <Link
+          href={`/account/plan/calendar/${id}/goals`}
+          className="inline-flex min-h-11 items-center text-sm underline"
+        >
+          Verknüpfte Ziele
+        </Link>
+      )}
     </div>
   );
 }
