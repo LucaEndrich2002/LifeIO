@@ -1,6 +1,6 @@
 # LifeOS – erste Designgrundlage
 
-Die Shell setzt die Richtung aus der README um: ruhig, übersichtlich, großzügige Abstände und klare Hierarchie. Phase 2 enthält einen statischen Dashboard-Prototyp; ein Dashboard mit persönlichen, gespeicherten Daten folgt in Phase 7.
+Die Shell setzt die Richtung aus der README um: ruhig, übersichtlich, großzügige Abstände und klare Hierarchie. Die öffentliche Startseite enthält den statischen Dashboard-Prototyp aus Phase 2. Das persönliche Home aus Phase 7 ergänzt inzwischen einen eigenen geschützten Überblick mit gespeicherten Daten.
 
 ## Visuelle Sprache
 
@@ -44,5 +44,7 @@ Die Startseite zeigt Monatssaldo, Tagesplan, Zielfortschritt und einen begründe
 Die Umsetzung benötigt keine zusätzlichen Pakete. Finanzformulare, automatisch berechnete Hinweise und AI Insights gehören zu späteren Fachphasen. Die noch ausstehende Nutzerprüfung aus J05 wird durch den Prototyp und seine Browsertests nicht als erfüllt betrachtet.
 
 ## Kontozugang und Profil
+
+Das persönliche Home unter `/account/home` verwendet dieselben Cards, Fortschrittsbalken, Farben und Schriftgrößen. Heute und Monatsübersicht stehen auf großen Bildschirmen nebeneinander, auf Smartphones untereinander. Hinweise nennen ihre Datenbasis; Ziele zeigen echte Beträge beziehungsweise Meilensteine und bleiben vollständig durchblätterbar. Die Monatsauswahl verwendet auf kleinen Bildschirmen die volle Breite. Die Kontonavigation führt zwischen Home, Money, Plan, Goals und Profil; Auth-Formulare bleiben fokussiert. J05 ist weiterhin offen. Details: [HOME_STATUS.md](../HOME_STATUS.md).
 
 `AccountShell` verwendet dieselben Farben und Typografie in einem fokussierten Layout. AuthForm und ProfileForm bieten Labels, Autofill, Pending-Zustände, verständliche Fehler und erhaltene Eingaben bei Fehlern. Bestätigungscodes sind per Tastatur oder Autofill eingebbar. Das Profil kennzeichnet tatsächliche Speicherung und verwendet keine Beispielwerte als Ausgangsdaten. Tastaturzugang, mobiles Layout und Sitzungsabläufe werden separat geprüft.

@@ -3,7 +3,13 @@ import type { ReactNode } from "react";
 import { ArrowLeft, Orbit } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 
-export function AccountShell({ children }: { children: ReactNode }) {
+export function AccountShell({
+  children,
+  navigation = false,
+}: {
+  children: ReactNode;
+  navigation?: boolean;
+}) {
   return (
     <div className="min-h-dvh">
       <a
@@ -22,10 +28,32 @@ export function AccountShell({ children }: { children: ReactNode }) {
         </Link>
         <ThemeToggle />
       </header>
+      {navigation && (
+        <nav
+          aria-label="Persönliche Bereiche"
+          className="mx-auto flex max-w-5xl flex-wrap gap-x-6 px-6 text-sm"
+        >
+          {[
+            ["Home", "/account/home"],
+            ["Money", "/account/money"],
+            ["Plan", "/account/plan"],
+            ["Goals", "/account/goals"],
+            ["Profil", "/account"],
+          ].map(([label, href]) => (
+            <Link
+              key={href}
+              href={href!}
+              className="inline-flex min-h-11 items-center underline"
+            >
+              {label}
+            </Link>
+          ))}
+        </nav>
+      )}
       <main
         id="account-content"
         tabIndex={-1}
-        className="mx-auto max-w-lg px-6 pt-6 pb-12 outline-none sm:pt-12"
+        className="mx-auto max-w-lg px-6 pt-6 pb-12 outline-none has-[.home-dashboard]:max-w-5xl sm:pt-12"
       >
         {children}
         <Link

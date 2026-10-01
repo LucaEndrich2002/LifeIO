@@ -57,15 +57,13 @@ test("financial setup persists, allows corrections and finishes with real plan v
     await page.getByRole("link", { name: "4. Übersicht" }).click();
     await expect(page.getByText("−439,99 €", { exact: true })).toBeVisible();
     await page.getByRole("button", { name: "Einrichtung abschließen" }).click();
-    await expect(page).toHaveURL("/account/money?month=2026-09");
+    await expect(page).toHaveURL("/account/home?month=2026-09");
     await page.reload();
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-      "Dein Geld im Überblick.",
+      "Hallo, Alex Test.",
     );
     await expect(page.getByText("−439,99 €", { exact: true })).toBeVisible();
-    await expect(
-      page.getByText(/Nur gespeicherte Angaben fließen ein/),
-    ).toBeVisible();
+    await expect(page.getByText(/Kein Kontostand/)).toBeVisible();
     expect(
       (await fixture.client.from("incomes").select("*")).data,
     ).toHaveLength(1);
@@ -94,7 +92,7 @@ test("financial setup persists, allows corrections and finishes with real plan v
       fullPage: true,
     });
     await page.goto("/account/onboarding/income");
-    await expect(page).toHaveURL("/account/money?month=2026-09");
+    await expect(page).toHaveURL("/account/home?month=2026-09");
   } finally {
     await removeFixture(fixture.id);
   }
@@ -129,11 +127,11 @@ test("explicit omissions resume and finish without invented financial records", 
       page.getByText("Noch unvollständig", { exact: true }),
     ).toBeVisible();
     await page.getByRole("button", { name: "Einrichtung abschließen" }).click();
-    await expect(page).toHaveURL(/\/account\/money\?month=\d{4}-\d{2}$/);
+    await expect(page).toHaveURL(/\/account\/home\?month=\d{4}-\d{2}$/);
     for (const table of ["incomes", "expenses", "goals"] as const)
       expect((await fixture.client.from(table).select("*")).data).toEqual([]);
     await expect(
-      page.getByText("Du hast noch kein Sparziel angegeben.", { exact: false }),
+      page.getByText("Kein Sparziel angegeben", { exact: true }),
     ).toBeVisible();
     await page.screenshot({
       path: testInfo.outputPath("empty-personal-overview.png"),

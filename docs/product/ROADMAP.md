@@ -6,7 +6,9 @@ Quellen: [README](../../README.md), Abschnitte 9, 10 und 21, sowie [PRD](PRD.md)
 
 ## Aktueller Stand
 
-- Der dritte Plan-Schritt verbindet Sparziele und persönliche Ziele mit eigenen Aufgaben (`requires`) und Terminen (`scheduled_as`). Auswahl, vollständige Seiten, beidseitige Navigation und bestätigtes Entfernen sind enthalten. Mit den vorhandenen Budget-Links sind R08–R10 und der funktionale Umfang von Phase 6 umgesetzt. Regeln und Abnahme: [GOAL_PLAN_LINKS_STATUS.md](../GOAL_PLAN_LINKS_STATUS.md). Der nächste getrennte Produktabschnitt ist Phase 7 – Home; optionale Onboarding-Aufgaben bleiben außerhalb dieses Plan-Inkrements offen.
+- Das erste Home-Inkrement ergänzt einen privaten Überblick über heute, den gewählten Finanzmonat, beide Zielarten und begründete Hinweise. Es verwendet echte eigene Daten und bestehende Fachberechnungen. Umfang, Grenzen und Prüfstand: [HOME_STATUS.md](../HOME_STATUS.md). Die Verständlichkeitsprüfung J05 mit fünf Personen bleibt offen; Phase 7 ist noch nicht insgesamt abgenommen.
+
+- Der dritte Plan-Schritt verbindet Sparziele und persönliche Ziele mit eigenen Aufgaben (`requires`) und Terminen (`scheduled_as`). Auswahl, vollständige Seiten, beidseitige Navigation und bestätigtes Entfernen sind enthalten. Mit den vorhandenen Budget-Links sind R08–R10 und der funktionale Umfang von Phase 6 umgesetzt. Regeln und Abnahme: [GOAL_PLAN_LINKS_STATUS.md](../GOAL_PLAN_LINKS_STATUS.md). Phase 7 – Home folgt als eigener Produktabschnitt; optionale Onboarding-Aufgaben bleiben außerhalb dieses Plan-Inkrements offen.
 
 - Der zweite Plan-Schritt ergänzt eigene Kalendertermine mit Bearbeiten, bestätigtem Löschen und Tages-/Wochenansicht. Profil- und Terminzeitzone, mehrtägige Intervalle sowie fehlende/doppelte Uhrzeiten sind explizit behandelt. [CALENDAR_STATUS.md](../CALENDAR_STATUS.md) beschreibt R09.
 

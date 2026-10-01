@@ -1,6 +1,6 @@
 # LifeOS – Systemarchitektur
 
-Stand: 01.10.2026, einschließlich Ziel-Verknüpfungen zu Aufgaben und Terminen. Produktumfang: [PRD](../product/PRD.md).
+Stand: 01.10.2026, einschließlich persönlichem Home-Dashboard. Produktumfang: [PRD](../product/PRD.md).
 
 ## Aktuell implementiert
 
@@ -11,6 +11,8 @@ Die Dashboard-Inhalte bleiben Server Components. Nur `PreviewSwitcher` ist für 
 `/auth/[mode]` bietet Anmeldung, Registrierung, Codebestätigung und Passwortwiederherstellung. Der gesamte `/account`-Bereich verlangt eine verifizierte Identität. Neben Profil und Passwort gibt es `/account/onboarding/[step]` für den finanziellen Einstieg und `/account/overview` für dessen persönliche Startübersicht. Die öffentliche Vorschau liegt in der Routengruppe `(preview)` und bleibt statisch; Konto und Auth verwenden ein eigenes Layout. Details: [AUTH_PROFILE_STATUS.md](../AUTH_PROFILE_STATUS.md) und [FINANCIAL_ONBOARDING_STATUS.md](../FINANCIAL_ONBOARDING_STATUS.md).
 
 ## Modularer Monolith
+
+Das persönliche Home unter `/account/home` kombiniert bestehende autorisierte Money-, Aufgaben- und Kalenderabfragen mit einer begrenzten Abfrage überfälliger Aufgaben und der stabilen RLS-Lesefunktion `read_home_goals`. Reine Zeitraum-/Hinweisregeln liegen in `src/domain/home.ts`, die Lesezusammenstellung in `src/server/home.ts` und die Serveransichten in `src/features/home`. Die öffentliche Vorschau bleibt getrennt. Es gibt keine neuen Schreibrechte oder Abhängigkeiten. Umfang, Snapshot-Grenzen, Fortschritt und offene Nutzerabnahme: [HOME_STATUS.md](../HOME_STATUS.md).
 
 Ziel–Aufgaben-/Termin-Verknüpfungen ergänzen den vorhandenen Life Core mit typisierten Referenzen. Reine Schemas und lokale Rückkehradressen liegen in `src/domain/goal-plan-links.ts`; autorisierte Lese- und Schreibpfade in `src/server/goal-plan-links.ts`/`goal-plan-link-actions.ts`. Listen verbinden RLS-geschützte Endpunkte und zählen vollständig. Featureansichten unter Goals/Plan nutzen gemeinsame Endpunktdarstellung und Seitennavigation; nur das Bestätigungsformular ist interaktiv. Der bestehende Budgetpfad ist ausdrücklich auf `funded_by` begrenzt. Architektur und Löschregeln: [GOAL_PLAN_LINKS_STATUS.md](../GOAL_PLAN_LINKS_STATUS.md).
 
