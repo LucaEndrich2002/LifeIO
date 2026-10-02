@@ -2,6 +2,8 @@
 
 Stand: 01.10.2026
 
+Weiterentwicklung: [AI_MONTH_STATUS.md](AI_MONTH_STATUS.md) beschreibt die inzwischen implementierte private Monatsoberfläche und Provideranbindung. Die nachfolgenden Angaben dokumentieren den Stand des ersten Leseinkrements.
+
 Dieses erste Inkrement von Phase 8 setzt die sechs Anwendungstools aus R12 um. Es ist eine ausschließlich serverseitige Grundlage: Noch gibt es keine echten KI-Antworten, Modellanbindung oder zusätzliche Chatoberfläche. Es werden keine Daten an einen KI-Anbieter übertragen. R12 und Phase 8 bleiben insgesamt offen; die Home-Verständlichkeitsprüfung J05 bleibt ebenfalls offen.
 
 ## Umfang und Ergebnisvertrag

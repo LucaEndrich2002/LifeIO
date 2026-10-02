@@ -30,6 +30,6 @@ export default defineConfig({
     url: "http://127.0.0.1:3100",
     reuseExistingServer: false,
     timeout: 60000,
-    env: { LIFEOS_TEST_SERVICE_KEY: "" },
+    env: { LIFEOS_TEST_SERVICE_KEY: "", OPENAI_API_KEY: "", OPENAI_MODEL: "" },
   },
 });

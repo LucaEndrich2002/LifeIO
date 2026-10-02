@@ -285,6 +285,8 @@ Dies sind vorgeschlagene Messdefinitionen, keine erfundenen Zielwerte. Geschäft
 
 ## 9. Übergang zur Entwicklung
 
+Die erste private KI-Antwortoberfläche beschränkt sich auf den ausgewählten Finanzmonat. Sie zeigt Originalwerte vor dem Senden, verlangt explizite Freigabe, prüft aktuelle Daten und Konto-Limits und verwendet eine begrenzte Responses-Anbindung. [AI_MONTH_STATUS.md](../AI_MONTH_STATUS.md) beschreibt den Ablauf. Zugangsdaten und Modellauswahl sind lokal noch offen; echte Antworten sowie weitere Datenbereiche bleiben für R12 abzunehmen.
+
 Die sechs lesenden Anwendungstools aus R12 sind als serverseitige Grundlage mit expliziter Freigabe, aktueller Identitätsprüfung, RLS und reduzierten Ergebnissen implementiert. Details: [AI_READ_TOOLS_STATUS.md](../AI_READ_TOOLS_STATUS.md). Modellanbindung, Anfrageauswahl und nutzbare KI-Antworten bleiben offen; R12 ist noch nicht insgesamt erfüllt.
 
 Das erste Home-Inkrement ergänzt den privaten Überblick aus R11 mit echten Daten, gemeinsamen Money-Berechnungen, Tagesgrenzen der Profilzeitzone, Zielfortschritt und nachvollziehbaren Hinweisen. Details: [HOME_STATUS.md](../HOME_STATUS.md). Die manuelle Verständlichkeitsprüfung J05 bleibt offen; wiederkehrende Hinweise folgen in einer eigenen Phase.
