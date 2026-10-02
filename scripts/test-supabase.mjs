@@ -24,6 +24,9 @@ if (!key || !serviceKey)
   throw new Error("Local Supabase test credentials unavailable.");
 const env = {
   ...process.env,
+  // Database/browser tests never use a real provider, even on configured hosts.
+  OPENAI_API_KEY: "",
+  OPENAI_MODEL: "",
   NEXT_PUBLIC_SUPABASE_URL: url.origin,
   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: key,
   LIFEOS_TEST_SERVICE_KEY: serviceKey,

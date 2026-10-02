@@ -38,6 +38,7 @@ export function AccountShell({
             ["Money", "/account/money"],
             ["Plan", "/account/plan"],
             ["Goals", "/account/goals"],
+            ["AI", "/account/ai"],
             ["Profil", "/account"],
           ].map(([label, href]) => (
             <Link

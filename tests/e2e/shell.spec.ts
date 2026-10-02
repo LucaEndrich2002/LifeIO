@@ -42,8 +42,8 @@ test("all five areas are reachable and distinguish the preview from real data", 
       ).toHaveAttribute("href", "/account/plan");
     } else {
       await expect(
-        page.getByText("In Vorbereitung", { exact: true }),
-      ).toBeVisible();
+        page.getByRole("link", { name: "Privaten KI-Monatsüberblick öffnen" }),
+      ).toHaveAttribute("href", "/account/ai");
     }
     await expect(page.locator('nav a[aria-current="page"]')).toHaveText(label);
     await page.reload();

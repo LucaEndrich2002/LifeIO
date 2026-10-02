@@ -85,6 +85,8 @@ Absolute Zeitpunkte werden als UTC-Zeitpunkte gespeichert, die Profilzeitzone be
 
 ## Lesende KI-Grundlage
 
+Der erste private Antwortablauf unter `/account/ai` nutzt ausschließlich Monatsübersicht und Budget. Server Action, Rechte-/Freigabeprüfung, Fingerabdruck der Vorschau und Providertransport liegen getrennt in `src/server/ai-actions.ts` und `src/server/ai/`. Das Modell erhält keine ausführbaren Werkzeuge; die Anwendung wählt beide benötigten Lesewerkzeuge vorab. Der feste HTTPS-Aufruf ist zeitlich und mengenmäßig begrenzt und wird nicht wiederholt. Ein atomarer Datenbankzähler schützt das Kontolimit über App-Prozesse hinweg. Verträge, Konfiguration und verbleibende Grenzen: [AI_MONTH_STATUS.md](../AI_MONTH_STATUS.md).
+
 ```text
 Nutzeranfrage
   → serverseitige Identitätsprüfung
@@ -96,7 +98,7 @@ Nutzeranfrage
 
 Zuerst nur lesend: `get_financial_summary`, `get_budget_status`, `get_goals`, `get_goal_projection`, `get_tasks`, `get_upcoming_events`. Finanzwerte werden berechnet, nicht vom Modell erfunden. Inhalte aus Datenbankfeldern sind Daten, keine Rechte oder Anweisungen für die Tool-Schicht.
 
-Diese sechs Werkzeuge sind in `src/server/ai-tools.ts` über einen Sitzungsklienten erreichbar. Der Serverkern in `src/server/ai/read-tools.ts` verlangt eine separat vom vertrauenswürdigen Aufrufer gelieferte Freigabeliste, strikt validierte Argumente, aktuelle Identität und abgeschlossene Einrichtung. Er verwendet bestehende lesende Fachzugriffe mit RLS und gibt reduzierte Ergebnisse mit Zeitraum und Herkunft aus. Geldbeträge verlassen die Schicht als ganzzahlige Minor-Unit-Zeichenfolgen mit Währung. Verträge und Terminzeiträume liegen rein in `src/domain/ai-read-tools.ts` und `ai-event-range.ts`. Es gibt noch keinen HTTP-Endpunkt, Provider, Modellaufruf oder privaten KI-Chat; die spätere Anfrageverarbeitung muss die benötigten Tools explizit auswählen. Details: [AI_READ_TOOLS_STATUS.md](../AI_READ_TOOLS_STATUS.md).
+Diese sechs Werkzeuge sind in `src/server/ai-tools.ts` über einen Sitzungsclient erreichbar. Der Serverkern in `src/server/ai/read-tools.ts` verlangt eine separat vom vertrauenswürdigen Aufrufer gelieferte Freigabeliste, strikt validierte Argumente, aktuelle Identität und abgeschlossene Einrichtung. Er verwendet bestehende lesende Fachzugriffe mit RLS und gibt reduzierte Ergebnisse mit Zeitraum und Herkunft aus. Geldbeträge verlassen die Schicht als ganzzahlige Minor-Unit-Zeichenfolgen mit Währung. Verträge und Terminzeiträume liegen rein in `src/domain/ai-read-tools.ts` und `ai-event-range.ts`. Es gibt keine öffentliche API zur freien Ausführung beliebiger Tools. Die Monatsoberfläche wählt nur ihre beiden festen Werkzeuge; weitere Antwortbereiche bleiben offen. Ursprüngliches Leseinkrement: [AI_READ_TOOLS_STATUS.md](../AI_READ_TOOLS_STATUS.md).
 
 Spätere Schreibaktionen wie `create_task`, `create_goal`, `update_goal` und `create_event` benötigen validierte Argumente, serverseitige Autorisierung, Fachlogik und vor Ausführung eine sichtbare Bestätigung der konkreten Aktion. Bestätigung ist an Nutzer und Argumente zu binden; Wiederholung darf keine unbeabsichtigten Duplikate erzeugen. Kein beliebiges SQL und keine Service-Role-Zugangsdaten für das Modell. Ein KI-Ausfall darf den übrigen Core nicht blockieren.
 

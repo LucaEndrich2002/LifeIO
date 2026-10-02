@@ -9,6 +9,27 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      ai_request_limits: {
+        Row: {
+          attempts: number;
+          day: string;
+          last_requested_at: string;
+          user_id: string;
+        };
+        Insert: {
+          attempts: number;
+          day: string;
+          last_requested_at: string;
+          user_id: string;
+        };
+        Update: {
+          attempts?: number;
+          day?: string;
+          last_requested_at?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       budgets: {
         Row: {
           amount_minor: number;
@@ -553,6 +574,7 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      claim_ai_request: { Args: never; Returns: boolean };
       is_supported_time_zone: { Args: { candidate: string }; Returns: boolean };
       mutate_budget: {
         Args: {
