@@ -88,6 +88,8 @@ Die lokale Auth-Konfiguration verwendet bestätigte E-Mail-Adressen, sechsstelli
 
 ## Projektstruktur und Grenzen
 
+Die Sparziel-Erklärung unter `/account/ai/goals/[id]` nutzt dieselbe optionale Providerkonfiguration wie die Monatserklärung und benötigt keine zusätzliche Migration. Einstieg über ein eigenes Sparziel; Datenvorschau, autorisierte Prognose, gemeinsame Anfragegrenzen und Prüfungen: [AI_GOAL_STATUS.md](AI_GOAL_STATUS.md). KI-Live-Tests sind auf Nutzerwunsch ausgesetzt. Automatische Tests verwenden ausschließlich Testantworten oder deaktivieren den Provider.
+
 Die private Monats-KI unter `/account/ai` benötigt optional `OPENAI_API_KEY` und `OPENAI_MODEL` in der ignorierten `.env.local` und einen Neustart des App-Prozesses. Keine öffentlichen Schlüsselvariablen verwenden. Ohne Konfiguration funktioniert die Datenvorschau weiter. Die Migration `20261001190000_ai_request_limits.sql` ergänzt ausschließlich einen begrenzten Anfragezähler; lokale Tests erzwingen eine leere Providerkonfiguration und senden keine Modellanfragen. Einrichtung und Grenzen: [AI_MONTH_STATUS.md](AI_MONTH_STATUS.md).
 
 Die sechs serverseitigen KI-Lesewerkzeuge werden durch `pnpm test` und `pnpm test:integration` geprüft. Sie verwenden den bestehenden lokalen Datenbestand und normale Nutzerrechte; es sind keine zusätzliche Migration, Modellanfrage, Abhängigkeit oder KI-Zugangsdaten nötig. Funktionsumfang und noch offene Modellanbindung: [AI_READ_TOOLS_STATUS.md](AI_READ_TOOLS_STATUS.md).

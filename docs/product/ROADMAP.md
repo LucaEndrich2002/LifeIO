@@ -1,10 +1,12 @@
 # LifeOS – Roadmap
 
-Stand: 02.10.2026
+Stand: 08.10.2026
 
 Quellen: [README](../../README.md), Abschnitte 9, 10 und 21, sowie [PRD](PRD.md). Diese Roadmap beschreibt die Reihenfolge und Abnahmebedingungen, keine bereits implementierten Funktionen.
 
 ## Aktueller Stand
+
+- Das dritte Life-AI-Inkrement ergänzt die Vorschau und freigegebene Erklärung der Prognose eines ausgewählten eigenen Sparziels. Es verwendet ausschließlich `get_goal_projection` und teilt die vorhandenen Anfragegrenzen mit der Monatserklärung. Umfang und Prüfstand: [AI_GOAL_STATUS.md](../AI_GOAL_STATUS.md). KI-Live-Tests werden auf Nutzerwunsch ausgelassen; echte Antwortqualität und die übrigen R12-Datenbereiche bleiben offen.
 
 - Das zweite Life-AI-Inkrement ergänzt eine private Monatsansicht mit Originalwerten, expliziter Datenfreigabe, begrenzter OpenAI-Anbindung und festen Quellen. Ein kontoübergreifend isolierter Zähler begrenzt Provideranfragen. Ohne Zugangsdaten bleibt die Monatsansicht nutzbar; echte Modellantworten sind noch nicht abgenommen. [AI_MONTH_STATUS.md](../AI_MONTH_STATUS.md) beschreibt Umfang und offene Punkte. R12 bleibt offen.
 

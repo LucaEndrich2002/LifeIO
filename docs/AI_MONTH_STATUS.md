@@ -2,6 +2,8 @@
 
 Stand: 02.10.2026
 
+Fortschreibung vom 07.10.2026: Die lokale Providerkonfiguration ist inzwischen hinterlegt. Der Verbindungstest meldete fehlendes API-Guthaben; weitere KI-Live-Tests werden auf ausdrücklichen Nutzerwunsch ausgelassen. Die folgende Abnahme bleibt eine Abnahme mit Testantworten. [AI_GOAL_STATUS.md](AI_GOAL_STATUS.md) beschreibt die anschließende Sparziel-Erklärung und die gemeinsam genutzten Formular-, Provider- und Kontingentgrenzen.
+
 Dieses zweite, begrenzte Inkrement von Phase 8 macht den Finanzmonat unter `/account/ai` zugänglich. Die öffentliche AI-Seite und die Kontonavigation verlinken dorthin. Monatsdaten, fehlende Angaben und ein fehlendes Budget sind unabhängig von einer Modellanbindung sichtbar. Die KI-Verbindung ist auf diesem Rechner noch nicht eingerichtet: Es wurden keine echten Provideranfragen gesendet. R12 bleibt offen, insbesondere die weiteren Datenbereiche und die qualitative Abnahme echter Modellantworten.
 
 ## Nutzerablauf
