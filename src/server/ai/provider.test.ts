@@ -1,7 +1,8 @@
 // @vitest-environment node
 import { afterEach, describe, expect, it, vi } from "vitest";
 vi.mock("server-only", () => ({}));
-import { aiConfig, explainMonth } from "./provider";
+import { aiConfig, explainMonth, explainGoal } from "./provider";
+import { goalFacts, goalAnswer } from "../../../tests/ai-goal-fixture";
 import { monthFacts, monthAnswer } from "../../../tests/ai-month-fixture";
 const config = { key: "test-key-never-sent", model: "test-model" };
 const response = (text: unknown = monthAnswer) =>
@@ -18,6 +19,29 @@ const response = (text: unknown = monthAnswer) =>
   );
 afterEach(() => vi.unstubAllEnvs());
 describe("OpenAI response boundary", () => {
+  it("restricts goal answers to supplied projection facts and the projection source", async () => {
+    const send = vi.fn<typeof fetch>().mockResolvedValue(response(goalAnswer));
+    expect(await explainGoal(config, goalFacts, "", send)).toEqual(goalAnswer);
+    const body = JSON.parse(String(send.mock.calls[0]?.[1]?.body));
+    expect(JSON.parse(body.input[0].content)).toEqual({
+      question: "Wann erreiche ich mein Sparziel?",
+      facts: goalFacts,
+    });
+    expect(body.text.format.schema.properties.sources.items.enum).toEqual([
+      "projection",
+    ]);
+    expect(body).not.toHaveProperty("tools");
+    expect(body).toMatchObject({ store: false, max_output_tokens: 1200 });
+    expect(body.instructions).toContain("Monatsbudget");
+    await expect(
+      explainGoal(
+        config,
+        goalFacts,
+        "",
+        vi.fn<typeof fetch>().mockResolvedValue(response(monthAnswer)),
+      ),
+    ).rejects.toThrow();
+  });
   it("requires private key and explicit model without exposing configuration", () => {
     vi.stubEnv("OPENAI_API_KEY", "");
     vi.stubEnv("OPENAI_MODEL", "");

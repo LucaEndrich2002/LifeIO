@@ -211,6 +211,12 @@ export async function GoalScreen({
         today={today}
         timeZone={profile.time_zone}
       />
+      <Link
+        href={`/account/ai/goals/${id}`}
+        className="inline-flex min-h-11 items-center text-sm underline"
+      >
+        Sparprognose mit Life AI verstehen
+      </Link>
       <MilestonesSection
         goalId={id}
         data={milestones}

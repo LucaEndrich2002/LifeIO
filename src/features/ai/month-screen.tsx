@@ -5,6 +5,7 @@ import { requireMoneyAccount } from "@/server/money";
 import { loadAiMonth } from "@/server/ai/month-data";
 import { aiConfig } from "@/server/ai/provider";
 import { MonthForm } from "@/features/ai/month-form";
+import Link from "next/link";
 
 export async function AiMonthScreen({ month }: { month?: string }) {
   const account = await requireMoneyAccount();
@@ -25,6 +26,19 @@ export async function AiMonthScreen({ month }: { month?: string }) {
           Quellen.
         </p>
       </header>
+      <section className="space-y-2 rounded-xl border p-4">
+        <h2 className="font-semibold">Wann erreiche ich mein Sparziel?</h2>
+        <p className="text-sm text-muted-foreground">
+          Öffne ein Sparziel und wähle „Sparprognose mit Life AI verstehen“. Die
+          berechnete Prognose ist auch ohne KI-Antwort verfügbar.
+        </p>
+        <Link
+          href="/account/goals"
+          className="inline-flex min-h-11 items-center text-sm underline"
+        >
+          Sparziel auswählen
+        </Link>
+      </section>
       <form action="/account/ai" className="flex flex-wrap items-end gap-3">
         <div className="min-w-0 flex-1">
           <label htmlFor="ai-month" className="mb-2 block text-sm font-medium">
