@@ -39,6 +39,19 @@ export async function AiMonthScreen({ month }: { month?: string }) {
           Sparziel auswählen
         </Link>
       </section>
+      <section className="space-y-2 rounded-xl border p-4">
+        <h2 className="font-semibold">Was sollte ich diese Woche erledigen?</h2>
+        <p className="text-sm text-muted-foreground">
+          Prüfe deine offenen Aufgaben und anstehenden Termine, bevor du sie zur
+          Einordnung freigibst.
+        </p>
+        <Link
+          href="/account/ai/plan"
+          className="inline-flex min-h-11 items-center text-sm underline"
+        >
+          Aufgaben und Termine mit Life AI
+        </Link>
+      </section>
       <form action="/account/ai" className="flex flex-wrap items-end gap-3">
         <div className="min-w-0 flex-1">
           <label htmlFor="ai-month" className="mb-2 block text-sm font-medium">

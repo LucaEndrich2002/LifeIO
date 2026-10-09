@@ -41,6 +41,12 @@ export async function TasksScreen({ query }: { query: TaskSearch }) {
       >
         Kalender öffnen
       </Link>
+      <Link
+        href="/account/ai/plan"
+        className="ml-4 inline-flex min-h-11 items-center text-sm underline"
+      >
+        Diese Woche mit Life AI einordnen
+      </Link>
       <p className="text-sm text-muted-foreground">
         Ein nächster Schritt nach dem anderen. Heute ist der{" "}
         {taskDateLabel(today)} in deiner Profilzeitzone{" "}

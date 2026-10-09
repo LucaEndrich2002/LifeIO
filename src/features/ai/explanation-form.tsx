@@ -14,6 +14,18 @@ type State = ExplanationState<
   { paragraphs: string[]; sources: string[] }
 >;
 const copy = {
+  plan: {
+    legend: "Deine Woche einordnen lassen",
+    label: "Deine Frage zu Aufgaben und Terminen (optional)",
+    placeholder: "Was sollte ich diese Woche erledigen?",
+    unavailable: "Aufgaben und Termine",
+    reload: "Aufgaben und Termine neu laden",
+    disclosure:
+      "An OpenAI werden nur die oben angezeigten Titel, Prioritäten, Fälligkeiten, Terminzeiten, Überfällig-/Läuft-Status, Gesamtanzahlen, Zeitraum und Profilzeitzone sowie deine Frage gesendet. Die Titel können persönliche Informationen enthalten. Interne Kennungen, Finanzen und Ziele werden nicht mitgesendet.",
+    help: "Andere Wochen und Datenbereiche werden nicht zusätzlich abgerufen.",
+    scope:
+      "Die Einordnung betrifft ausschließlich die angezeigten Aufgaben und Termine. Sie ist kein vollständiger Wochenplan.",
+  },
   month: {
     legend: "Deinen Monat erklären lassen",
     label: "Deine Frage zum Monat (optional)",
