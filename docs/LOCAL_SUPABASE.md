@@ -57,6 +57,8 @@ Am 29.09.2026 hing die Engine nach einem früheren Speicherplatzfehler beim Been
 
 ## Wiederholbare Vorprüfung
 
+Am 09.10.2026 verhinderte derselbe `sailor-ingest.sock`-Fehler erneut den Desktop-Start. Nach Prüfung der Docker-Prozesspfade und der beiden Laufzeitverzeichnisse wurden diese mit dem Zusatz `.lifeos-socket-backup-20261009-1855` reversibel umbenannt. Ausschließlich `docker-desktop` wurde beendet und Docker anschließend neu gestartet; Datenbankvolumes wurden nicht zurückgesetzt.
+
 Am 26.09.2026 trat derselbe `sailor-ingest.sock`-Fehler beim erneuten Docker-Start auf. Nach Prüfung der Fehlermeldung und der betroffenen Verzeichnisse wurde derselbe reversible Workaround erneut angewendet. Die beiden Sicherungen tragen den Zusatz `.lifeos-socket-backup-20260926-172634`. Docker 29.8.0 und die vorhandene Supabase-Datenbank starteten anschließend erfolgreich; Datenbankvolumes wurden nicht zurückgesetzt.
 
 ```sh

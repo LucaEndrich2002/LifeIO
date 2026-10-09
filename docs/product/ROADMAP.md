@@ -1,10 +1,12 @@
 # LifeOS – Roadmap
 
-Stand: 08.10.2026
+Stand: 09.10.2026
 
 Quellen: [README](../../README.md), Abschnitte 9, 10 und 21, sowie [PRD](PRD.md). Diese Roadmap beschreibt die Reihenfolge und Abnahmebedingungen, keine bereits implementierten Funktionen.
 
 ## Aktueller Stand
+
+- Das vierte Life-AI-Inkrement ergänzt die freizugebende Einordnung eigener offener Aufgaben und anstehender Termine dieser Woche, mit sichtbarem Ausschnitt und festen Quellen. [AI_PLAN_STATUS.md](../AI_PLAN_STATUS.md) beschreibt Umfang und Prüfstand. Die verbleibende V1-Arbeit ist in sechs Paketen in [V1_STATUS.md](V1_STATUS.md) zusammengefasst; das ist keine Zählung gleich großer Tickets. KI-Live-Tests bleiben auf Nutzerwunsch ausgesetzt.
 
 - Das dritte Life-AI-Inkrement ergänzt die Vorschau und freigegebene Erklärung der Prognose eines ausgewählten eigenen Sparziels. Es verwendet ausschließlich `get_goal_projection` und teilt die vorhandenen Anfragegrenzen mit der Monatserklärung. Umfang und Prüfstand: [AI_GOAL_STATUS.md](../AI_GOAL_STATUS.md). KI-Live-Tests werden auf Nutzerwunsch ausgelassen; echte Antwortqualität und die übrigen R12-Datenbereiche bleiben offen.
 
