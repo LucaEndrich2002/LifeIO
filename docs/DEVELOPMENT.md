@@ -18,6 +18,8 @@ Der Kontobereich ist separat: `/auth/login` und `/account` benötigen die lokale
 
 ## Qualitätsprüfungen
 
+Die Zielübersicht unter `/account/ai/goals` benötigt keine weitere Migration. Sie nutzt den vorhandenen Ziel-Snapshot und die gemeinsame Sparprognose; Quellen führen zur gewählten Dashboard-Zielseite und zu eigenen Details. Regeln und Prüfstand: [AI_GOALS_STATUS.md](AI_GOALS_STATUS.md). Einzelprognosen unter `/account/ai/goals/[id]` bleiben bestehen.
+
 Die Aufgaben-/Termin-Erklärung unter `/account/ai/plan` benötigt keine weitere Migration. Sie ist über Life AI und die Aufgabenliste erreichbar. Vorschau, Zustimmung, Quellen und Grenzen sind in [AI_PLAN_STATUS.md](AI_PLAN_STATUS.md) dokumentiert. Automatische Prüfungen verwenden weiterhin keine echte Providerverbindung.
 
 Das persönliche Dashboard unter `/account/home` benötigt die additive Lese-Erweiterung `20261001090000_home_goals.sql`. Mit `pnpm exec supabase migration up --local` anwenden. `/account/overview` führt nach abgeschlossener Einrichtung zum Dashboard mit dem Startmonat; der normale Home-Link verwendet den aktuellen Monat der Profilzeitzone. Regeln und offene Verständlichkeitsprüfung: [HOME_STATUS.md](HOME_STATUS.md).

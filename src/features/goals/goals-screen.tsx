@@ -44,6 +44,12 @@ export async function GoalsScreen({
             : "Öffne ein Ziel für deinen tatsächlichen Sparstand, Einzahlungen und geplante Sparraten."}
         </p>
       </div>
+      <Link
+        href="/account/ai/goals"
+        className="inline-flex min-h-11 items-center text-sm underline"
+      >
+        Ziele gemeinsam mit Life AI betrachten
+      </Link>
       <nav aria-label="Zielarten" className="flex flex-wrap gap-4 text-sm">
         <Link
           href="/account/goals"

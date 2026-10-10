@@ -87,6 +87,8 @@ Absolute Zeitpunkte werden als UTC-Zeitpunkte gespeichert, die Profilzeitzone be
 
 ## Lesende KI-Grundlage
 
+Die Zielübersicht `/account/ai/goals` verwendet ausschließlich `get_goals` mit der gewählten Seite. Das Tool berechnet Sparprognosen aus dem bereits gelesenen gemeinsamen Ziel-Snapshot mit `forecastGoal`, ohne weitere Detailabfragen. Der strikte Providervertrag entfernt Namen und IDs und ordnet Ziele über Kürzel A bis F zu; der lokale Fingerabdruck bindet auch die angezeigten Namen/IDs. Gemeinsame Kontingente und Freigabegrenzen bleiben erhalten. Details: [AI_GOALS_STATUS.md](../AI_GOALS_STATUS.md).
+
 Die Planungserklärung `/account/ai/plan` verwendet ausschließlich `get_tasks` und `get_upcoming_events` für die aktuelle Profilwoche. Ein eigener strikter Datenvertrag begrenzt die Vorschau auf je 25 Einträge samt Gesamtanzahl; interne IDs und fachfremde Daten werden entfernt. Titel werden nur nach sichtbarer Freigabe mitgesendet. Die vorhandene gemeinsame Formular-, Kontingent- und Providergrenze wird wiederverwendet. Zeitregeln und Abnahme: [AI_PLAN_STATUS.md](../AI_PLAN_STATUS.md).
 
 Der erste private Antwortablauf unter `/account/ai` nutzt ausschließlich Monatsübersicht und Budget. Server Action, Rechte-/Freigabeprüfung, Fingerabdruck der Vorschau und Providertransport liegen getrennt in `src/server/ai-actions.ts` und `src/server/ai/`. Das Modell erhält keine ausführbaren Werkzeuge; die Anwendung wählt beide benötigten Lesewerkzeuge vorab. Der feste HTTPS-Aufruf ist zeitlich und mengenmäßig begrenzt und wird nicht wiederholt. Ein atomarer Datenbankzähler schützt das Kontolimit über App-Prozesse hinweg. Verträge, Konfiguration und verbleibende Grenzen: [AI_MONTH_STATUS.md](../AI_MONTH_STATUS.md).
