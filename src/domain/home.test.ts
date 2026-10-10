@@ -5,6 +5,7 @@ import {
   homeGoalsSchema,
   homePeriod,
   homeQuerySchema,
+  homeInsightHref,
 } from "./home";
 import type { MoneySnapshot } from "./transactions";
 const base = {
@@ -16,6 +17,18 @@ const base = {
   milestone_completed: 0,
 };
 describe("personal home rules", () => {
+  it("preserves month and goal page in fixed insight links and rejects unsupported scopes", () => {
+    expect(
+      homeInsightHref({ month: "2026-09", goal_page: 1, insight: "goals" }),
+    ).toBe("/account/home?month=2026-09&goal_page=1&insight=goals#home-ai");
+    expect(homeInsightHref({ month: "2026-09", goal_page: 1 })).toBe(
+      "/account/home?month=2026-09&goal_page=1#home-ai",
+    );
+    for (const insight of ["all", "https://example.test", ["month", "goals"]])
+      expect(
+        homeQuerySchema.safeParse({ month: "2026-09", insight }).success,
+      ).toBe(false);
+  });
   it("uses one profile-zone day and month, while a month selection leaves today unchanged", () => {
     const now = new Date("2026-09-30T23:30:00Z");
     expect(homePeriod(now, "Europe/Berlin")).toMatchObject({

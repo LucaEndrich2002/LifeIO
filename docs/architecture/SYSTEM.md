@@ -87,6 +87,8 @@ Absolute Zeitpunkte werden als UTC-Zeitpunkte gespeichert, die Profilzeitzone be
 
 ## Lesende KI-Grundlage
 
+Der Home-KI-Bereich wählt mit einem validierten `insight`-Parameter genau einen der vorhandenen Snapshot-Lader für Monat, Woche oder Zielseite. Ohne Auswahl entstehen keine Zusatzabfragen. Eine eigene Suspense-Grenze und lokal behandelte Ladefehler erhalten den übrigen Home-Bereich. Bestehende Formulare und Server Actions übernehmen Vorschau, Zustimmung, Anfrage und Quellen; nur der Wiederholungslink erhält den festen Home-Kontext. Keine neuen Providerrechte oder automatischen Anfragen. Details: [HOME_AI_STATUS.md](../HOME_AI_STATUS.md).
+
 Die Zielübersicht `/account/ai/goals` verwendet ausschließlich `get_goals` mit der gewählten Seite. Das Tool berechnet Sparprognosen aus dem bereits gelesenen gemeinsamen Ziel-Snapshot mit `forecastGoal`, ohne weitere Detailabfragen. Der strikte Providervertrag entfernt Namen und IDs und ordnet Ziele über Kürzel A bis F zu; der lokale Fingerabdruck bindet auch die angezeigten Namen/IDs. Gemeinsame Kontingente und Freigabegrenzen bleiben erhalten. Details: [AI_GOALS_STATUS.md](../AI_GOALS_STATUS.md).
 
 Die Planungserklärung `/account/ai/plan` verwendet ausschließlich `get_tasks` und `get_upcoming_events` für die aktuelle Profilwoche. Ein eigener strikter Datenvertrag begrenzt die Vorschau auf je 25 Einträge samt Gesamtanzahl; interne IDs und fachfremde Daten werden entfernt. Titel werden nur nach sichtbarer Freigabe mitgesendet. Die vorhandene gemeinsame Formular-, Kontingent- und Providergrenze wird wiederverwendet. Zeitregeln und Abnahme: [AI_PLAN_STATUS.md](../AI_PLAN_STATUS.md).

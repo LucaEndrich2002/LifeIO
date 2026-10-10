@@ -18,11 +18,13 @@ export function GoalsExplanationForm({
   names,
   fingerprint,
   configured,
+  reloadHref,
 }: {
   facts: AiGoalsFacts;
   names: { id: string; name: string }[];
   fingerprint: string;
   configured: boolean;
+  reloadHref?: string;
 }) {
   return (
     <ExplanationForm<AiGoalsAnswerState>
@@ -31,7 +33,7 @@ export function GoalsExplanationForm({
       fingerprint={fingerprint}
       hiddenFields={{ page: String(facts.page) }}
       sources={{ goals: aiGoalsSource(facts.page) }}
-      reloadHref={aiGoalsHref(facts.page)}
+      reloadHref={reloadHref ?? aiGoalsHref(facts.page)}
       initialState={{ status: "idle" }}
       submit={askAiGoals}
     >

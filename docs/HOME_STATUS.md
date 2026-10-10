@@ -1,5 +1,7 @@
 # Persönliches Home-Dashboard
 
+Folgeinkrement vom 10.10.2026: Der auswählbare KI-Bereich direkt auf Home ist in [HOME_AI_STATUS.md](HOME_AI_STATUS.md) beschrieben. Der folgende Bericht dokumentiert das ursprüngliche Home-Inkrement; dessen damals noch offener KI-Bereich ist inzwischen implementiert.
+
 ## Umfang und Einstieg
 
 Das erste Home-Inkrement setzt den technischen Überblick aus R11 um: Begrüßung und Datum, Heute, Monatsübersicht, Ziele und überprüfbare Aufmerksamkeitshinweise. `/account/home` benötigt eine gültige Sitzung, ein Profil und abgeschlossene Einrichtung. Der Abschluss der Einrichtung führt über `/account/overview` zum Dashboard mit dem gewählten Startmonat. Der normale Home-Einstieg verwendet den aktuellen Monat der Profilzeitzone. Das Profil und die Navigation im Kontobereich bieten einen direkten Einstieg; die öffentliche Startseite bleibt eine gekennzeichnete Vorschau.

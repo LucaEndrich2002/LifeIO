@@ -52,8 +52,23 @@ export const homeGoalsSchema = z
 export const homeQuerySchema = z.object({
   month: monthSchema,
   goal_page: z.coerce.number().int().min(0).max(1000000).default(0),
+  insight: z.enum(["month", "plan", "goals"]).optional(),
 });
-export type HomeSearch = { month?: string; goal_page?: string };
+export type HomeSearch = {
+  month?: string;
+  goal_page?: string;
+  insight?: string;
+};
+export type HomeQuery = z.output<typeof homeQuerySchema>;
+export function homeInsightHref(query: HomeQuery) {
+  const parsed = homeQuerySchema.parse(query);
+  const params = new URLSearchParams({
+    month: parsed.month,
+    goal_page: String(parsed.goal_page),
+  });
+  if (parsed.insight) params.set("insight", parsed.insight);
+  return `/account/home?${params.toString()}#home-ai`;
+}
 export function homePeriod(now: Date, zone: string, selectedMonth?: string) {
   const day = dateSchema.parse(dateInZone(now, zone));
   const month = monthSchema.parse(selectedMonth ?? day.slice(0, 7));

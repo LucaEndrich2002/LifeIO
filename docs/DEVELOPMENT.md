@@ -18,6 +18,8 @@ Der Kontobereich ist separat: `/auth/login` und `/account` benötigen die lokale
 
 ## Qualitätsprüfungen
 
+Der KI-Bereich auf `/account/home` benötigt keine weitere Migration. `insight=month|plan|goals` öffnet die jeweilige Vorschau direkt auf Home und erhält Monat und Zielseite. Vor einer tatsächlichen Anfrage bleiben Prüfung und Zustimmung erforderlich. Verhalten und Prüfstand: [HOME_AI_STATUS.md](HOME_AI_STATUS.md).
+
 Die Zielübersicht unter `/account/ai/goals` benötigt keine weitere Migration. Sie nutzt den vorhandenen Ziel-Snapshot und die gemeinsame Sparprognose; Quellen führen zur gewählten Dashboard-Zielseite und zu eigenen Details. Regeln und Prüfstand: [AI_GOALS_STATUS.md](AI_GOALS_STATUS.md). Einzelprognosen unter `/account/ai/goals/[id]` bleiben bestehen.
 
 Die Aufgaben-/Termin-Erklärung unter `/account/ai/plan` benötigt keine weitere Migration. Sie ist über Life AI und die Aufgabenliste erreichbar. Vorschau, Zustimmung, Quellen und Grenzen sind in [AI_PLAN_STATUS.md](AI_PLAN_STATUS.md) dokumentiert. Automatische Prüfungen verwenden weiterhin keine echte Providerverbindung.
