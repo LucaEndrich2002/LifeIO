@@ -52,6 +52,19 @@ export async function AiMonthScreen({ month }: { month?: string }) {
           Aufgaben und Termine mit Life AI
         </Link>
       </section>
+      <section className="space-y-2 rounded-xl border p-4">
+        <h2 className="font-semibold">Welche Ziele brauchen Aufmerksamkeit?</h2>
+        <p className="text-sm text-muted-foreground">
+          Vergleiche Sparziele und persönliche Ziele mit ihrem Fortschritt und
+          nachvollziehbaren Termin-Hinweisen.
+        </p>
+        <Link
+          href="/account/ai/goals"
+          className="inline-flex min-h-11 items-center text-sm underline"
+        >
+          Ziele gemeinsam mit Life AI betrachten
+        </Link>
+      </section>
       <form action="/account/ai" className="flex flex-wrap items-end gap-3">
         <div className="min-w-0 flex-1">
           <label htmlFor="ai-month" className="mb-2 block text-sm font-medium">

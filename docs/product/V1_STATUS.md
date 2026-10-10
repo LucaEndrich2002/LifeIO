@@ -1,10 +1,10 @@
 # LifeOS – Verbleibender V1-Umfang
 
-Stand: 09.10.2026. Diese Übersicht bündelt die offenen Arbeiten in sechs Pakete. Sie ist keine Anzahl gleich großer Tickets oder Aufwandsschätzung. Historische Statussätze in älteren Inkrement-Berichten beschreiben deren damaligen Stand.
+Stand: 10.10.2026. Diese Übersicht bündelt die offenen Arbeiten in sechs Pakete. Sie ist keine Anzahl gleich großer Tickets oder Aufwandsschätzung. Historische Statussätze in älteren Inkrement-Berichten beschreiben deren damaligen Stand.
 
 ## Bereits umgesetzt
 
-Lokales Projektfundament und GitHub-Prüfungen; responsive Oberfläche mit hellem/dunklem Design; Kontozugang, Profil und finanzieller Einstieg; Einnahmen, variable Ausgaben, historische Fixkostenfassungen und Monatsbudget; Sparziele mit Einzahlungen, Ratenverlauf und Prognose; persönliche Ziele und Meilensteine; Aufgaben, Kalender sowie Zielverknüpfungen; persönliches Home mit berechneten Hinweisen. Life AI hat sechs autorisierte Lesezugriffe und freizugebende Ansichten für Finanzmonat, einzelne Sparprognose und Aufgaben/Termine der aktuellen Woche.
+Lokales Projektfundament und GitHub-Prüfungen; responsive Oberfläche mit hellem/dunklem Design; Kontozugang, Profil und finanzieller Einstieg; Einnahmen, variable Ausgaben, historische Fixkostenfassungen und Monatsbudget; Sparziele mit Einzahlungen, Ratenverlauf und Prognose; persönliche Ziele und Meilensteine; Aufgaben, Kalender sowie Zielverknüpfungen; persönliches Home mit berechneten Hinweisen. Life AI hat sechs autorisierte Lesezugriffe und freizugebende Ansichten für Finanzmonat, einzelne Sparprognose, mehrere Ziele und Aufgaben/Termine der aktuellen Woche.
 
 Implementierter Funktionsumfang ersetzt keine ausstehende Gesamtabnahme oder Veröffentlichung. Die Änderungen liegen auf Arbeitsbranches und Pull Requests; ihre Integration in den Hauptbranch ist separat zu prüfen.
 
@@ -12,7 +12,7 @@ Implementierter Funktionsumfang ersetzt keine ausstehende Gesamtabnahme oder Ver
 
 | Paket                                 | Noch erforderlich                                                                                                                                                                                                                                                                                                                  | Bezug             |
 | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
-| 1. Life AI abschließen                | Mehrere Ziele und gefährdete Zieltermine erklären; KI-Insight im persönlichen Home; tatsächliche Antwortqualität prüfen. Letzteres ist auf Nutzerwunsch ausdrücklich ausgesetzt.                                                                                                                                                   | Phase 8, R11–R12  |
+| 1. Life AI abschließen                | KI-Insight im persönlichen Home; tatsächliche Antwortqualität prüfen. Letzteres ist auf Nutzerwunsch ausdrücklich ausgesetzt.                                                                                                                                                                                                      | Phase 8, R11–R12  |
 | 2. Einstieg ergänzen                  | Optional erste Aufgaben im Onboarding erfassen oder bewusst überspringen; Wiederaufnahme und gesamter Einstieg prüfen.                                                                                                                                                                                                             | R02, J01          |
 | 3. Wochenrückblick                    | Reproduzierbare Wochenzusammenfassung von Finanzen, Budgets, Zielen, Aufgaben und Fristen mit begründeten Hinweisen, Datenstand und Aktualisierung ohne Duplikate.                                                                                                                                                                 | Phase 9, R13      |
 | 4. Benachrichtigungen                 | In-App-Hinweise mit Grund und eigenem Ursprungsdatensatz; gelesen/ungelesen dauerhaft speichern und doppelte Auslöser vermeiden. Auslöser konkretisieren.                                                                                                                                                                          | Phase 9, R14, O05 |
@@ -23,7 +23,7 @@ Keine dieser externen oder manuellen Abnahmen wird ohne tatsächliche Durchführ
 
 ## Abgrenzung
 
-Die neue Planungserklärung zeigt offene Aufgaben dieser Woche und noch anstehende Termine; sie ist kein gespeicherter Wochenrückblick. Einzelne Sparprognosen sind bereits umgesetzt, eine zusammenhängende Einordnung mehrerer Ziele noch nicht.
+Die neue Planungserklärung zeigt offene Aufgaben dieser Woche und noch anstehende Termine; sie ist kein gespeicherter Wochenrückblick. Einzelne Sparprognosen und eine seitenweise Einordnung mehrerer Ziele sind umgesetzt. Der KI-Insight-Bereich auf Home bleibt offen.
 
 Schreibende KI-Aktionen, externe Kalender, Bankanbindung und die späteren Produktversionen gehören nicht in diesen Restumfang. Eine Zahlungsintegration folgt erst nach belegtem Produktnutzen. Historische Fixkostenkorrekturen benötigen eine eigene Regelentscheidung; bestehende Fassungen bleiben erhalten, rückwirkendes Umschreiben wird nicht stillschweigend eingeführt.
 

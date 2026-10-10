@@ -8,6 +8,8 @@ import type { AiGoalAnswerState } from "@/domain/ai-goal";
 import { answerGoal } from "@/server/ai/goal-answer";
 import type { AiPlanAnswerState } from "@/domain/ai-plan";
 import { answerPlan } from "@/server/ai/plan-answer";
+import type { AiGoalsAnswerState } from "@/domain/ai-goals";
+import { answerGoals } from "@/server/ai/goals-answer";
 
 export async function askAiMonth(
   _previous: AiAnswerState,
@@ -43,6 +45,20 @@ export async function askAiPlan(
 ): Promise<AiPlanAnswerState> {
   const { supabase } = await requireIdentity(true);
   return answerPlan(
+    supabase,
+    Object.fromEntries(
+      [...form].filter(([key]) => !key.startsWith("$ACTION_")),
+    ),
+    aiConfig(),
+  );
+}
+
+export async function askAiGoals(
+  _previous: AiGoalsAnswerState,
+  form: FormData,
+): Promise<AiGoalsAnswerState> {
+  const { supabase } = await requireIdentity(true);
+  return answerGoals(
     supabase,
     Object.fromEntries(
       [...form].filter(([key]) => !key.startsWith("$ACTION_")),

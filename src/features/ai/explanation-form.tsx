@@ -14,6 +14,18 @@ type State = ExplanationState<
   { paragraphs: string[]; sources: string[] }
 >;
 const copy = {
+  goals: {
+    legend: "Deine Zielseite einordnen lassen",
+    label: "Deine Frage zu diesen Zielen (optional)",
+    placeholder: "Welche meiner angezeigten Ziele brauchen Aufmerksamkeit?",
+    unavailable: "Zieldaten",
+    reload: "Zielseite neu laden",
+    disclosure:
+      "An OpenAI werden nur die oben angezeigten Kürzel A bis F, Zielarten, Beträge, Zieldaten, Prognosen, Terminstatus und Meilensteinanzahlen sowie Datenstand, Zeitzone, Währung, Seiten- und Gesamtanzahl und deine Frage gesendet. Zielnamen und interne Kennungen bleiben in LifeOS, sofern du sie nicht selbst in deine Frage schreibst.",
+    help: "Andere Zielseiten, Finanzen, Aufgaben und Termine werden nicht zusätzlich abgerufen.",
+    scope:
+      "Diese Einordnung bezieht sich nur auf die angezeigte Zielseite. Sie prüft weder gemeinsame Finanzierbarkeit noch verfügbare Zeit.",
+  },
   plan: {
     legend: "Deine Woche einordnen lassen",
     label: "Deine Frage zu Aufgaben und Terminen (optional)",

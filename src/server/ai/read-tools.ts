@@ -97,30 +97,49 @@ export async function readAiTool(
             href: `/account/home?goal_page=${request.arguments.page}#home-goals`,
           },
           coverage: aiPage(request.arguments.page, 6, result.total),
-          data: result.items.map((goal) => ({
-            goal_id: goal.id,
-            name: goal.name,
-            kind: goal.kind,
-            deadline: goal.deadline,
-            progress:
-              goal.kind === "financial"
-                ? {
-                    currency: "EUR",
-                    amount_unit: "minor",
-                    target_minor: String(goal.target_minor),
-                    balance_minor: String(goal.balance),
-                    percent: goalProgress(goal.target_minor, goal.balance)
-                      .percent,
-                  }
-                : {
-                    milestones: goal.milestone_total,
-                    completed: goal.milestone_completed,
-                    percent: milestoneProgress(
-                      goal.milestone_total,
-                      goal.milestone_completed,
-                    ),
-                  },
-          })),
+          data: result.items.map((goal) => {
+            const common = {
+              goal_id: goal.id,
+              name: goal.name,
+              deadline: goal.deadline,
+            };
+            if (goal.kind === "financial") {
+              const forecast = forecastGoal({
+                targetMinor: goal.target_minor,
+                balanceMinor: goal.balance,
+                today,
+                deadline: goal.deadline,
+                rates: goal.rates,
+              });
+              const { remainingMinor, ...projection } = forecast;
+              return {
+                ...common,
+                kind: "financial" as const,
+                remaining_minor: String(remainingMinor),
+                projection,
+                progress: {
+                  currency: "EUR",
+                  amount_unit: "minor",
+                  target_minor: String(goal.target_minor),
+                  balance_minor: String(goal.balance),
+                  percent: goalProgress(goal.target_minor, goal.balance)
+                    .percent,
+                },
+              };
+            }
+            return {
+              ...common,
+              kind: "personal" as const,
+              progress: {
+                milestones: goal.milestone_total,
+                completed: goal.milestone_completed,
+                percent: milestoneProgress(
+                  goal.milestone_total,
+                  goal.milestone_completed,
+                ),
+              },
+            };
+          }),
         };
       }
       case "get_goal_projection": {
