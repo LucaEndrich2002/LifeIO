@@ -11,6 +11,7 @@ import { loadHome } from "@/server/home";
 import { HomeGoals } from "@/features/home/personal-goals";
 import { HomeAttention } from "@/features/home/attention";
 import { SignOutButton } from "@/features/auth/sign-out-button";
+import { HomeAiInsight } from "@/features/home/ai-insight";
 export async function PersonalHome({ query }: { query: HomeSearch }) {
   const account = await requireMoneyAccount(),
     now = new Date();
@@ -240,6 +241,7 @@ export async function PersonalHome({ query }: { query: HomeSearch }) {
       </div>
       <HomeAttention data={data} />
       <HomeGoals data={data} page={parsed.data.goal_page} />
+      <HomeAiInsight client={account.supabase} query={parsed.data} now={now} />
       <p className="text-xs text-muted-foreground">
         Deine gespeicherten Angaben · Stand beim Laden dieser Seite. Öffne die
         Übersicht erneut, um Änderungen aus anderen Fenstern zu sehen.

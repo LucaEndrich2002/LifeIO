@@ -14,10 +14,12 @@ export function PlanExplanationForm({
   facts,
   fingerprint,
   configured,
+  reloadHref,
 }: {
   facts: AiPlanFacts;
   fingerprint: string;
   configured: boolean;
+  reloadHref?: string;
 }) {
   const sources = aiPlanSources(facts.as_of);
   return (
@@ -27,7 +29,7 @@ export function PlanExplanationForm({
       fingerprint={fingerprint}
       hiddenFields={{}}
       sources={sources}
-      reloadHref="/account/ai/plan"
+      reloadHref={reloadHref ?? "/account/ai/plan"}
       initialState={{ status: "idle" }}
       submit={askAiPlan}
     >

@@ -11,10 +11,12 @@ export function MonthForm({
   facts,
   fingerprint,
   configured,
+  reloadHref,
 }: {
   facts: AiMonthFacts;
   fingerprint: string;
   configured: boolean;
+  reloadHref?: string;
 }) {
   return (
     <ExplanationForm<AiAnswerState>
@@ -23,7 +25,7 @@ export function MonthForm({
       fingerprint={fingerprint}
       hiddenFields={{ month: facts.month }}
       sources={aiMonthSources(facts.month)}
-      reloadHref={`/account/ai?month=${facts.month}`}
+      reloadHref={reloadHref ?? `/account/ai?month=${facts.month}`}
       initialState={{ status: "idle" }}
       submit={askAiMonth}
     >
