@@ -1,6 +1,8 @@
 # LifeOS – Roadmap
 
-Stand: 10.10.2026
+Aktuell (11.10.2026): Optionale erste Aufgaben ergänzen den Einstieg nach R02/J01 einschließlich Überspringen, Wiederaufnahme und Übergang in Plan. Bereits abgeschlossene Einrichtungen bleiben erhalten. Umfang und Prüfstand: [ONBOARDING_TASKS_STATUS.md](../ONBOARDING_TASKS_STATUS.md). Der verbleibende V1-Umfang steht in [V1_STATUS.md](V1_STATUS.md).
+
+Stand: 11.10.2026
 
 Quellen: [README](../../README.md), Abschnitte 9, 10 und 21, sowie [PRD](PRD.md). Diese Roadmap beschreibt die Reihenfolge und Abnahmebedingungen, keine bereits implementierten Funktionen.
 
@@ -10,7 +12,7 @@ Quellen: [README](../../README.md), Abschnitte 9, 10 und 21, sowie [PRD](PRD.md)
 
 - Das fünfte Life-AI-Inkrement ergänzt eine paginierte Einordnung mehrerer eigener Sparziele und persönlicher Ziele mit Originalwerten, berechneten Termin-Hinweisen und expliziter Freigabe. Namen bleiben lokal; der Provider erhält die Kürzel A bis F für die angezeigte Seite. Umfang und Prüfstand: [AI_GOALS_STATUS.md](../AI_GOALS_STATUS.md). Der Home-KI-Insight und die ausgesetzte Live-Abnahme bleiben offen.
 
-- Das vierte Life-AI-Inkrement ergänzt die freizugebende Einordnung eigener offener Aufgaben und anstehender Termine dieser Woche, mit sichtbarem Ausschnitt und festen Quellen. [AI_PLAN_STATUS.md](../AI_PLAN_STATUS.md) beschreibt Umfang und Prüfstand. Die verbleibende V1-Arbeit ist in sechs Paketen in [V1_STATUS.md](V1_STATUS.md) zusammengefasst; das ist keine Zählung gleich großer Tickets. KI-Live-Tests bleiben auf Nutzerwunsch ausgesetzt.
+- Das vierte Life-AI-Inkrement ergänzt die freizugebende Einordnung eigener offener Aufgaben und anstehender Termine dieser Woche, mit sichtbarem Ausschnitt und festen Quellen. [AI_PLAN_STATUS.md](../AI_PLAN_STATUS.md) beschreibt Umfang und Prüfstand. Die verbleibende V1-Arbeit ist in [V1_STATUS.md](V1_STATUS.md) zusammengefasst; das ist keine Zählung gleich großer Tickets. KI-Live-Tests bleiben auf Nutzerwunsch ausgesetzt.
 
 - Das dritte Life-AI-Inkrement ergänzt die Vorschau und freigegebene Erklärung der Prognose eines ausgewählten eigenen Sparziels. Es verwendet ausschließlich `get_goal_projection` und teilt die vorhandenen Anfragegrenzen mit der Monatserklärung. Umfang und Prüfstand: [AI_GOAL_STATUS.md](../AI_GOAL_STATUS.md). KI-Live-Tests werden auf Nutzerwunsch ausgelassen; echte Antwortqualität und die übrigen R12-Datenbereiche bleiben offen.
 

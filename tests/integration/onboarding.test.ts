@@ -123,7 +123,11 @@ describe("financial onboarding through authenticated Data API", () => {
     expect(
       (await save(user, "goal", { decision: "skipped" }, 2)).error,
     ).toBeNull();
-    expect((await save(user, "complete", {}, 3)).error).toBeNull();
+    expect((await save(user, "complete", {}, 3)).error).not.toBeNull();
+    expect(
+      (await save(user, "tasks", { decision: "skipped" }, 3)).error,
+    ).toBeNull();
+    expect((await save(user, "complete", {}, 4)).error).toBeNull();
     const completed = (
       await user.client.from("onboarding").select("*").single()
     ).data!;

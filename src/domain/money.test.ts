@@ -111,6 +111,7 @@ describe("onboarding boundaries", () => {
         income_status: "skipped",
         expenses_status: "saved",
         goal_status: "pending",
+        tasks_status: "pending",
       }),
     ).toBe("goal");
   });

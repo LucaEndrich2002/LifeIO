@@ -4,13 +4,14 @@ import { requireIdentity } from "@/server/identity";
 
 export async function loadOnboarding() {
   const { supabase, user } = await requireIdentity();
-  // One relational query keeps decisions and financial rows on the same snapshot.
+  // One relational query keeps decisions and initial records on the same snapshot.
   const { data, error } = await supabase
     .from("profiles")
     .select(
-      "display_name,time_zone,currency,onboarding(*),incomes(*),expenses(*),goals(*)",
+      "display_name,time_zone,currency,onboarding(*),incomes(*),expenses(*),goals(*),tasks(*)",
     )
     .eq("user_id", user.id)
+    .not("tasks.onboarding_slot", "is", null)
     .maybeSingle();
   if (error) throw new Error("Onboarding unavailable.");
   if (!data) redirect("/account");
@@ -32,6 +33,9 @@ export async function loadOnboarding() {
       currency: data.currency,
     },
     state: data.onboarding,
+    tasks: data.tasks
+      .filter((item) => item.onboarding_slot !== null)
+      .sort((a, b) => a.onboarding_slot! - b.onboarding_slot!),
     income: data.incomes[0] ?? null,
     expenses: data.expenses.sort(
       (a, b) => (a.onboarding_slot ?? 0) - (b.onboarding_slot ?? 0),

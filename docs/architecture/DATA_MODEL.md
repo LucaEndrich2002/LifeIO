@@ -6,6 +6,8 @@ Dieses Dokument beschreibt die Entitäten aus der README. Die folgenden Abschnit
 
 ## Bereits implementiert
 
+Der Einstieg ergänzt `onboarding.tasks_status` und bis zu drei initiale `tasks` mit eindeutigem `(user_id, onboarding_slot)`. Dieselben Aufgaben stehen nach Abschluss in Plan zur Verfügung; gewöhnliche Plan-Aufgaben haben keinen Slot. `save_onboarding_step` speichert Aufgaben und Entscheidung atomar, verlangt vor Abschluss alle vier Entscheidungen und weist veraltete Revisionen ab. Bereits abgeschlossene Einrichtungen erhalten bei der Migration `not_offered`, offene Einrichtungen `pending`. Keine erfundenen Aufgaben oder Überspringentscheidungen: [ONBOARDING_TASKS_STATUS.md](../ONBOARDING_TASKS_STATUS.md).
+
 `ai_request_limits` ist ein betrieblicher Zähler je Auth-Nutzer mit UTC-Tag, Versuchszahl und letztem Anfragezeitpunkt. Er enthält keine Frage, Antwort oder Finanzdaten. Nutzer dürfen ausschließlich die eigene Zeile lesen. `claim_ai_request()` erhöht ihn atomar nach Identitäts- und Onboarding-Prüfung und erzwingt 30 Sekunden Abstand sowie 20 Versuche pro UTC-Tag. Die eng begrenzte Definer-Funktion akzeptiert keine Parameter und gewährt keine Schreibrechte auf Fachdatensätze. Auth-Löschung entfernt den Zähler. Details: [AI_MONTH_STATUS.md](../AI_MONTH_STATUS.md).
 
 `profiles` verwendet `user_id` als Primär-/Fremdschlüssel zu `auth.users`, `display_name`, `time_zone`, `currency = EUR` sowie serverseitige Zeitstempel. Constraints, Eigentümer-RLS und explizite Spaltenrechte sind Teil derselben Migration. Die Löschung eines Auth-Nutzers entfernt sein Profil und dessen initiale Finanzdaten ausdrücklich per Kaskade. Ein gespeichertes Profil bedeutet noch nicht abgeschlossenes Onboarding.

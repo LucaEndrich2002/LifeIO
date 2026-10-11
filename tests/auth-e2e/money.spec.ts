@@ -33,6 +33,7 @@ async function preparedAccount() {
           monthly: 50000,
         },
       ],
+      ["tasks", { decision: "skipped" }],
       ["complete", {}],
     ];
     for (const [revision, [step, payload]] of steps.entries())
