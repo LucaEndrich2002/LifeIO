@@ -575,11 +575,56 @@ export type Database = {
           },
         ];
       };
+      weekly_reviews: {
+        Row: {
+          user_id: string;
+          week_start: string;
+          time_zone: string;
+          rule_version: number;
+          snapshot: Json;
+          revision: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          user_id: string;
+          week_start: string;
+          time_zone: string;
+          rule_version?: number;
+          snapshot: Json;
+          revision?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          user_id?: string;
+          week_start?: string;
+          time_zone?: string;
+          rule_version?: number;
+          snapshot?: Json;
+          revision?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "weekly_reviews_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["user_id"];
+          },
+        ];
+      };
     };
     Views: {
       [_ in never]: never;
     };
     Functions: {
+      generate_weekly_review: {
+        Args: { p_week: string; p_revision: number };
+        Returns: undefined;
+      };
       claim_ai_request: { Args: never; Returns: boolean };
       is_supported_time_zone: { Args: { candidate: string }; Returns: boolean };
       mutate_budget: {

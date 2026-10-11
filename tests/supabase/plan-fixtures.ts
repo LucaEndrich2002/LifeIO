@@ -3,6 +3,7 @@ import type { Json } from "../../src/types/database";
 
 export async function createPlanFixture({
   complete = true,
+  skipIncome = false,
   skipFixed = false,
   skipGoal = false,
 } = {}) {
@@ -18,12 +19,14 @@ export async function createPlanFixture({
       const steps: [string, Json][] = [
         [
           "income",
-          {
-            decision: "saved",
-            name: "Gehalt",
-            amount: 280000,
-            month: "2026-09",
-          },
+          skipIncome
+            ? { decision: "skipped", month: "2026-09" }
+            : {
+                decision: "saved",
+                name: "Gehalt",
+                amount: 280000,
+                month: "2026-09",
+              },
         ],
         [
           "expenses",

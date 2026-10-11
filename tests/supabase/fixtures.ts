@@ -1,5 +1,11 @@
 import { randomUUID } from "node:crypto";
+import { spawnSync } from "node:child_process";
 import { createClient } from "@supabase/supabase-js";
+import {
+  dockerCommand,
+  isLocalDockerEndpoint,
+  readDockerEndpoint,
+} from "../../scripts/local-docker.mjs";
 import type { Database } from "../../src/types/database";
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -22,7 +28,7 @@ const options = {
     detectSessionInUrl: false,
   },
 };
-// Admin privileges are confined to fixture creation and removal on local Supabase.
+// Admin privileges are confined to fixture setup and removal on local Supabase.
 const admin = createClient<Database>(url, serviceKey, options);
 export const publicClient = () =>
   createClient<Database>(url, publicKey, options);
@@ -51,6 +57,67 @@ export async function createFixture() {
 export async function removeFixture(id: string) {
   const { error } = await admin.auth.admin.deleteUser(id);
   if (error) throw new Error("Could not remove a local auth fixture.");
+}
+
+// Only synthetic accounts may receive historical completion times for boundary
+// tests. All tested application reads and mutations still use the user's client.
+export async function setFixtureCompletionTime(
+  userId: string,
+  table: "tasks" | "goal_milestones",
+  id: string,
+  timestamp: string,
+) {
+  const uuid =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  if (
+    !uuid.test(userId) ||
+    !uuid.test(id) ||
+    !["tasks", "goal_milestones"].includes(table) ||
+    !Number.isFinite(Date.parse(timestamp)) ||
+    !isLocalDockerEndpoint(readDockerEndpoint())
+  )
+    throw new Error("Refusing non-fixture completion setup.");
+  const account = await admin.auth.admin.getUserById(userId);
+  if (
+    account.error ||
+    !/^lifeos-test-[0-9a-f-]+@example\.test$/.test(
+      account.data.user?.email ?? "",
+    )
+  )
+    throw new Error("Refusing non-fixture completion setup.");
+  // No application grants are changed for test setup. Only allowlisted tables,
+  // validated UUIDs and a canonical timestamp enter this local fixture query.
+  const completedAt = new Date(timestamp).toISOString();
+  const result = spawnSync(
+    dockerCommand,
+    [
+      "exec",
+      "-i",
+      "supabase_db_lifeos",
+      "psql",
+      "-U",
+      "postgres",
+      "-d",
+      "postgres",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "--no-psqlrc",
+    ],
+    {
+      input: `do $$ begin
+        update public.${table} set completed_at = '${completedAt}'::timestamptz
+        where user_id = '${userId}'::uuid and id = '${id}'::uuid
+          and exists (select 1 from auth.users where id = '${userId}'::uuid
+            and email ~ '^lifeos-test-[0-9a-f-]+@example[.]test$');
+        if not found then raise exception 'Fixture record missing'; end if;
+      end $$;`,
+      encoding: "utf8",
+      windowsHide: true,
+      timeout: 15000,
+    },
+  );
+  if (result.error || result.status !== 0)
+    throw new Error("Could not prepare fixture completion time.");
 }
 
 export async function removeFixtureByEmail(email: string) {
