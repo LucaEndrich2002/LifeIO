@@ -41,12 +41,20 @@ export async function PersonalHome({ query }: { query: HomeSearch }) {
           Heute ist der {taskDateLabel(data.day)} · {account.profile.time_zone}
         </p>
         <p className="text-sm">Dein Tag, dein Geld und deine nächsten Ziele.</p>
-        <Link
-          href="/account/review"
-          className="inline-flex min-h-11 items-center text-sm font-medium underline"
-        >
-          Wochenrückblick öffnen
-        </Link>
+        <div className="flex flex-wrap gap-x-5 gap-y-2">
+          <Link
+            href="/account/review"
+            className="inline-flex min-h-11 items-center text-sm font-medium underline"
+          >
+            Wochenrückblick öffnen
+          </Link>
+          <Link
+            href="/account/notifications"
+            className="inline-flex min-h-11 items-center text-sm font-medium underline"
+          >
+            Benachrichtigungen öffnen
+          </Link>
+        </div>
       </header>
       <div className="grid items-start gap-6 lg:grid-cols-2">
         <section

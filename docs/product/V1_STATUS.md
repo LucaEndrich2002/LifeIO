@@ -1,6 +1,6 @@
 # LifeOS – Verbleibender V1-Umfang
 
-Stand: 11.10.2026. Diese Übersicht bündelt die offenen Arbeiten in vier Pakete. Sie ist keine Anzahl gleich großer Tickets oder Aufwandsschätzung. Historische Statussätze in älteren Inkrement-Berichten beschreiben deren damaligen Stand.
+Stand: 12.10.2026. Diese Übersicht bündelt die offenen Arbeiten in drei Pakete. Sie ist keine Anzahl gleich großer Tickets oder Aufwandsschätzung. Historische Statussätze in älteren Inkrement-Berichten beschreiben deren damaligen Stand.
 
 ## Bereits umgesetzt
 
@@ -10,16 +10,17 @@ Der funktionale Einstieg nach R02/J01 ist ergänzt: [ONBOARDING_TASKS_STATUS.md]
 
 Der gespeicherte Wochenrückblick nach R13 zeigt Finanzen, Budgets, Ziele, Aufgaben und Fristen mit deterministischen Hinweisen, Datenstand und ausdrücklicher Aktualisierung ohne Duplikate: [WEEKLY_REVIEW_STATUS.md](../WEEKLY_REVIEW_STATUS.md).
 
+Die In-App-Hinweisliste nach R14 wertet vier festgelegte Auslöser auf Klick aus und speichert Anlass, eigenen Quellenverweis und Lesestatus ohne Duplikate. O05 ist für V1 konkretisiert: [NOTIFICATIONS_STATUS.md](../NOTIFICATIONS_STATUS.md).
+
 Implementierter Funktionsumfang ersetzt keine ausstehende Gesamtabnahme oder Veröffentlichung. Die Änderungen liegen auf Arbeitsbranches und Pull Requests; ihre Integration in den Hauptbranch ist separat zu prüfen.
 
-## Vier offene Arbeitspakete
+## Drei offene Arbeitspakete
 
 | Paket                                 | Noch erforderlich                                                                                                                                                                                                                                                                                                                  | Bezug             |
 | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
 | 1. Life AI abschließen                | Tatsächliche Antwortqualität prüfen. Dies ist auf Nutzerwunsch ausdrücklich ausgesetzt; die lesenden Ansichten einschließlich des Home-KI-Bereichs sind implementiert.                                                                                                                                                             | Phase 8, R11–R12  |
-| 2. Benachrichtigungen                 | In-App-Hinweise mit Grund und eigenem Ursprungsdatensatz; gelesen/ungelesen dauerhaft speichern und doppelte Auslöser vermeiden. Auslöser konkretisieren.                                                                                                                                                                          | Phase 9, R14, O05 |
-| 3. Verständlichkeit abnehmen          | Home mit fünf Testpersonen prüfen: dieselben drei Kernfragen innerhalb von zehn Sekunden korrekt beantworten. Automatisierte Tests ersetzen diese Prüfung nicht.                                                                                                                                                                   | Phase 7, J05      |
-| 4. Onlinebetrieb und Beta vorbereiten | Gesamtprüfung von Auth/RLS, Datenflüssen, Logs, Rate Limits, Secrets und Validierung; Datenschutzregion und Aufbewahrungs-/Löschkonzept festlegen; Backup/Restore und Migrationen prüfen; Supabase Cloud und Vercel einrichten; offene Änderungen integrieren; Beta mit 10–30 Personen und festgelegten Messkriterien durchführen. | Phase 10, O07–O08 |
+| 2. Verständlichkeit abnehmen          | Home mit fünf Testpersonen prüfen: dieselben drei Kernfragen innerhalb von zehn Sekunden korrekt beantworten. Automatisierte Tests ersetzen diese Prüfung nicht.                                                                                                                                                                   | Phase 7, J05      |
+| 3. Onlinebetrieb und Beta vorbereiten | Gesamtprüfung von Auth/RLS, Datenflüssen, Logs, Rate Limits, Secrets und Validierung; Datenschutzregion und Aufbewahrungs-/Löschkonzept festlegen; Backup/Restore und Migrationen prüfen; Supabase Cloud und Vercel einrichten; offene Änderungen integrieren; Beta mit 10–30 Personen und festgelegten Messkriterien durchführen. | Phase 10, O07–O08 |
 
 Keine dieser externen oder manuellen Abnahmen wird ohne tatsächliche Durchführung als bestanden gewertet. Automatische Sicherheits- und Funktionstests laufen bereits während der Entwicklung.
 

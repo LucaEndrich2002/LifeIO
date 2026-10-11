@@ -69,6 +69,8 @@ Vitest prüft Konfigurationsvalidierung und zugängliche Navigation. Playwright 
 
 ## Supabase lokal
 
+Die In-App-Benachrichtigungen unter `/account/notifications` benötigen `20261012090000_notifications.sql`. Mit `pnpm exec supabase migration up --local` additiv anwenden; kein Reset. „Hinweise“ in der privaten Navigation öffnet die Liste, „Hinweise prüfen“ wertet die vier V1-Auslöser aus. Kein Hintergrunddienst oder Providerzugang erforderlich. Regeln und Prüfstand: [NOTIFICATIONS_STATUS.md](NOTIFICATIONS_STATUS.md).
+
 Der Einstieg mit optionalen ersten Aufgaben benötigt `20261011090000_onboarding_tasks.sql`. Mit `pnpm exec supabase migration up --local` additiv anwenden; kein Reset. Bereits abgeschlossene Einrichtungen bleiben abgeschlossen, offene Einrichtungen erhalten den zusätzlichen Aufgaben-Schritt. Details: [ONBOARDING_TASKS_STATUS.md](ONBOARDING_TASKS_STATUS.md).
 
 Der gespeicherte Wochenrückblick unter `/account/review` benötigt `20261011130000_weekly_reviews.sql`. Mit `pnpm exec supabase migration up --local` additiv anwenden; kein Reset und keine Providerkonfiguration nötig. Der Einstieg befindet sich auf dem persönlichen Home. Wochen werden erst auf ausdrücklichen Klick gespeichert. Umfang und Prüfstand: [WEEKLY_REVIEW_STATUS.md](WEEKLY_REVIEW_STATUS.md).

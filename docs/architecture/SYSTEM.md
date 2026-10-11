@@ -1,6 +1,6 @@
 # LifeOS – Systemarchitektur
 
-Stand: 11.10.2026, einschließlich gespeichertem Wochenrückblick. Produktumfang: [PRD](../product/PRD.md).
+Stand: 12.10.2026, einschließlich In-App-Benachrichtigungen. Produktumfang: [PRD](../product/PRD.md).
 
 ## Aktuell implementiert
 
@@ -11,6 +11,8 @@ Die Dashboard-Inhalte bleiben Server Components. Nur `PreviewSwitcher` ist für 
 `/auth/[mode]` bietet Anmeldung, Registrierung, Codebestätigung und Passwortwiederherstellung. Der gesamte `/account`-Bereich verlangt eine verifizierte Identität. Neben Profil und Passwort gibt es `/account/onboarding/[step]` für den finanziellen Einstieg und `/account/overview` für dessen persönliche Startübersicht. Die öffentliche Vorschau liegt in der Routengruppe `(preview)` und bleibt statisch; Konto und Auth verwenden ein eigenes Layout. Details: [AUTH_PROFILE_STATUS.md](../AUTH_PROFILE_STATUS.md) und [FINANCIAL_ONBOARDING_STATUS.md](../FINANCIAL_ONBOARDING_STATUS.md).
 
 ## Modularer Monolith
+
+Die In-App-Hinweisliste unter `/account/notifications` nutzt reine Verträge und sichere Quellenlinks in `src/domain/notifications.ts`, den autorisierten Lader und Server Actions in `src/server/notifications.ts`/`notification-actions.ts` sowie Serveransichten in `src/features/notifications`. Nur die Prüf-/Lesestatusformulare sind interaktiv. GET liest vorhandene Hinweise; explizite Auswertung und gewünschte Leserichtung laufen über begrenzte RPCs. Es gibt keine automatischen Hintergrundabfragen oder externen Nachrichten. Regeln, Deduplizierung und Grenzen: [NOTIFICATIONS_STATUS.md](../NOTIFICATIONS_STATUS.md).
 
 Der gespeicherte Wochenrückblick unter `/account/review` trennt reine Zeitraum-/Snapshot-/Hinweisregeln in `src/domain/weekly-review.ts`, autorisierte Lesezugriffe und Server Action in `src/server/weekly-review.ts`/`weekly-review-actions.ts` sowie Serveransichten in `src/features/review`. Nur das Speicherformular ist interaktiv. Öffnen liest, ausdrückliches Erstellen oder Aktualisieren ruft eine eng begrenzte Datenbankfunktion auf. Diese übernimmt gemeinsame Money-/Goal-Berechnungen in einen versionierten Snapshot; die Hinweise werden deterministisch daraus abgeleitet. Keine neue Abhängigkeit oder KI-Anfrage. Regeln und Grenzen: [WEEKLY_REVIEW_STATUS.md](../WEEKLY_REVIEW_STATUS.md).
 
