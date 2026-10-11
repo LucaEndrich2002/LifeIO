@@ -575,6 +575,93 @@ export type Database = {
           },
         ];
       };
+      notifications: {
+        Row: {
+          id: string;
+          user_id: string;
+          kind: string;
+          task_id: string | null;
+          goal_id: string | null;
+          budget_id: string | null;
+          review_week: string | null;
+          context: Json;
+          rule_version: number;
+          time_zone: string;
+          checked_on: string;
+          created_at: string;
+          read_at: string | null;
+          revision: number;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          kind: string;
+          task_id?: string | null;
+          goal_id?: string | null;
+          budget_id?: string | null;
+          review_week?: string | null;
+          context: Json;
+          rule_version?: number;
+          time_zone: string;
+          checked_on: string;
+          created_at?: string;
+          read_at?: string | null;
+          revision?: number;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          kind?: string;
+          task_id?: string | null;
+          goal_id?: string | null;
+          budget_id?: string | null;
+          review_week?: string | null;
+          context?: Json;
+          rule_version?: number;
+          time_zone?: string;
+          checked_on?: string;
+          created_at?: string;
+          read_at?: string | null;
+          revision?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "notifications_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["user_id"];
+          },
+          {
+            foreignKeyName: "notifications_user_id_task_id_fkey";
+            columns: ["user_id", "task_id"];
+            isOneToOne: false;
+            referencedRelation: "tasks";
+            referencedColumns: ["user_id", "id"];
+          },
+          {
+            foreignKeyName: "notifications_user_id_goal_id_fkey";
+            columns: ["user_id", "goal_id"];
+            isOneToOne: false;
+            referencedRelation: "goals";
+            referencedColumns: ["user_id", "id"];
+          },
+          {
+            foreignKeyName: "notifications_user_id_budget_id_fkey";
+            columns: ["user_id", "budget_id"];
+            isOneToOne: false;
+            referencedRelation: "budgets";
+            referencedColumns: ["user_id", "id"];
+          },
+          {
+            foreignKeyName: "notifications_user_id_review_week_fkey";
+            columns: ["user_id", "review_week"];
+            isOneToOne: false;
+            referencedRelation: "weekly_reviews";
+            referencedColumns: ["user_id", "week_start"];
+          },
+        ];
+      };
       weekly_reviews: {
         Row: {
           user_id: string;
@@ -621,6 +708,15 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      synchronize_notifications: { Args: never; Returns: number };
+      read_notifications: {
+        Args: { p_filter?: string; p_page?: number };
+        Returns: Json;
+      };
+      set_notification_read: {
+        Args: { p_id: string; p_revision: number; p_read: boolean };
+        Returns: undefined;
+      };
       generate_weekly_review: {
         Args: { p_week: string; p_revision: number };
         Returns: undefined;
