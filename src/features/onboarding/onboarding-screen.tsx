@@ -8,12 +8,14 @@ import {
 } from "@/domain/onboarding";
 import { OnboardingForm } from "@/features/onboarding/onboarding-form";
 import { FinancialSummary } from "@/features/onboarding/financial-summary";
+import { OnboardingTasksSummary } from "@/features/onboarding/onboarding-tasks-summary";
 import { loadOnboarding } from "@/server/onboarding";
 
 const titles = {
   income: "Dein Einkommen.",
   expenses: "Deine Fixkosten.",
   goal: "Dein erstes Sparziel.",
+  tasks: "Deine ersten Aufgaben.",
   review: "Dein Start im Überblick.",
 };
 const descriptions = {
@@ -22,6 +24,8 @@ const descriptions = {
   expenses:
     "Miete, Verträge oder andere regelmäßige Kosten: Erfasse bis zu 20 monatliche Positionen. Du kannst diesen Schritt auch auslassen.",
   goal: "Wofür möchtest du sparen? Halte ein erstes Ziel und deinen aktuellen Stand fest oder starte ohne Sparziel.",
+  tasks:
+    "Was möchtest du als Nächstes angehen? Erfasse bis zu drei Aufgaben oder überspringe diesen Schritt. Nach dem Abschluss findest du sie in Plan.",
   review:
     "Prüfe deine gespeicherten Angaben. Über die Schritte oben kannst du sie vor dem Abschluss noch korrigieren.",
 };
@@ -37,7 +41,7 @@ export async function OnboardingScreen({ step }: { step: OnboardingStep }) {
     <div className="space-y-7">
       <div>
         <p className="mb-3 text-xs font-medium tracking-widest text-primary uppercase">
-          Dein LifeOS · Schritt {index + 1} von 4
+          Dein LifeOS · Schritt {index + 1} von {onboardingSteps.length}
         </p>
         <h1 className="text-3xl font-semibold tracking-tight">
           {titles[step]}
@@ -62,6 +66,7 @@ export async function OnboardingScreen({ step }: { step: OnboardingStep }) {
                       income: "Einkommen",
                       expenses: "Fixkosten",
                       goal: "Sparziel",
+                      tasks: "Aufgaben",
                       review: "Übersicht",
                     }[item]
                   }
@@ -74,6 +79,7 @@ export async function OnboardingScreen({ step }: { step: OnboardingStep }) {
                       income: "Einkommen",
                       expenses: "Fixkosten",
                       goal: "Sparziel",
+                      tasks: "Aufgaben",
                       review: "Übersicht",
                     }[item]
                   }
@@ -84,6 +90,7 @@ export async function OnboardingScreen({ step }: { step: OnboardingStep }) {
         </ol>
       </nav>
       {step === "review" && <FinancialSummary data={data} />}
+      {step === "review" && <OnboardingTasksSummary tasks={data.tasks} />}
       <OnboardingForm
         key={step}
         step={step}
@@ -97,10 +104,17 @@ export async function OnboardingScreen({ step }: { step: OnboardingStep }) {
               ? (data.state?.income_status ?? "pending")
               : step === "expenses"
                 ? (data.state?.expenses_status ?? "pending")
-                : (data.state?.goal_status ?? "pending"),
+                : step === "tasks"
+                  ? (data.state?.tasks_status ?? "pending")
+                  : (data.state?.goal_status ?? "pending"),
           name: (step === "income" ? data.income?.name : data.goal?.name) ?? "",
           amount: data.income?.amount_minor ?? null,
           expenses: data.expenses,
+          tasks: data.tasks.map((task) => ({
+            title: task.title,
+            priority: task.priority,
+            due_on: task.due_on ?? "",
+          })),
           target: data.goal?.target_minor ?? null,
           current: data.goal?.current_minor ?? null,
           monthly: data.goal?.monthly_minor ?? null,

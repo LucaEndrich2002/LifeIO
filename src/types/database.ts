@@ -462,6 +462,7 @@ export type Database = {
       };
       onboarding: {
         Row: {
+          tasks_status: string;
           completed_at: string | null;
           expenses_status: string;
           goal_status: string;
@@ -471,6 +472,7 @@ export type Database = {
           user_id: string;
         };
         Insert: {
+          tasks_status?: string;
           completed_at?: string | null;
           expenses_status?: string;
           goal_status?: string;
@@ -480,6 +482,7 @@ export type Database = {
           user_id: string;
         };
         Update: {
+          tasks_status?: string;
           completed_at?: string | null;
           expenses_status?: string;
           goal_status?: string;
@@ -527,6 +530,7 @@ export type Database = {
       };
       tasks: {
         Row: {
+          onboarding_slot: number | null;
           completed_at: string | null;
           created_at: string;
           due_on: string | null;
@@ -538,6 +542,7 @@ export type Database = {
           user_id: string;
         };
         Insert: {
+          onboarding_slot?: number | null;
           completed_at?: string | null;
           created_at?: string;
           due_on?: string | null;
@@ -549,6 +554,7 @@ export type Database = {
           user_id: string;
         };
         Update: {
+          onboarding_slot?: number | null;
           completed_at?: string | null;
           created_at?: string;
           due_on?: string | null;

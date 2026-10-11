@@ -1,39 +1,12 @@
 "use client";
 
-import { useActionState, useState, type ComponentProps } from "react";
+import { useActionState, useState } from "react";
+import { OnboardingField } from "@/features/onboarding/onboarding-field";
 import { amountInput } from "@/domain/money";
 import type { OnboardingStep } from "@/domain/onboarding";
 import type { FormState } from "@/features/auth/form-state";
 import { saveOnboarding } from "@/server/onboarding-actions";
-
-const inputClass =
-  "min-h-12 w-full rounded-xl border bg-background px-3 text-base";
-function Field({
-  label,
-  error,
-  id,
-  ...props
-}: ComponentProps<"input"> & { label: string; error?: string; id: string }) {
-  return (
-    <div>
-      <label htmlFor={id} className="mb-2 block text-sm font-medium">
-        {label}
-      </label>
-      <input
-        {...props}
-        id={id}
-        className={inputClass}
-        aria-invalid={!!error}
-        aria-describedby={error ? `${id}-error` : undefined}
-      />
-      {error && (
-        <p id={`${id}-error`} className="mt-2 text-sm text-destructive">
-          {error}
-        </p>
-      )}
-    </div>
-  );
-}
+import { OnboardingTasksFields } from "@/features/onboarding/onboarding-tasks-fields";
 
 export type InitialOnboardingForm = {
   revision: number;
@@ -42,6 +15,7 @@ export type InitialOnboardingForm = {
   name: string;
   amount: number | null;
   expenses: { name: string; amount_minor: number }[];
+  tasks: { title: string; priority: string; due_on: string }[];
   target: number | null;
   current: number | null;
   monthly: number | null;
@@ -89,6 +63,7 @@ export function OnboardingForm({
     income: ["Einkommen erfassen", "Kein Einkommen angeben"],
     expenses: ["Fixkosten erfassen", "Keine Fixkosten angeben"],
     goal: ["Sparziel erfassen", "Noch kein Sparziel angeben"],
+    tasks: ["Erste Aufgaben erfassen", "Aufgaben vorerst überspringen"],
     review: [],
   };
 
@@ -104,7 +79,7 @@ export function OnboardingForm({
         </legend>
         {step === "income" && (
           <>
-            <Field
+            <OnboardingField
               id="month"
               name="month"
               type="month"
@@ -147,13 +122,13 @@ export function OnboardingForm({
         )}
         {decision === "skipped" && step !== "review" && (
           <p className="rounded-xl bg-muted p-4 text-sm leading-relaxed">
-            Wir speichern deine Entscheidung ohne einen Finanzdatensatz. Bereits
-            in diesem Schritt gespeicherte Angaben werden beim Fortfahren
-            entfernt.
+            {step === "tasks"
+              ? "Du startest ohne erste Aufgaben. Bereits in diesem Schritt gespeicherte Aufgaben werden beim Fortfahren entfernt. Später kannst du in Plan jederzeit Aufgaben anlegen."
+              : "Wir speichern deine Entscheidung ohne einen Finanzdatensatz. Bereits in diesem Schritt gespeicherte Angaben werden beim Fortfahren entfernt."}
           </p>
         )}
         {decision === "saved" && (step === "income" || step === "goal") && (
-          <Field
+          <OnboardingField
             id="name"
             name="name"
             label={
@@ -168,7 +143,7 @@ export function OnboardingForm({
           />
         )}
         {decision === "saved" && step === "income" && (
-          <Field
+          <OnboardingField
             id="amount"
             name="amount"
             label="Monatliches Nettoeinkommen (€)"
@@ -188,7 +163,7 @@ export function OnboardingForm({
                 <legend className="px-2 text-sm font-medium">
                   Fixkosten {index + 1}
                 </legend>
-                <Field
+                <OnboardingField
                   id={`expense-${item.key}-name`}
                   name="expense_name"
                   label={`Bezeichnung ${index + 1}`}
@@ -205,7 +180,7 @@ export function OnboardingForm({
                   }
                   error={errors[`items.${index}.name`]}
                 />
-                <Field
+                <OnboardingField
                   id={`expense-${item.key}-amount`}
                   name="expense_amount"
                   label={`Monatsbetrag ${index + 1} (€)`}
@@ -259,7 +234,7 @@ export function OnboardingForm({
         )}
         {decision === "saved" && step === "goal" && (
           <>
-            <Field
+            <OnboardingField
               id="target"
               name="target"
               label="Zielbetrag (€)"
@@ -268,7 +243,7 @@ export function OnboardingForm({
               onChange={(event) => setTarget(event.target.value)}
               error={errors.target}
             />
-            <Field
+            <OnboardingField
               id="current"
               name="current"
               label="Bereits gespart (€)"
@@ -277,7 +252,7 @@ export function OnboardingForm({
               onChange={(event) => setCurrent(event.target.value)}
               error={errors.current}
             />
-            <Field
+            <OnboardingField
               id="monthly"
               name="monthly"
               label="Geplante monatliche Sparrate (€)"
@@ -292,7 +267,14 @@ export function OnboardingForm({
             </p>
           </>
         )}
-        {step !== "review" && decision === "saved" && (
+        {step === "tasks" && (
+          <OnboardingTasksFields
+            initial={initial.tasks}
+            errors={errors}
+            hidden={decision !== "saved"}
+          />
+        )}
+        {step !== "review" && step !== "tasks" && decision === "saved" && (
           <p className="text-xs text-muted-foreground">
             Alle Beträge in Euro. Komma oder Punkt als Dezimalzeichen, ohne
             Tausendertrennzeichen. Höchstens 999.999.999,99 € je Betrag.

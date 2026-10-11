@@ -1,5 +1,7 @@
 # Finanzielle Einrichtung – zweites Inkrement von Phase 3
 
+Ergänzung vom 11.10.2026: Der Einstieg enthält inzwischen auch optionale erste Aufgaben mit fünf Schritten bis zur Übersicht. [ONBOARDING_TASKS_STATUS.md](ONBOARDING_TASKS_STATUS.md) dokumentiert die Ergänzung von R02/J01; der folgende Bericht beschreibt das ursprüngliche Finanz-Inkrement.
+
 Stand: 20.09.2026. Task-Branch: `codex/financial-onboarding`, aufbauend auf `codex/auth-and-profile`.
 
 Dieser Bericht beschreibt den abgeschlossenen Einrichtungs-Task. Das Folgeinkrement [MONEY_TRANSACTIONS_STATUS.md](MONEY_TRANSACTIONS_STATUS.md) ergänzt inzwischen die laufende Pflege von Einnahmen und variablen Ausgaben. Nach Abschluss führt `/account/overview` zur aktuellen Money-Ansicht des Startmonats; eine separate, veraltete Startrechnung wird nicht weitergeführt.

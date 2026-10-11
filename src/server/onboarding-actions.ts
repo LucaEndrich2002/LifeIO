@@ -7,6 +7,7 @@ import {
   expensesSchema,
   goalSchema,
   incomeSchema,
+  onboardingTasksSchema,
   revisionSchema,
   stepSchema,
 } from "@/domain/onboarding";
@@ -32,18 +33,30 @@ export async function saveOnboarding(
     const raw = Object.fromEntries(form);
     const names = form.getAll("expense_name");
     const amounts = form.getAll("expense_amount");
+    const titles = form.getAll("task_title");
+    const priorities = form.getAll("task_priority");
+    const dates = form.getAll("task_due_on");
     const input =
       parsedStep.data === "income"
         ? incomeSchema.safeParse(raw)
         : parsedStep.data === "goal"
           ? goalSchema.safeParse(raw)
-          : expensesSchema.safeParse({
-              ...raw,
-              items: names.map((name, index) => ({
-                name,
-                amount: amounts[index],
-              })),
-            });
+          : parsedStep.data === "tasks"
+            ? onboardingTasksSchema.safeParse({
+                ...raw,
+                items: titles.map((title, index) => ({
+                  title,
+                  priority: priorities[index],
+                  due_on: dates[index],
+                })),
+              })
+            : expensesSchema.safeParse({
+                ...raw,
+                items: names.map((name, index) => ({
+                  name,
+                  amount: amounts[index],
+                })),
+              });
     if (!input.success)
       return {
         status: "error",
@@ -83,7 +96,8 @@ export async function saveOnboarding(
   const destination = {
     income: "expenses",
     expenses: "goal",
-    goal: "review",
+    goal: "tasks",
+    tasks: "review",
     review: null,
   }[parsedStep.data];
   redirect(

@@ -65,12 +65,12 @@ export async function ProfileScreen({
         >
           {onboarding?.data?.completed_at
             ? "Meine Finanzübersicht öffnen"
-            : "Weiter zur finanziellen Einrichtung"}
+            : "Weiter zur Einrichtung"}
         </Link>
       ) : (
         <p className="text-xs leading-relaxed text-muted-foreground">
           Speichere zuerst dein Profil. Danach kannst du Einkommen, Fixkosten
-          und dein erstes Sparziel einrichten.
+          und dein erstes Sparziel einrichten sowie erste Aufgaben anlegen.
         </p>
       )}
       {onboarding?.data?.completed_at && (

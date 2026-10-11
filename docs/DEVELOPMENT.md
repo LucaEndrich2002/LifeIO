@@ -69,6 +69,8 @@ Vitest prüft Konfigurationsvalidierung und zugängliche Navigation. Playwright 
 
 ## Supabase lokal
 
+Der Einstieg mit optionalen ersten Aufgaben benötigt `20261011090000_onboarding_tasks.sql`. Mit `pnpm exec supabase migration up --local` additiv anwenden; kein Reset. Bereits abgeschlossene Einrichtungen bleiben abgeschlossen, offene Einrichtungen erhalten den zusätzlichen Aufgaben-Schritt. Details: [ONBOARDING_TASKS_STATUS.md](ONBOARDING_TASKS_STATUS.md).
+
 Die konkrete Windows-Einrichtung und der aktuelle Stand sind in [LOCAL_SUPABASE.md](LOCAL_SUPABASE.md) beschrieben. `pnpm db:doctor` prüft die Voraussetzungen für die Erstinstallation ohne Datenänderungen. Nach vollständiger Einrichtung prüft `pnpm db:doctor --runtime` dieselben Komponenten mit 5 GiB verbleibender Betriebsreserve statt der 20 GiB Installationsreserve. Die Standardprüfung bleibt unverändert streng; vor größeren neuen Downloads erneut die Installationsreserve prüfen.
 
 Voraussetzung ist eine laufende Docker-Umgebung für Linux-Container. Die Supabase CLI ist als Projektabhängigkeit festgeschrieben; `supabase/config.toml` wurde mit ihr initialisiert und auf den benötigten lokalen Umfang reduziert.
