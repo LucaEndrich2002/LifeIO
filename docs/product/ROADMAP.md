@@ -1,12 +1,14 @@
 # LifeOS – Roadmap
 
-Aktuell (11.10.2026): Optionale erste Aufgaben ergänzen den Einstieg nach R02/J01 einschließlich Überspringen, Wiederaufnahme und Übergang in Plan. Bereits abgeschlossene Einrichtungen bleiben erhalten. Umfang und Prüfstand: [ONBOARDING_TASKS_STATUS.md](../ONBOARDING_TASKS_STATUS.md). Der verbleibende V1-Umfang steht in [V1_STATUS.md](V1_STATUS.md).
+Aktuell (11.10.2026): Der gespeicherte Wochenrückblick nach R13 ergänzt Geld, Ziele, Aufgaben und Fristen mit nachvollziehbaren Hinweisen, unverändertem Datenstand beim Öffnen und ausdrücklicher Aktualisierung. Umfang und Prüfstand: [WEEKLY_REVIEW_STATUS.md](../WEEKLY_REVIEW_STATUS.md). R14 bleibt offen; Phase 9 ist nicht insgesamt abgeschlossen. Der verbleibende V1-Umfang steht in [V1_STATUS.md](V1_STATUS.md).
 
 Stand: 11.10.2026
 
 Quellen: [README](../../README.md), Abschnitte 9, 10 und 21, sowie [PRD](PRD.md). Diese Roadmap beschreibt die Reihenfolge und Abnahmebedingungen, keine bereits implementierten Funktionen.
 
 ## Aktueller Stand
+
+- Optionale erste Aufgaben ergänzen den Einstieg nach R02/J01 einschließlich Überspringen, Wiederaufnahme und Übergang in Plan. Bereits abgeschlossene Einrichtungen bleiben erhalten. Umfang und Prüfstand: [ONBOARDING_TASKS_STATUS.md](../ONBOARDING_TASKS_STATUS.md).
 
 - Das sechste Life-AI-Inkrement ergänzt direkt auf Home eine auswählbare KI-Vorschau und Erklärung für den gewählten Finanzmonat, die aktuelle Woche oder die angezeigte Zielseite. Vorhandene Freigabe-/Datengrenzen werden wiederverwendet; Öffnen und Wechseln senden nichts an OpenAI. Umfang, lokale Speichergrenze und Prüfstand: [HOME_AI_STATUS.md](../HOME_AI_STATUS.md). Die ausgesetzte Abnahme echter Antworten bleibt offen.
 
