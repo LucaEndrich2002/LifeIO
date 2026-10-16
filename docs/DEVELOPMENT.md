@@ -120,6 +120,8 @@ Vercel und Supabase Cloud bleiben die vorgesehenen späteren Hosting-Ziele. Das 
 
 ## Bekannte Voraussetzungen und Versionsentscheidungen
 
+Für die manuelle Home-Abnahme erzeugt `pnpm test:home:prepare` nach einem aktuellen `pnpm build` ein isoliertes, fiktives Testpaket unter `.cache/home-study/`. Es nutzt dieselbe lokale Supabase-Absicherung wie `test:auth` und sendet keine KI-Anfragen. Ablauf, Grenzen und Bewertung: [HOME_COMPREHENSION_TEST.md](HOME_COMPREHENSION_TEST.md). Ein erfolgreicher Vorbereitungslauf zählt nicht als bestandener Test mit Menschen.
+
 Der Auth-Task vom 20.09.2026 ergänzt Profilmigration, RLS und lokale Mailtemplates. CI startet Supabase, führt `test:integration` und `test:auth` aus und stoppt die Testdatenbank. Der Start-Wrapper gibt keine CLI-Schlüssel aus. Auth-Berichte liegen unter `playwright-auth-report` und `test-results-auth`; Traces sind zum Schutz von Passwörtern, Codes und Cookies ausgeschaltet. Der private Fixture-Schlüssel wird nicht an den App-Testserver weitergegeben. Aktueller Prüfstand: [AUTH_PROFILE_STATUS.md](AUTH_PROFILE_STATUS.md).
 
 - Docker Desktop 4.91.0 mit WSL 2.7.13 und der lokale Supabase-Stack sind eingerichtet. Dienstzustand, ausschließlich lokale Ports und Wiederanlauf wurden am 19.09.2026 geprüft; `.env.local` enthält nur öffentliche Verbindungskonfiguration. Ein beim Docker-Desktop-Neustart beobachteter Socket-Fehler wurde mit einem reversiblen Workaround behoben und bleibt als externe Einschränkung dokumentiert: [LOCAL_SUPABASE.md](LOCAL_SUPABASE.md). Die erste Profilmigration und RLS sind inzwischen implementiert und geprüft.

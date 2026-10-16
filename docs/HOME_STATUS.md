@@ -1,5 +1,7 @@
 # Persönliches Home-Dashboard
 
+Am 16.10.2026 wurde ein [ausführbares Testpaket für J05](HOME_COMPREHENSION_TEST.md) ergänzt. Es erzeugt eine fiktive Aufnahme des echten privaten Home, eine Zehn-Sekunden-Anzeige und ein leeres Fünf-Personen-Protokoll. Die Prüfung mit Menschen wurde noch nicht durchgeführt; J05 bleibt offen.
+
 Folgeinkrement vom 10.10.2026: Der auswählbare KI-Bereich direkt auf Home ist in [HOME_AI_STATUS.md](HOME_AI_STATUS.md) beschrieben. Der folgende Bericht dokumentiert das ursprüngliche Home-Inkrement; dessen damals noch offener KI-Bereich ist inzwischen implementiert.
 
 ## Umfang und Einstieg

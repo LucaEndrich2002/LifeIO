@@ -2,8 +2,8 @@ import { spawnSync } from "node:child_process";
 import { isLocalDockerEndpoint, readDockerEndpoint } from "./local-docker.mjs";
 
 const mode = process.argv[2];
-if (!["integration", "e2e"].includes(mode))
-  throw new Error("Choose integration or e2e.");
+if (!["integration", "e2e", "home-study"].includes(mode))
+  throw new Error("Choose integration, e2e or home-study.");
 if (!isLocalDockerEndpoint(readDockerEndpoint()))
   throw new Error("Tests require local Docker.");
 const status = spawnSync(
@@ -44,7 +44,9 @@ const args =
         "node_modules/@playwright/test/cli.js",
         "test",
         "--config",
-        "playwright.auth.config.ts",
+        mode === "home-study"
+          ? "playwright.home-study.config.ts"
+          : "playwright.auth.config.ts",
       ];
 const result = spawnSync(process.execPath, args, {
   env,
