@@ -1,6 +1,6 @@
 # LifeOS – Verbleibender V1-Umfang
 
-Stand: 12.10.2026. Diese Übersicht bündelt die offenen Arbeiten in drei Pakete. Sie ist keine Anzahl gleich großer Tickets oder Aufwandsschätzung. Historische Statussätze in älteren Inkrement-Berichten beschreiben deren damaligen Stand.
+Stand: 16.10.2026. Diese Übersicht bündelt die offenen Arbeiten in drei Pakete. Sie ist keine Anzahl gleich großer Tickets oder Aufwandsschätzung. Historische Statussätze in älteren Inkrement-Berichten beschreiben deren damaligen Stand.
 
 ## Bereits umgesetzt
 
@@ -23,6 +23,28 @@ Implementierter Funktionsumfang ersetzt keine ausstehende Gesamtabnahme oder Ver
 | 3. Onlinebetrieb und Beta vorbereiten | Gesamtprüfung von Auth/RLS, Datenflüssen, Logs, Rate Limits, Secrets und Validierung; Datenschutzregion und Aufbewahrungs-/Löschkonzept festlegen; Backup/Restore und Migrationen prüfen; Supabase Cloud und Vercel einrichten; offene Änderungen integrieren; Beta mit 10–30 Personen und festgelegten Messkriterien durchführen. | Phase 10, O07–O08 |
 
 Keine dieser externen oder manuellen Abnahmen wird ohne tatsächliche Durchführung als bestanden gewertet. Automatische Sicherheits- und Funktionstests laufen bereits während der Entwicklung.
+
+Für Paket 2 ist ein ausführbares [Home-Testpaket mit Anleitung und Lösungsschlüssel](../HOME_COMPREHENSION_TEST.md) vorbereitet: isolierte fiktive Aufnahme der echten Oberfläche, Zehn-Sekunden-Anzeige und leeres Protokoll für fünf Personen. Die tatsächliche Durchführung und Auswertung bleiben offen.
+
+## Was konkret noch fehlt
+
+Diese Prüfliste zerlegt die drei Pakete; die Zeilen sind keine zusätzlichen Produktphasen. Sie ist eine Bestandsaufnahme, keine Freigabe für Cloud-Ausgaben, Veröffentlichung oder Zusammenführen von Pull Requests.
+
+| Bereich                  | Offener Abschluss / Nachweis                                                                                                                                                                                                                                                    |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Home-Abnahme             | Fünf unbeeinflusste Erstversuche durchführen, Zeit und Antworten erfassen; bei Missverständnissen korrigieren und erneut abnehmen. Das neue Paket liefert Material, keine Testergebnisse.                                                                                       |
+| KI-Antworten             | Echte Antworten für Monat, Sparprognose, Zielübersicht und Wochenplanung auf Richtigkeit, Quellen und Verständlichkeit prüfen. Auf Nutzerwunsch ausgesetzt; der Verzicht ist kein bestandener Test.                                                                             |
+| Hauptbranch              | Die gestapelten Funktions-PRs prüfen und in Abhängigkeitsreihenfolge integrieren, danach den zusammengeführten Stand vollständig prüfen. Am 16.10.2026 lagen vor diesem Testpaket 23 offene PRs (#1–#23) vor; beide Prüfungen von #23 waren erfolgreich.                        |
+| Sicherheitsabnahme       | Auth, Sitzungen, RLS und bereichsübergreifende Zugriffe insgesamt prüfen; offene Befunde beheben. Vorhandene negative Rechte- und Funktionstests sind eine Grundlage, keine abschließende Beta-Freigabe.                                                                        |
+| Produktionshärtung       | Datenflüsse, Logs, Validierung, Anfragegrenzen, passende Content Security Policy und produktive Secret-Verwaltung prüfen bzw. vervollständigen. Abhängigkeiten und ihre unterstützten Versionen gemeinsam überprüfen; dokumentierte Tooling-Grenzen berücksichtigen.            |
+| Datenschutz und Löschung | Cloud-Region und Datenempfänger festlegen; Aufbewahrungs-/Löschkonzept sowie tatsächlich ausführbare Löschabläufe definieren und prüfen. Erforderliche Nutzerinformationen daraus ableiten.                                                                                     |
+| Sicherung und Änderungen | Backup und tatsächliche Wiederherstellung erproben, Migrationen mit vorhandenem Datenbestand testen und Wiederanlauf/Rückfallablauf dokumentieren. Keine Probe durch Zurücksetzen echter Daten ersetzen.                                                                        |
+| Hosting                  | Supabase Cloud und Vercel konfigurieren; Umgebungen, erlaubte Auth-URLs, E-Mail-Zustellung, HTTPS und Zugangsdaten einrichten. Danach Registrierung, Anmeldung, Wiederherstellung und Kernabläufe auf der echten Zielumgebung prüfen. Lokal laufend bedeutet noch nicht online. |
+| Betrieb                  | Fehlererkennung, Zuständigkeit, Support- und Störungsablauf sowie Kosten-/Kapazitätsgrenzen für die Beta festlegen und prüfen. Keine Finanzinhalte oder Tokens in Telemetrie übernehmen.                                                                                        |
+| Beta-Messplan            | Die vorgeschlagenen PRD-Kennzahlen und geschäftlichen Erfolgsschwellen vorab beschließen (O08). Datenschutzregion bleibt Teil von O07. Die ausgesetzte KI-Abnahme bei der Freigabe ausdrücklich berücksichtigen.                                                                |
+| Beta-Durchführung        | 10–30 reale Testpersonen einladen, Kernabläufe und Nutzung beobachten, Fehler/Feedback auswerten und erforderliche Korrekturen erneut prüfen. Erst danach den tatsächlichen Freigabestand festhalten.                                                                           |
+
+Die nächste externe Voraussetzung für J05 sind fünf Testpersonen. Für Hosting und Beta werden danach konkrete Konto-/Region-/Kosten- und Produktentscheidungen gebraucht. Diese werden nicht stillschweigend durch technische Defaults ersetzt.
 
 ## Abgrenzung
 

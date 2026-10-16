@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; img-src data:; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'none'; base-uri 'none'; form-action 'none'"
+    />
+    <title>LifeOS · Home verstehen</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      body {
+        margin: 0;
+        color: #18242a;
+        background: #eef3f1;
+        font:
+          16px/1.5 system-ui,
+          sans-serif;
+      }
+      button {
+        min-height: 44px;
+        padding: 8px 18px;
+        border: 1px solid #245e52;
+        border-radius: 8px;
+        background: #fff;
+        color: #18242a;
+        font: inherit;
+        cursor: pointer;
+      }
+      button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      :focus-visible {
+        outline: 3px solid #126eab;
+        outline-offset: 3px;
+      }
+      #intro {
+        max-width: 760px;
+        margin: 40px auto;
+        padding: 24px;
+      }
+      h1 {
+        line-height: 1.2;
+      }
+      li {
+        margin: 12px 0;
+      }
+      #toolbar {
+        height: 72px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 8px 16px;
+      }
+      #view {
+        width: 1280px;
+        height: 720px;
+        margin: 0 auto;
+        overflow: auto;
+        background: #fff;
+      }
+      #view img {
+        display: block;
+        width: 1280px;
+        max-width: none;
+      }
+      #result {
+        max-width: 760px;
+        margin: 40px auto;
+        padding: 24px;
+      }
+      small {
+        color: #465a54;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section id="intro" aria-labelledby="title">
+        <p>LifeOS · Verständlichkeitstest · ausschließlich fiktive Daten</p>
+        <h1 id="title">Was zeigt dir Home?</h1>
+        <p>
+          Du siehst gleich ein Bild des Dashboards. Beantworte diese drei Fragen
+          laut, während das Bild sichtbar ist:
+        </p>
+        <ol>
+          <li>Was steht heute an?</li>
+          <li>
+            Wie viel bleibt nach den erfassten Angaben im angezeigten Monat?
+          </li>
+          <li>Welches Ziel benötigt Aufmerksamkeit, und warum?</li>
+        </ol>
+        <p>
+          Du hast insgesamt zehn Sekunden. Du darfst im Bild scrollen; Links
+          sind in dieser Aufnahme nicht anklickbar. Die Testleitung stoppt nach
+          deiner letzten Antwort.
+        </p>
+        <p id="ready" role="status">Das Testbild wird vorbereitet …</p>
+        <button id="start" type="button" disabled>Test starten</button>
+        <p>
+          <small
+            >Desktop-Aufnahme · 1280 × 720 · helles Design. Alle fünf Personen
+            sehen dieselbe Datei. Dies ist kein Test mit einem
+            Screenreader.</small
+          >
+        </p>
+      </section>
+      <section id="trial" aria-label="Testdurchlauf" hidden>
+        <div id="toolbar">
+          <span>Fiktives Dashboard · Antworten laut nennen</span>
+          <button id="finish" type="button">
+            Letzte Antwort gegeben · stoppen
+          </button>
+        </div>
+        <div
+          id="view"
+          tabindex="0"
+          role="region"
+          aria-label="Dashboard-Aufnahme, zum Lesen scrollen"
+        >
+          <img
+            id="dashboard"
+            src="__DASHBOARD_IMAGE__"
+            alt="Aufnahme des fiktiven Home-Dashboards für den visuellen Verständlichkeitstest"
+          />
+        </div>
+      </section>
+      <section id="result" aria-labelledby="result-title" hidden>
+        <h1 id="result-title">Durchlauf beendet</h1>
+        <p id="outcome" role="status"></p>
+        <p>
+          Die Testleitung trägt die gesprochenen Antworten und Beobachtungen ins
+          Protokoll ein. Diese Seite bewertet und speichert keine Antworten.
+        </p>
+        <button id="reset" type="button">Nächste Person vorbereiten</button>
+        <p>
+          <small
+            >Keine Wiederholung für dieselbe Person als Erstversuch werten. Eine
+            Unterbrechung zählt nicht als bestanden.</small
+          >
+        </p>
+      </section>
+    </main>
+    <script>
+      // The capture is embedded; this file needs no account, server or network.
+      const byId = (id) => document.getElementById(id);
+      const start = byId("start");
+      let imageReady = false;
+      let running = false;
+      let startedAt = 0;
+      let wallStartedAt = 0;
+      let timer;
+      const fits = () => innerWidth >= 1280 && innerHeight >= 792;
+      const elapsed = () =>
+        Math.max(performance.now() - startedAt, Date.now() - wallStartedAt);
+      function readiness() {
+        start.disabled = !imageReady || !fits();
+        byId("ready").textContent = !imageReady
+          ? "Das Testbild konnte noch nicht geladen werden."
+          : !fits()
+            ? "Bitte das Browserfenster vergrößern: mindestens 1280 × 792 Pixel, Browserzoom 100 %."
+            : "Bereit. Erst starten, wenn die Person alle Fragen gelesen hat.";
+      }
+      function end(reason) {
+        if (!running) return;
+        const duration = elapsed();
+        running = false;
+        clearTimeout(timer);
+        byId("trial").hidden = true;
+        byId("result").hidden = false;
+        const seconds = (duration / 1000).toLocaleString("de-DE", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+        byId("outcome").textContent =
+          reason === "interrupted"
+            ? "Unterbrochen: Fenstergröße oder Sichtbarkeit geändert. Diesen Durchlauf nicht als bestanden werten."
+            : reason === "timeout" || duration > 10000
+              ? "Zehn Sekunden abgelaufen. Es wurde keine rechtzeitige letzte Antwort bestätigt; Zeitkriterium nicht erfüllt."
+              : `Letzte Antwort nach ${seconds} Sekunden gestoppt. Inhaltliche Richtigkeit separat prüfen; dies ist noch kein bestandenes Ergebnis.`;
+        byId("reset").focus();
+      }
+      start.addEventListener("click", () => {
+        if (!imageReady || !fits()) return;
+        byId("intro").hidden = true;
+        byId("trial").hidden = false;
+        byId("view").scrollTop = 0;
+        byId("view").scrollLeft = 0;
+        window.scrollTo(0, 0);
+        byId("view").focus();
+        startedAt = performance.now();
+        wallStartedAt = Date.now();
+        running = true;
+        timer = setTimeout(() => end("timeout"), 10000);
+      });
+      byId("finish").addEventListener("click", () => end("finished"));
+      byId("reset").addEventListener("click", () => {
+        byId("result").hidden = true;
+        byId("intro").hidden = false;
+        readiness();
+        start.focus();
+      });
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) end("interrupted");
+      });
+      window.addEventListener("resize", () => {
+        end("interrupted");
+        readiness();
+      });
+      byId("dashboard")
+        .decode()
+        .then(() => {
+          imageReady = true;
+          readiness();
+        })
+        .catch(() => readiness());
+    </script>
+  </body>
+</html>
