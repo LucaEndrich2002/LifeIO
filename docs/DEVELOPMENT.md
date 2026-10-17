@@ -96,6 +96,8 @@ pnpm db:reset
 
 Die erste Migration erzeugt `public.profiles` samt Constraints, Grants, RLS und Isolationstests. Nach einem Checkout `pnpm exec supabase migration up --local` ausführen. Neue Tabellen werden nicht automatisch für die Data API freigegeben. Die Tests erzeugen und entfernen ihre eigenen lokalen Fixtures; globale Seeds bleiben deaktiviert. Ein Cloud-Projekt muss dieselben Grenzen separat erhalten.
 
+Die Integrationssuite prüft zusätzlich das vollständige Anwendungsschema auf RLS, Rollen, wirksame Tabellen-/Spaltenrechte, Eigentümer-Policies und freigegebene Funktionssignaturen. Der lokale Katalogleser verwendet ausschließlich eine feste READ-ONLY-Abfrage ohne Anwendungsdaten. Neue Objekte und Rechte brauchen eine ausdrückliche Prüfung im Testinventar: [DATABASE_SECURITY_STATUS.md](DATABASE_SECURITY_STATUS.md).
+
 Die lokale Auth-Konfiguration verwendet bestätigte E-Mail-Adressen, sechsstellige Codes und sichere Passwortänderungen. Templates liegen unter `supabase/templates`; Supabase-Stop/Start aktiviert Änderungen bei erhaltenen Volumes. Codebestätigung und Wiederherstellung verwenden Server Actions mit festen Weiterleitungen. Der Proxy erneuert Sitzungen; Server Components und Server Actions verwenden getrennte Cookie-Adapter.
 
 ## Projektstruktur und Grenzen
