@@ -1,5 +1,7 @@
 # LifeOS – Roadmap
 
+Ergänzung 17.10.2026: Eine [gemeinsame Prüfung der Datenbankrechte](../DATABASE_SECURITY_STATUS.md) ergänzt die bestehenden Zwei-Nutzer-Tests um das vollständige Tabellen-/Funktionsinventar und wirksame Rollen-/Spaltenrechte. Dieser begrenzte Nachweis ist keine vollständige Sicherheits- oder Beta-Freigabe. Beide GitHub-Prüfungen von PR #24 sind erfolgreich; J05 und echte KI-Antwortqualität bleiben offen.
+
 Ergänzung 16.10.2026: Das [Home-Testpaket für J05](../HOME_COMPREHENSION_TEST.md) bereitet die noch offene Verständlichkeitsabnahme vor. Fünf tatsächliche Testpersonen und die Auswertung fehlen weiterhin. [V1_STATUS.md](V1_STATUS.md) schlüsselt die verbleibenden Arbeiten bis zur Beta auf; echte KI-Tests bleiben ausgesetzt. Beide GitHub-Prüfungen des Benachrichtigungs-PR #23 sind erfolgreich.
 
 Aktuell (12.10.2026): In-App-Benachrichtigungen nach R14 ergänzen eine eigene Hinweisliste mit vier festgelegten Auslösern, dauerhaftem Lesestatus, Quellenlinks und Duplikatschutz. Auswertung erfolgt ausdrücklich auf Klick; O05 ist für V1 konkretisiert. Umfang und Prüfstand: [NOTIFICATIONS_STATUS.md](../NOTIFICATIONS_STATUS.md). Zusammen mit R13 ist der funktionale Umfang von Phase 9 implementiert. Der verbleibende V1-Umfang steht in [V1_STATUS.md](V1_STATUS.md).
