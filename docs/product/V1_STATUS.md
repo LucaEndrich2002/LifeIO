@@ -1,6 +1,6 @@
 # LifeOS – Verbleibender V1-Umfang
 
-Stand: 17.10.2026. Diese Übersicht bündelt die offenen Arbeiten in drei Pakete. Sie ist keine Anzahl gleich großer Tickets oder Aufwandsschätzung. Historische Statussätze in älteren Inkrement-Berichten beschreiben deren damaligen Stand.
+Stand: 27.10.2026. Diese Übersicht bündelt die offenen Arbeiten in drei Pakete. Sie ist keine Anzahl gleich großer Tickets oder Aufwandsschätzung. Historische Statussätze in älteren Inkrement-Berichten beschreiben deren damaligen Stand.
 
 ## Bereits umgesetzt
 
@@ -29,6 +29,8 @@ Für Paket 2 ist ein ausführbares [Home-Testpaket mit Anleitung und Lösungssch
 Am 17.10.2026 bestanden beide GitHub-Prüfungen des Home-Testpaket-PR #24. Eine neue [gemeinsame Datenbankprüfung](../DATABASE_SECURITY_STATUS.md) erfasst alle 15 Anwendungstabellen und 28 Funktionen sowie Rollen, Spaltenrechte und Eigentümer-Policies. Sie ergänzt die bestehenden Isolationstests; Paket 3 bleibt bis zur vollständigen Abnahme offen.
 
 ## Was konkret noch fehlt
+
+Eine [durchgesetzte Content Security Policy](../CONTENT_SECURITY_POLICY_STATUS.md) ergänzt inzwischen den Browserschutz für Vorschau, Auth und Konto. Die vollständige Produktionshärtung einschließlich Prüfung in der späteren Hostingumgebung bleibt offen.
 
 Diese Prüfliste zerlegt die drei Pakete; die Zeilen sind keine zusätzlichen Produktphasen. Sie ist eine Bestandsaufnahme, keine Freigabe für Cloud-Ausgaben, Veröffentlichung oder Zusammenführen von Pull Requests.
 

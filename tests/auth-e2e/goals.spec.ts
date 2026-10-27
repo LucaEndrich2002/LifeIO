@@ -191,7 +191,9 @@ test("real deposits can exceed the target and are cancelled only after confirmat
       page.getByText("Storniert · zählt nicht zum Sparstand", { exact: true }),
     ).toBeVisible();
     await page.goto("/account/money?month=2026-09");
-    await expect(page.getByTestId("month-available")).toHaveText("1.400,00 €");
+    await expect(
+      page.getByRole("main").getByTestId("month-available"),
+    ).toHaveText("1.400,00 €");
   } finally {
     await removeFixture(user.id);
   }

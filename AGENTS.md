@@ -13,3 +13,13 @@ Read `README.md`, `docs/product/PRD.md` and `docs/product/ROADMAP.md` for produc
 - Implement relevant Acceptance Criteria; include loading, empty and error states, keyboard access and responsive behavior. Do not present mock values as real user data.
 - Run `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` and `pnpm format:check`; run `pnpm test:e2e` for affected user flows. Document any external blocker accurately. Do not weaken checks to hide failures.
 - Review the diff for scope, security, types, duplication, dependencies and configuration. Update documentation when behavior or architecture changes.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
