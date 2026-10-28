@@ -103,6 +103,8 @@ Die Integrationssuite prüft zusätzlich das vollständige Anwendungsschema auf 
 
 `pnpm test:restore` benötigt ausschließlich lokalen Docker und das vorhandene PostgreSQL-Image. Es erzeugt eine eigene Umgebung ohne Netzwerk, sichert fiktive Daten aller Anwendungstabellen und prüft deren tatsächliche Wiederherstellung einschließlich Rechten und Eigentümerzugriffen. Bestehende Datenbanken werden nicht zurückgesetzt. Voraussetzungen, Bereinigung und Grenzen: [BACKUP_RESTORE_STATUS.md](BACKUP_RESTORE_STATUS.md).
 
+`pnpm test:migrations` verwendet dieselbe isolierte Umgebung für drei tatsächlich vor der Sparziel-Migration erzeugte fiktive Konten. Es prüft Datenübernahme, historische Raten, späteren Einrichtungsabschluss und Eigentümerrechte bis zum aktuellen V1-Schema. Der SQL-Dateilauf ersetzt keine Prüfung des Supabase-CLI-Migrationsablaufs: [MIGRATION_EXISTING_DATA_STATUS.md](MIGRATION_EXISTING_DATA_STATUS.md).
+
 Die lokale Auth-Konfiguration verwendet bestätigte E-Mail-Adressen, sechsstellige Codes und sichere Passwortänderungen. Templates liegen unter `supabase/templates`; Supabase-Stop/Start aktiviert Änderungen bei erhaltenen Volumes. Codebestätigung und Wiederherstellung verwenden Server Actions mit festen Weiterleitungen. Der Proxy erneuert Sitzungen; Server Components und Server Actions verwenden getrennte Cookie-Adapter.
 
 ## Projektstruktur und Grenzen
