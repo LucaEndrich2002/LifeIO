@@ -77,7 +77,9 @@ test("monthly income and variable expenses can be created, corrected, moved and 
   const user = await preparedAccount();
   try {
     await login(page, user);
-    await expect(page.getByTestId("month-available")).toHaveText("1.400,00 €");
+    await expect(
+      page.getByRole("main").getByTestId("month-available"),
+    ).toHaveText("1.400,00 €");
     await page.getByRole("link", { name: "Einnahme hinzufügen" }).click();
     await page.getByLabel("Bezeichnung", { exact: true }).fill("Nebenjob");
     await page.getByLabel("Betrag (€)").fill("200");
@@ -92,7 +94,9 @@ test("monthly income and variable expenses can be created, corrected, moved and 
     await page.getByLabel("Kategorie").selectOption("groceries");
     await save(page);
     await page.reload();
-    await expect(page.getByTestId("month-available")).toHaveText("1.639,01 €");
+    await expect(
+      page.getByRole("main").getByTestId("month-available"),
+    ).toHaveText("1.639,01 €");
     await expect(
       page.getByText("30.9.2026 · Lebensmittel", { exact: true }),
     ).toBeVisible();
@@ -113,13 +117,15 @@ test("monthly income and variable expenses can be created, corrected, moved and 
     await page.getByRole("link", { name: "Wocheneinkauf bearbeiten" }).click();
     await page.getByLabel("Datum", { exact: true }).fill("2026-10-01");
     await save(page, "2026-10");
-    await expect(page.getByTestId("month-available")).toHaveText(
-      "Noch unvollständig",
-    );
+    await expect(
+      page.getByRole("main").getByTestId("month-available"),
+    ).toHaveText("Noch unvollständig");
     await page.getByLabel("Monat auswählen").fill("2026-09");
     await page.getByRole("button", { name: "Monat anzeigen" }).click();
     await expect(page).toHaveURL("/account/money?month=2026-09");
-    await expect(page.getByTestId("month-available")).toHaveText("1.650,00 €");
+    await expect(
+      page.getByRole("main").getByTestId("month-available"),
+    ).toHaveText("1.650,00 €");
     await expect(
       page.getByRole("link", { name: "Wocheneinkauf bearbeiten" }),
     ).toHaveCount(0);
@@ -136,7 +142,9 @@ test("monthly income and variable expenses can be created, corrected, moved and 
     await page.getByLabel("Diesen Eintrag endgültig löschen").check();
     await page.getByRole("button", { name: "Jetzt löschen" }).click();
     await expect(page).toHaveURL("/account/money?month=2026-09");
-    await expect(page.getByTestId("month-available")).toHaveText("1.400,00 €");
+    await expect(
+      page.getByRole("main").getByTestId("month-available"),
+    ).toHaveText("1.400,00 €");
     await page.goto("/account/money?month=2026-10");
     await page.getByRole("link", { name: "Wocheneinkauf löschen" }).click();
     await page.getByLabel("Diesen Eintrag endgültig löschen").check();

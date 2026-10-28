@@ -63,6 +63,8 @@ pnpm test:auth
 
 Playwright benötigt beim ersten Setup einen Browserdownload; Linux-CI verwendet zusätzlich `--with-deps`. `--only-shell` lädt nur den für diese Headless-Tests benötigten Browser. Unter Windows kann bei Problemen mit `pnpm exec` der lokale Launcher direkt aufgerufen werden: `.\node_modules\.bin\playwright.CMD install --only-shell chromium`. Bei knappem Speicher oder begrenzten Ressourcen kann `pnpm test:e2e --workers=1` verwendet werden; alle Tests bleiben aktiv.
 
+Bei privaten Seiten können während des React-Streamings zusätzliche unsichtbare Inhaltsknoten außerhalb des sichtbaren Hauptbereichs bestehen. Anzeigeprüfungen mit `getByTestId` deshalb über `page.getByRole("main")` auf den dargestellten Inhalt begrenzen. Abwesenheits- und Datenschutzprüfungen behalten ihren globalen Suchbereich, damit auch versteckte unerlaubte Daten auffallen. Keine beliebige Auswahl mit `.first()` und keine Wiederholungsversuche verwenden, um mehrdeutige Treffer zu übergehen.
+
 Vitest prüft Konfigurationsvalidierung und zugängliche Navigation. Playwright prüft alle fünf Bereiche, direkte Routen, Farbschema-Persistenz, mobilen Überlauf, Tastaturzugang und 404 sowie die Kennzeichnung der Beispieldaten, Zielfortschritte, Dashboard-Links und den Wechsel zum Leerzustand. Berichte und Screenshots stehen lokal unter `playwright-report` bzw. `test-results` und werden nicht versioniert.
 
 `pnpm format` formatiert bearbeitbare Projektdateien. Die unverändert übernommene Produkt-README ist davon ausgenommen. `pnpm test:watch` startet den interaktiven Testmodus.
@@ -101,6 +103,8 @@ Die Integrationssuite prüft zusätzlich das vollständige Anwendungsschema auf 
 Die lokale Auth-Konfiguration verwendet bestätigte E-Mail-Adressen, sechsstellige Codes und sichere Passwortänderungen. Templates liegen unter `supabase/templates`; Supabase-Stop/Start aktiviert Änderungen bei erhaltenen Volumes. Codebestätigung und Wiederherstellung verwenden Server Actions mit festen Weiterleitungen. Der Proxy erneuert Sitzungen; Server Components und Server Actions verwenden getrennte Cookie-Adapter.
 
 ## Projektstruktur und Grenzen
+
+Der gemeinsame Proxy setzt eine durchgesetzte Content Security Policy mit einer neuen Nonce je Seitenanfrage. Auch die öffentliche Vorschau wird deshalb dynamisch gerendert; sie benötigt weiterhin keine Datenbank. `next dev` besitzt begrenzte Freigaben für lokale Entwicklungswerkzeuge, `pnpm build`/`pnpm start` verwenden die strengere Produktionsrichtlinie. Neue externe Browserressourcen brauchen eine gezielte Richtlinienprüfung. Tests und Architekturentscheidung: [CONTENT_SECURITY_POLICY_STATUS.md](CONTENT_SECURITY_POLICY_STATUS.md).
 
 Die Sparziel-Erklärung unter `/account/ai/goals/[id]` nutzt dieselbe optionale Providerkonfiguration wie die Monatserklärung und benötigt keine zusätzliche Migration. Einstieg über ein eigenes Sparziel; Datenvorschau, autorisierte Prognose, gemeinsame Anfragegrenzen und Prüfungen: [AI_GOAL_STATUS.md](AI_GOAL_STATUS.md). KI-Live-Tests sind auf Nutzerwunsch ausgesetzt. Automatische Tests verwenden ausschließlich Testantworten oder deaktivieren den Provider.
 

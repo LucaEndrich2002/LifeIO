@@ -53,7 +53,9 @@ test("empty goals can be filled and edited while Money preserves the earlier sav
     await page.getByLabel("Zielbetrag (€)").fill("1000");
     await saveGoal(page);
     const url = page.url();
-    await expect(page.getByTestId("goal-balance")).toHaveText("0,00 €");
+    await expect(page.getByRole("main").getByTestId("goal-balance")).toHaveText(
+      "0,00 €",
+    );
     await page
       .getByRole("link", { name: "Sparziel bearbeiten", exact: true })
       .click();
@@ -71,7 +73,9 @@ test("empty goals can be filled and edited while Money preserves the earlier sav
     await page.getByLabel("Zieldatum (optional)").fill("2027-06-30");
     await saveGoal(page);
     await page.reload();
-    await expect(page.getByTestId("goal-balance")).toHaveText("100,00 €");
+    await expect(page.getByRole("main").getByTestId("goal-balance")).toHaveText(
+      "100,00 €",
+    );
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
       "Große Reise",
     );
@@ -83,7 +87,9 @@ test("empty goals can be filled and edited while Money preserves the earlier sav
       page.getByText("Ab Oktober 2026: 200,00 € monatlich", { exact: true }),
     ).toBeVisible();
     await page.goto("/account/money?month=2026-09");
-    await expect(page.getByTestId("month-available")).toHaveText("1.800,00 €");
+    await expect(
+      page.getByRole("main").getByTestId("month-available"),
+    ).toHaveText("1.800,00 €");
     await expect(
       page.getByRole("link", { name: "Große Reise", exact: true }),
     ).toHaveAttribute("href", new URL(url).pathname);
@@ -99,7 +105,9 @@ test("empty goals can be filled and edited while Money preserves the earlier sav
     await page.getByLabel("Sparrate gültig ab").fill("2026-09");
     await saveGoal(page);
     await page.goto("/account/money?month=2026-09");
-    await expect(page.getByTestId("month-available")).toHaveText("1.750,00 €");
+    await expect(
+      page.getByRole("main").getByTestId("month-available"),
+    ).toHaveText("1.750,00 €");
   } finally {
     await removeFixture(user.id);
   }
@@ -112,8 +120,12 @@ test("real deposits can exceed the target and are cancelled only after confirmat
   try {
     await login(page, user);
     const url = await openOriginal(page);
-    await expect(page.getByTestId("goal-balance")).toHaveText("3.500,00 €");
-    await expect(page.getByTestId("goal-progress")).toHaveText("35 % erreicht");
+    await expect(page.getByRole("main").getByTestId("goal-balance")).toHaveText(
+      "3.500,00 €",
+    );
+    await expect(
+      page.getByRole("main").getByTestId("goal-progress"),
+    ).toHaveText("35 % erreicht");
     await page
       .getByRole("link", { name: "Einzahlung erfassen", exact: true })
       .click();
@@ -134,20 +146,22 @@ test("real deposits can exceed the target and are cancelled only after confirmat
       .click();
     await expect(page).toHaveURL(url);
     await page.reload();
-    await expect(page.getByTestId("goal-balance")).toHaveText("10.500,01 €");
-    await expect(page.getByTestId("goal-progress")).toHaveText(
-      "105 % erreicht",
+    await expect(page.getByRole("main").getByTestId("goal-balance")).toHaveText(
+      "10.500,01 €",
     );
+    await expect(
+      page.getByRole("main").getByTestId("goal-progress"),
+    ).toHaveText("105 % erreicht");
     await expect(page.getByRole("progressbar")).toHaveAttribute("value", "100");
     await expect(
       page.getByText("Ziel erreicht", { exact: true }),
     ).toBeVisible();
-    await expect(page.getByTestId("goal-forecast")).toContainText(
-      "Bereits angespart",
-    );
-    await expect(page.getByTestId("goal-forecast")).not.toContainText(
-      "Voraussichtlich",
-    );
+    await expect(
+      page.getByRole("main").getByTestId("goal-forecast"),
+    ).toContainText("Bereits angespart");
+    await expect(
+      page.getByRole("main").getByTestId("goal-forecast"),
+    ).not.toContainText("Voraussichtlich");
     await page.screenshot({
       path: testInfo.outputPath("goal-light.png"),
       fullPage: true,
@@ -172,7 +186,9 @@ test("real deposits can exceed the target and are cancelled only after confirmat
       "Bitte bestätige",
     );
     await page.getByRole("link", { name: "Abbrechen und zurück" }).click();
-    await expect(page.getByTestId("goal-balance")).toHaveText("10.500,01 €");
+    await expect(page.getByRole("main").getByTestId("goal-balance")).toHaveText(
+      "10.500,01 €",
+    );
     await page
       .getByRole("link", { name: /^Einzahlung vom .* stornieren$/ })
       .click();
@@ -183,15 +199,19 @@ test("real deposits can exceed the target and are cancelled only after confirmat
       .getByRole("button", { name: "Stornierung bestätigen", exact: true })
       .click();
     await expect(page).toHaveURL(url);
-    await expect(page.getByTestId("goal-balance")).toHaveText("3.500,00 €");
-    await expect(page.getByTestId("goal-forecast")).toContainText(
-      "Noch 13 geplante Beiträge.",
+    await expect(page.getByRole("main").getByTestId("goal-balance")).toHaveText(
+      "3.500,00 €",
     );
+    await expect(
+      page.getByRole("main").getByTestId("goal-forecast"),
+    ).toContainText("Noch 13 geplante Beiträge.");
     await expect(
       page.getByText("Storniert · zählt nicht zum Sparstand", { exact: true }),
     ).toBeVisible();
     await page.goto("/account/money?month=2026-09");
-    await expect(page.getByTestId("month-available")).toHaveText("1.400,00 €");
+    await expect(
+      page.getByRole("main").getByTestId("month-available"),
+    ).toHaveText("1.400,00 €");
   } finally {
     await removeFixture(user.id);
   }
@@ -214,7 +234,7 @@ test("forecast explains future contributions, flags deadlines and follows saved 
       }).format(date);
     await login(page, user);
     await openOriginal(page);
-    const forecast = page.getByTestId("goal-forecast");
+    const forecast = page.getByRole("main").getByTestId("goal-forecast");
     await expect(forecast).toContainText("Noch offen: 6.500,00 €");
     await expect(forecast).toContainText("Noch 13 geplante Beiträge.");
     await expect(forecast).toContainText(
@@ -233,9 +253,9 @@ test("forecast explains future contributions, flags deadlines and follows saved 
       .fill(deadline.toISOString().slice(0, 10));
     await saveGoal(page);
     await page.reload();
-    await expect(page.getByTestId("goal-deadline")).toContainText(
-      "erst nach deinem Zieldatum",
-    );
+    await expect(
+      page.getByRole("main").getByTestId("goal-deadline"),
+    ).toContainText("erst nach deinem Zieldatum");
     const explanation = page
       .locator("summary")
       .filter({ hasText: "So wird die Prognose berechnet" });
@@ -287,9 +307,9 @@ test("forecast explains future contributions, flags deadlines and follows saved 
       "noch kein Erreichungsdatum berechenbar",
     );
     await expect(forecast).not.toContainText("Voraussichtlich");
-    await expect(page.getByTestId("goal-deadline")).toContainText(
-      "nicht bestätigen",
-    );
+    await expect(
+      page.getByRole("main").getByTestId("goal-deadline"),
+    ).toContainText("nicht bestätigen");
 
     await page
       .getByRole("link", { name: "Sparziel bearbeiten", exact: true })
@@ -307,10 +327,12 @@ test("forecast explains future contributions, flags deadlines and follows saved 
     await expect(forecast).toContainText(
       `Nächster angenommener Beitrag: ${label(futureEnd(2))}`,
     );
-    await expect(page.getByTestId("goal-deadline")).toContainText(
-      "bis zu deinem Zieldatum",
+    await expect(
+      page.getByRole("main").getByTestId("goal-deadline"),
+    ).toContainText("bis zu deinem Zieldatum");
+    await expect(page.getByRole("main").getByTestId("goal-balance")).toHaveText(
+      "3.500,00 €",
     );
-    await expect(page.getByTestId("goal-balance")).toHaveText("3.500,00 €");
   } finally {
     await removeFixture(user.id);
   }
@@ -351,7 +373,9 @@ test("stale goal edits preserve inputs, and foreign goal pages and contributions
       "Mein neuer Name",
     );
     await page.getByRole("link", { name: "Aktuellen Stand öffnen" }).click();
-    await expect(page.getByTestId("goal-balance")).toHaveText("3.600,00 €");
+    await expect(page.getByRole("main").getByTestId("goal-balance")).toHaveText(
+      "3.600,00 €",
+    );
     const foreignId = (await foreign.client.from("goals").select("id").single())
       .data!.id;
     await page.goto(`/account/goals/${foreignId}?edit=1`);

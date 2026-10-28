@@ -73,9 +73,9 @@ test("milestones can be edited, completed, reopened and removed without changing
     });
     await complete.focus();
     await page.keyboard.press("Enter");
-    await expect(page.getByTestId("milestone-count")).toHaveText(
-      "1 von 2 Meilensteinen erledigt",
-    );
+    await expect(
+      page.getByRole("main").getByTestId("milestone-count"),
+    ).toHaveText("1 von 2 Meilensteinen erledigt");
     await page.reload();
     await expect(section.getByRole("progressbar")).toHaveAttribute(
       "value",
@@ -86,13 +86,15 @@ test("milestones can be edited, completed, reopened and removed without changing
       .click();
     await page.getByLabel("Name des Meilensteins").fill("Ziel festlegen");
     await save(page);
-    await expect(page.getByTestId("milestone-count")).toHaveText(
-      "1 von 2 Meilensteinen erledigt",
+    await expect(
+      page.getByRole("main").getByTestId("milestone-count"),
+    ).toHaveText("1 von 2 Meilensteinen erledigt");
+    await expect(page.getByRole("main").getByTestId("goal-balance")).toHaveText(
+      "3.500,00 €",
     );
-    await expect(page.getByTestId("goal-balance")).toHaveText("3.500,00 €");
-    await expect(page.getByTestId("goal-forecast")).toContainText(
-      "Noch 13 geplante Beiträge.",
-    );
+    await expect(
+      page.getByRole("main").getByTestId("goal-forecast"),
+    ).toContainText("Noch 13 geplante Beiträge.");
     expect(
       await page.evaluate(
         () => document.documentElement.scrollWidth <= window.innerWidth,
@@ -111,9 +113,9 @@ test("milestones can be edited, completed, reopened and removed without changing
         exact: true,
       })
       .click();
-    await expect(page.getByTestId("milestone-count")).toHaveText(
-      "0 von 2 Meilensteinen erledigt",
-    );
+    await expect(
+      page.getByRole("main").getByTestId("milestone-count"),
+    ).toHaveText("0 von 2 Meilensteinen erledigt");
     await page
       .getByRole("link", {
         name: "Angebote vergleichen entfernen",
@@ -125,9 +127,9 @@ test("milestones can be edited, completed, reopened and removed without changing
       "Bitte bestätige",
     );
     await page.getByRole("link", { name: "Abbrechen und zurück" }).click();
-    await expect(page.getByTestId("milestone-count")).toHaveText(
-      "0 von 2 Meilensteinen erledigt",
-    );
+    await expect(
+      page.getByRole("main").getByTestId("milestone-count"),
+    ).toHaveText("0 von 2 Meilensteinen erledigt");
     for (const title of ["Angebote vergleichen", "Ziel festlegen"]) {
       await page
         .getByRole("link", { name: `${title} entfernen`, exact: true })
@@ -140,7 +142,9 @@ test("milestones can be edited, completed, reopened and removed without changing
       "Du hast noch keine Meilensteine angelegt.",
     );
     await expect(section.getByRole("progressbar")).toHaveCount(0);
-    await expect(page.getByTestId("goal-balance")).toHaveText("3.500,00 €");
+    await expect(page.getByRole("main").getByTestId("goal-balance")).toHaveText(
+      "3.500,00 €",
+    );
   } finally {
     await removeFixture(user.id);
   }
@@ -169,9 +173,9 @@ test("stale milestone forms preserve names and foreign goals and entries stay pr
         exact: true,
       })
       .click();
-    await expect(other.getByTestId("milestone-count")).toHaveText(
-      "1 von 1 Meilensteinen erledigt",
-    );
+    await expect(
+      other.getByRole("main").getByTestId("milestone-count"),
+    ).toHaveText("1 von 1 Meilensteinen erledigt");
     await other.close();
     await page
       .getByLabel("Name des Meilensteins")
@@ -186,9 +190,9 @@ test("stale milestone forms preserve names and foreign goals and entries stay pr
       "Meine erhaltene Eingabe",
     );
     await page.getByRole("link", { name: "Aktuellen Stand öffnen" }).click();
-    await expect(page.getByTestId("milestone-count")).toHaveText(
-      "1 von 1 Meilensteinen erledigt",
-    );
+    await expect(
+      page.getByRole("main").getByTestId("milestone-count"),
+    ).toHaveText("1 von 1 Meilensteinen erledigt");
     for (const path of [
       `/account/goals/${foreignGoal}/milestones/new`,
       `/account/goals/${goal}/milestones/${foreignId}`,
@@ -222,9 +226,9 @@ test("milestone progress includes later pages and status changes keep the select
       name: "Meilensteine Seiten",
     });
     await navigation.getByRole("link", { name: "Nächste Seite" }).click();
-    await expect(page.getByTestId("milestone-count")).toHaveText(
-      "0 von 26 Meilensteinen erledigt",
-    );
+    await expect(
+      page.getByRole("main").getByTestId("milestone-count"),
+    ).toHaveText("0 von 26 Meilensteinen erledigt");
     await page
       .getByRole("button", {
         name: "Als erledigt markieren: Schritt 1",
@@ -232,18 +236,18 @@ test("milestone progress includes later pages and status changes keep the select
       })
       .click();
     await expect(page).toHaveURL(/milestone_page=1#milestones$/);
-    await expect(page.getByTestId("milestone-count")).toHaveText(
-      "1 von 26 Meilensteinen erledigt",
-    );
+    await expect(
+      page.getByRole("main").getByTestId("milestone-count"),
+    ).toHaveText("1 von 26 Meilensteinen erledigt");
     await page
       .getByRole("link", { name: "Schritt 1 entfernen", exact: true })
       .click();
     await page.getByLabel("Diesen Meilenstein entfernen").check();
     await page.getByRole("button", { name: "Entfernen bestätigen" }).click();
     await expect(page).toHaveURL(/milestone_page=1#milestones$/);
-    await expect(page.getByTestId("milestone-count")).toHaveText(
-      "0 von 25 Meilensteinen erledigt",
-    );
+    await expect(
+      page.getByRole("main").getByTestId("milestone-count"),
+    ).toHaveText("0 von 25 Meilensteinen erledigt");
     await expect(
       page.getByText("Auf dieser Seite gibt es keine Meilensteine."),
     ).toBeVisible();

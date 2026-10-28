@@ -65,7 +65,7 @@ export function parseSupabasePublicEnv(input: Record<string, unknown>) {
 
 export function getSupabasePublicEnv() {
   // Direct property references let Next.js inline only these two public values.
-  // Validate lazily: the static shell does not require Supabase credentials.
+  // Validate lazily: the public preview does not require Supabase credentials.
   return parseSupabasePublicEnv({
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:

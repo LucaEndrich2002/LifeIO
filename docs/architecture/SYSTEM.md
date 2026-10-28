@@ -1,14 +1,14 @@
 # LifeOS – Systemarchitektur
 
-Stand: 12.10.2026, einschließlich In-App-Benachrichtigungen. Produktumfang: [PRD](../product/PRD.md).
+Stand: 27.10.2026, einschließlich Content Security Policy. Produktumfang: [PRD](../product/PRD.md).
 
 ## Aktuell implementiert
 
-Eine Next.js-App mit App Router, React und TypeScript Strict Mode. Die fünf öffentlichen Vorschauseiten sind statisch und verwenden keine Nutzerdaten. Home zeigt einen ausdrücklich gekennzeichneten Dashboard-Prototyp mit fiktiven Beispieldaten und einer umschaltbaren Ansicht ohne Einträge. Tailwind und lokale shadcn/ui-Bausteine bilden die Oberfläche. Die Shell funktioniert ohne Konto, Datenbank oder KI-Schlüssel.
+Eine Next.js-App mit App Router, React und TypeScript Strict Mode. Die fünf öffentlichen Vorschauseiten verwenden keine Nutzerdaten. Home zeigt einen ausdrücklich gekennzeichneten Dashboard-Prototyp mit fiktiven Beispieldaten und einer umschaltbaren Ansicht ohne Einträge. Tailwind und lokale shadcn/ui-Bausteine bilden die Oberfläche. Die Shell funktioniert ohne Konto, Datenbank oder KI-Schlüssel. Seit Einführung der Nonce-basierten Content Security Policy wird auch die Vorschau pro Anfrage gerendert; ihre HTML-Antworten sind nicht mehr statisch zwischengespeichert.
 
 Die Dashboard-Inhalte bleiben Server Components. Nur `PreviewSwitcher` ist für die Umschaltung interaktiv; er erhält die beiden serverseitig gerenderten Ansichten als React-Nodes. Die Auswahl lebt ausschließlich im Komponentenstatus, ohne Speicherung oder Netzwerkaufruf. Beispielbeträge sind fertige Anzeigetexte, Fortschrittswerte feste Prozentangaben; es gibt hier keine Finanzberechnung oder persistierten Geldwerte. Der Beispieltag ist ausdrücklich der 19.09.2026, kein dynamisch ermitteltes persönliches „Heute“.
 
-`/auth/[mode]` bietet Anmeldung, Registrierung, Codebestätigung und Passwortwiederherstellung. Der gesamte `/account`-Bereich verlangt eine verifizierte Identität. Neben Profil und Passwort gibt es `/account/onboarding/[step]` für den finanziellen Einstieg und `/account/overview` für dessen persönliche Startübersicht. Die öffentliche Vorschau liegt in der Routengruppe `(preview)` und bleibt statisch; Konto und Auth verwenden ein eigenes Layout. Details: [AUTH_PROFILE_STATUS.md](../AUTH_PROFILE_STATUS.md) und [FINANCIAL_ONBOARDING_STATUS.md](../FINANCIAL_ONBOARDING_STATUS.md).
+`/auth/[mode]` bietet Anmeldung, Registrierung, Codebestätigung und Passwortwiederherstellung. Der gesamte `/account`-Bereich verlangt eine verifizierte Identität. Neben Profil und Passwort gibt es `/account/onboarding/[step]` für den finanziellen Einstieg und `/account/overview` für dessen persönliche Startübersicht. Die öffentliche Vorschau liegt in der Routengruppe `(preview)`; Konto und Auth verwenden ein eigenes Layout. Details: [AUTH_PROFILE_STATUS.md](../AUTH_PROFILE_STATUS.md) und [FINANCIAL_ONBOARDING_STATUS.md](../FINANCIAL_ONBOARDING_STATUS.md).
 
 ## Modularer Monolith
 
@@ -38,7 +38,7 @@ Die Zielansicht berechnet ihre rein lesende Prognose mit `src/domain/goal-foreca
 
 Die Fixkostenverwaltung unter `/account/money/fixed` und Planformulare für `fixed`/`budget` ergänzen Money. `src/domain/plans.ts` enthält reine Validierung und Budgetarithmetik, `src/server/plan-actions.ts` die autorisierten Mutationen. Die Tabellen und RPCs sind in [FIXED_COSTS_BUDGET_STATUS.md](../FIXED_COSTS_BUDGET_STATUS.md) beschrieben. Die übrigen Modulgrenzen bleiben gleich.
 
-`/account/money` ergänzt die laufende Monatsübersicht; `/account/money/[kind]/[id]` enthält Erfassung, Bearbeitung und Löschbestätigung. Die Übersicht nach dem Onboarding verwendet nun diese aktuelle Datenbasis. `src/features/money`, `src/domain/transactions.ts` und die Money-Servermodule folgen denselben Schichtgrenzen. Die öffentliche Money-Seite ist ein statischer Einstieg in den privaten Bereich. Umfang und Datenbank-RPCs stehen in [MONEY_TRANSACTIONS_STATUS.md](../MONEY_TRANSACTIONS_STATUS.md).
+`/account/money` ergänzt die laufende Monatsübersicht; `/account/money/[kind]/[id]` enthält Erfassung, Bearbeitung und Löschbestätigung. Die Übersicht nach dem Onboarding verwendet nun diese aktuelle Datenbasis. `src/features/money`, `src/domain/transactions.ts` und die Money-Servermodule folgen denselben Schichtgrenzen. Die öffentliche Money-Seite ist ein Einstieg ohne Nutzerdaten in den privaten Bereich. Umfang und Datenbank-RPCs stehen in [MONEY_TRANSACTIONS_STATUS.md](../MONEY_TRANSACTIONS_STATUS.md).
 
 ```text
 UI / Next.js-Routen
@@ -72,7 +72,7 @@ Eine Route ruft einen konkreten Anwendungsfall auf. Dieser validiert Eingaben un
 - Die schreibfähige Serverfabrik wird in Server Actions verwendet. Für Server Components gibt es einen separaten Read-Client ohne Cookie-Setter. Fehler beim Cookie-Schreiben werden nicht verschluckt.
 - Der Proxy erneuert Sitzungen über `getClaims()` und überträgt die aktualisierten Cookies in Anfrage und Antwort. `requireIdentity()` ruft für geschützte Seiten und Profilmutationen zusätzlich `getUser()` auf. Ein aus Cookies gelesenes `getSession()` wird nicht als Autorisierungsnachweis verwendet.
 - Jede Fachoperation prüft Identität und Eigentümerschaft serverseitig. RLS ist eine zusätzliche Datenbankgrenze; die Clientfabriken sind kein Ersatz dafür.
-- Personalisierte Antworten dürfen nicht in einen nutzerübergreifenden Cache gelangen. Der heute statische Home-Einstieg ist davon klar getrennt.
+- Personalisierte Antworten dürfen nicht in einen nutzerübergreifenden Cache gelangen. Die öffentliche Home-Vorschau ohne Nutzerdaten ist davon klar getrennt.
 - Die lokale API-Konfiguration deaktiviert die automatische Freigabe neuer Tabellen. Jede künftige Migration benötigt explizite Grants, aktivierte RLS und passende Policies; diese müssen auch in Cloud-Projekten eingerichtet werden.
 
 ## Umgebungsvariablen
@@ -120,7 +120,9 @@ Vitest/RTL prüfen Konfiguration, Auth-/Profilvalidierung und Navigation. Die se
 
 GitHub Actions installiert aus dem Lockfile und führt Formatterprüfung, Lint, Typecheck, Tests, Build und Browser-Smoke-Tests ohne Cloud-Secrets aus. Der Workflow läuft bei Push, Pull Request oder manueller Auslösung. Browserberichte und Screenshots werden als Artefakt für sieben Tage aufbewahrt. Der Workflow benötigt nur `contents: read` und führt keine Deployments aus. Hosting bleibt gemäß README für später Vercel plus Supabase Cloud.
 
-Vor Beta fehlen unter anderem umfassende Auth-/RLS-Tests, Datenflüsse und Löschkonzept, Backup-/Restore-Prüfung, Rate Limits, eine zur Auth-Architektur passende CSP und produktive Secret-Verwaltung. Die jetzigen Basis-HTTP-Header ersetzen diese Arbeiten nicht.
+Der gemeinsame Proxy erzeugt pro Anfrage eine zufällige Nonce und eine durchgesetzte Content Security Policy. Next.js liest die Nonce aus dem weitergereichten Header; der Theme-Provider verwendet dieselbe Freigabe für seinen Startcode und Übergangsstile. Alle HTML-Seiten werden dynamisch mit `private, no-store` ausgeliefert. Auth-Erneuerung bleibt auf `/auth` und `/account` begrenzt; RSC-Navigation und Sitzungserneuerung behalten den Schutz. Framework-Assets behalten ihr eigenes Caching. Umfang und Grenzen: [CONTENT_SECURITY_POLICY_STATUS.md](../CONTENT_SECURITY_POLICY_STATUS.md).
+
+Vor Beta fehlen weiterhin die gesamte Auth-/RLS-Abnahme, Datenflüsse und Löschkonzept, Backup-/Restore-Prüfung, produktive Anfragegrenzen und Secret-Verwaltung. CSP und Basis-HTTP-Header ersetzen diese Arbeiten nicht; Hosting muss den Schutz erneut prüfen.
 
 ## Technische Referenzen
 

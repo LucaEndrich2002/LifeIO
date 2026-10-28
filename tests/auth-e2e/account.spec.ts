@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { documentPolicy, observePolicyViolations } from "../csp";
 import {
   createFixture,
   fixtureCredentials,
@@ -12,6 +13,7 @@ test("a stale session is refreshed without losing the signed-in account", async 
   context,
 }) => {
   const fixture = await createFixture();
+  const violations = await observePolicyViolations(page);
   try {
     await page.goto("/auth/login");
     await page.getByLabel("E-Mail-Adresse").fill(fixture.email);
@@ -46,6 +48,7 @@ test("a stale session is refreshed without losing the signed-in account", async 
       })),
     );
     const response = await page.goto("/account");
+    documentPolicy(response);
     await expect(page).toHaveURL("/account");
     await expect(page.getByLabel("Anzeigename")).toBeVisible();
     expect(response?.headers()["cache-control"]).toContain("no-store");
@@ -66,6 +69,7 @@ test("a stale session is refreshed without losing the signed-in account", async 
     );
     await page.reload();
     await expect(page).toHaveURL("/account");
+    expect(violations).toEqual([]);
   } finally {
     await removeFixture(fixture.id);
   }

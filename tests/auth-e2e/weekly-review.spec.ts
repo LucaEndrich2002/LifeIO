@@ -51,7 +51,9 @@ test("review is explicitly created, persists on reopen and refreshes the same we
     await expect(
       page.getByRole("region", { name: "Datenstand", exact: true }),
     ).toContainText("Gespeicherte Fassung 1");
-    await expect(page.getByTestId("review-week-spent")).toHaveText("125,00 €");
+    await expect(
+      page.getByRole("main").getByTestId("review-week-spent"),
+    ).toHaveText("125,00 €");
     await expect(page.getByRole("main")).toContainText("125,00 € weniger");
     await expect(page.getByRole("main")).toContainText("Termin der Folgewoche");
     await expect(page.getByRole("main")).toContainText(
@@ -74,13 +76,17 @@ test("review is explicitly created, persists on reopen and refreshes the same we
     const first = await readReview(user);
     await reviewExpense(user, "2026-10-01", 500);
     await page.reload();
-    await expect(page.getByTestId("review-week-spent")).toHaveText("125,00 €");
+    await expect(
+      page.getByRole("main").getByTestId("review-week-spent"),
+    ).toHaveText("125,00 €");
     expect(await readReview(user)).toEqual(first);
     await page.getByRole("button", { name: "Rückblick aktualisieren" }).click();
     await expect(
       page.getByRole("region", { name: "Datenstand", exact: true }),
     ).toContainText("Gespeicherte Fassung 2");
-    await expect(page.getByTestId("review-week-spent")).toHaveText("130,00 €");
+    await expect(
+      page.getByRole("main").getByTestId("review-week-spent"),
+    ).toHaveText("130,00 €");
     expect(
       (await user.client.from("weekly_reviews").select("week_start")).data,
     ).toHaveLength(1);
@@ -90,6 +96,7 @@ test("review is explicitly created, persists on reopen and refreshes the same we
     await expect(page).toHaveURL(`/account/plan/${task}`);
     await page.goto(`/account/review?week=${reviewWeek}`);
     await page
+      .getByRole("main")
       .getByText("Zuletzt gespeicherte Wochen", { exact: true })
       .click();
     await expect(
@@ -129,7 +136,9 @@ test("stale refresh keeps the latest review and offers a safe reload", async ({
     await expect(
       page.getByRole("region", { name: "Datenstand", exact: true }),
     ).toContainText("Fassung 2");
-    await expect(page.getByTestId("review-week-spent")).toHaveText("1,00 €");
+    await expect(
+      page.getByRole("main").getByTestId("review-week-spent"),
+    ).toHaveText("1,00 €");
   } finally {
     await removeFixture(user.id);
   }
@@ -163,9 +172,9 @@ test("empty, unfinished and foreign weeks reveal no invented or foreign data", a
     await expect(page.getByRole("main")).toContainText(
       "Noch keine ausreichende Datengrundlage",
     );
-    await expect(page.getByTestId("review-week-spent")).toHaveText(
-      "Keine erfasst",
-    );
+    await expect(
+      page.getByRole("main").getByTestId("review-week-spent"),
+    ).toHaveText("Keine erfasst");
     await page.screenshot({
       path: testInfo.outputPath("weekly-review-empty.png"),
       fullPage: true,

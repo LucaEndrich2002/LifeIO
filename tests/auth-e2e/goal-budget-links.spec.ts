@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { expect, test, type Page } from "@playwright/test";
+import { observePolicyViolations } from "../csp";
 import { createPlanFixture } from "../supabase/plan-fixtures";
 import { removeFixture } from "../supabase/fixtures";
 import {
@@ -38,6 +39,7 @@ test("budgets link both goal kinds, navigate both ways and unlink only after con
   page,
 }, testInfo) => {
   const user = await createPlanFixture();
+  const violations = await observePolicyViolations(page);
   try {
     const goal = await financialLinkGoal(user);
     const personal = await createLinkGoal(user);
@@ -67,7 +69,9 @@ test("budgets link both goal kinds, navigate both ways and unlink only after con
     });
     await expect(section).toContainText("500,00 €");
     await expect(section).toContainText("reserviert kein Geld");
-    await expect(page.getByTestId("goal-balance")).toHaveText("3.500,00 €");
+    await expect(page.getByRole("main").getByTestId("goal-balance")).toHaveText(
+      "3.500,00 €",
+    );
     await page.reload();
     await expect(
       section.getByRole("heading", { name: "Alltagsbudget" }),
@@ -86,9 +90,9 @@ test("budgets link both goal kinds, navigate both ways and unlink only after con
     });
     await section.getByRole("link", { name: /Alltagsbudget.*öffnen/ }).click();
     await expect(page).toHaveURL(/\/account\/money\?month=2026-09#budget$/);
-    await expect(page.getByTestId("budget-remaining")).toHaveText(
-      "500,00 € verbleibend",
-    );
+    await expect(
+      page.getByRole("main").getByTestId("budget-remaining"),
+    ).toHaveText("500,00 € verbleibend");
     await page.getByRole("link", { name: "Verknüpfte Ziele ansehen" }).click();
     await expect(page).toHaveURL(`/account/money/budget/${budget}/goals`);
     await page
@@ -153,7 +157,10 @@ test("budgets link both goal kinds, navigate both ways and unlink only after con
     await expect(page).toHaveURL(/\/account\/money\?month=2026-09$/);
     await page.goto(`/account/goals/${goal}`);
     await expect(section).toContainText("Du hast noch kein Monatsbudget");
-    await expect(page.getByTestId("goal-balance")).toHaveText("3.500,00 €");
+    await expect(page.getByRole("main").getByTestId("goal-balance")).toHaveText(
+      "3.500,00 €",
+    );
+    expect(violations).toEqual([]);
   } finally {
     await removeFixture(user.id);
   }

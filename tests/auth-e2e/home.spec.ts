@@ -64,7 +64,9 @@ test("home shows real day, money and goal data, explains attention and links to 
     await page.getByLabel("Monat auswählen").fill("2026-09");
     await page.getByRole("button", { name: "Monat anzeigen" }).focus();
     await page.keyboard.press("Enter");
-    await expect(page.getByTestId("home-available")).toHaveText("800,00 €");
+    await expect(
+      page.getByRole("main").getByTestId("home-available"),
+    ).toHaveText("800,00 €");
     const today = page.getByRole("region", { name: "Heute", exact: true });
     await expect(today).toContainText("1 offene Aufgabe für heute");
     await expect(today).toContainText("1 Termin heute");
@@ -96,7 +98,9 @@ test("home shows real day, money and goal data, explains attention and links to 
     });
     await page.getByRole("link", { name: "Monatsdetails in Money" }).click();
     await expect(page).toHaveURL("/account/money?month=2026-09");
-    await expect(page.getByTestId("month-available")).toHaveText("800,00 €");
+    await expect(
+      page.getByRole("main").getByTestId("month-available"),
+    ).toHaveText("800,00 €");
     await page.goto("/account/home?month=2026-09");
     await today
       .getByRole("link", { name: "Reise planen", exact: true })
@@ -111,9 +115,9 @@ test("home shows real day, money and goal data, explains attention and links to 
     await expect(today).toContainText("0 offene Aufgaben für heute");
     await page.getByLabel("Monat auswählen").fill("2026-10");
     await page.getByRole("button", { name: "Monat anzeigen" }).click();
-    await expect(page.getByTestId("home-available")).toHaveText(
-      "Noch unvollständig",
-    );
+    await expect(
+      page.getByRole("main").getByTestId("home-available"),
+    ).toHaveText("Noch unvollständig");
     await expect(today).toContainText("Beratung");
     await expect(
       page.getByRole("region", { name: "Ein Blick lohnt sich" }),
@@ -170,9 +174,9 @@ test("empty and private home states never invent values or expose another accoun
     await expect(page).toHaveURL("/auth/login");
     await login(page, user);
     await page.goto(`/account/home?month=2026-09&user_id=${foreign.id}`);
-    await expect(page.getByTestId("home-available")).toHaveText(
-      "Noch unvollständig",
-    );
+    await expect(
+      page.getByRole("main").getByTestId("home-available"),
+    ).toHaveText("Noch unvollständig");
     await expect(page.getByRole("main")).toContainText("0 Ziele");
     await expect(page.getByRole("main")).not.toContainText("Geheimes Ziel");
     await expect(page.getByRole("main")).not.toContainText("Geheime Aufgabe");
