@@ -63,6 +63,8 @@ pnpm test:auth
 
 Playwright benötigt beim ersten Setup einen Browserdownload; Linux-CI verwendet zusätzlich `--with-deps`. `--only-shell` lädt nur den für diese Headless-Tests benötigten Browser. Unter Windows kann bei Problemen mit `pnpm exec` der lokale Launcher direkt aufgerufen werden: `.\node_modules\.bin\playwright.CMD install --only-shell chromium`. Bei knappem Speicher oder begrenzten Ressourcen kann `pnpm test:e2e --workers=1` verwendet werden; alle Tests bleiben aktiv.
 
+Bei privaten Seiten können während des React-Streamings zusätzliche unsichtbare Inhaltsknoten außerhalb des sichtbaren Hauptbereichs bestehen. Anzeigeprüfungen mit `getByTestId` deshalb über `page.getByRole("main")` auf den dargestellten Inhalt begrenzen. Abwesenheits- und Datenschutzprüfungen behalten ihren globalen Suchbereich, damit auch versteckte unerlaubte Daten auffallen. Keine beliebige Auswahl mit `.first()` und keine Wiederholungsversuche verwenden, um mehrdeutige Treffer zu übergehen.
+
 Vitest prüft Konfigurationsvalidierung und zugängliche Navigation. Playwright prüft alle fünf Bereiche, direkte Routen, Farbschema-Persistenz, mobilen Überlauf, Tastaturzugang und 404 sowie die Kennzeichnung der Beispieldaten, Zielfortschritte, Dashboard-Links und den Wechsel zum Leerzustand. Berichte und Screenshots stehen lokal unter `playwright-report` bzw. `test-results` und werden nicht versioniert.
 
 `pnpm format` formatiert bearbeitbare Projektdateien. Die unverändert übernommene Produkt-README ist davon ausgenommen. `pnpm test:watch` startet den interaktiven Testmodus.

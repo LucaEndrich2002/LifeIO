@@ -36,7 +36,9 @@ test("fixed costs preserve earlier amounts and include a confirmed final month",
     ).toHaveAttribute("aria-invalid", "true");
     await page.getByLabel("Letzter gültiger Monat (optional)").fill("2026-11");
     await save(page, "Fixkosten speichern", "2026-09");
-    await expect(page.getByTestId("month-available")).toHaveText("1.350,00 €");
+    await expect(
+      page.getByRole("main").getByTestId("month-available"),
+    ).toHaveText("1.350,00 €");
     await page.getByRole("link", { name: "Miete ändern", exact: true }).click();
     await page.getByLabel("Monatlicher Betrag (€)").fill("950");
     await page.getByLabel("Änderung gültig ab").fill("2026-09");
@@ -48,7 +50,9 @@ test("fixed costs preserve earlier amounts and include a confirmed final month",
     await page.getByLabel("Änderung gültig ab").fill("2026-10");
     await save(page, "Fixkosten speichern", "2026-10");
     await page.goto("/account/money?month=2026-09");
-    await expect(page.getByTestId("month-available")).toHaveText("1.350,00 €");
+    await expect(
+      page.getByRole("main").getByTestId("month-available"),
+    ).toHaveText("1.350,00 €");
     await page.getByRole("link", { name: "Miete Verlauf öffnen" }).click();
     await expect(
       page.getByRole("heading", { name: "Früherer Fixkostenstand" }),
@@ -72,7 +76,9 @@ test("fixed costs preserve earlier amounts and include a confirmed final month",
     );
     await page.getByLabel("Fixkosten nach dem gewählten Monat beenden").check();
     await save(page, "Fixkosten beenden", "2026-09");
-    await expect(page.getByTestId("month-available")).toHaveText("1.350,00 €");
+    await expect(
+      page.getByRole("main").getByTestId("month-available"),
+    ).toHaveText("1.350,00 €");
     await page.goto("/account/money?month=2026-10");
     await expect(
       page.getByRole("link", { name: "Internet ändern", exact: true }),
@@ -121,11 +127,15 @@ test("a monthly budget tracks 90 percent, overspending and confirmed removal wit
     );
     await page.getByLabel("Monatslimit (€)").fill("500");
     await save(page, "Budget speichern", "2026-09");
-    await expect(page.getByTestId("budget-usage")).toHaveText("90 % genutzt");
-    await expect(page.getByTestId("budget-remaining")).toHaveText(
-      "50,00 € verbleibend",
+    await expect(page.getByRole("main").getByTestId("budget-usage")).toHaveText(
+      "90 % genutzt",
     );
-    await expect(page.getByTestId("month-available")).toHaveText("950,00 €");
+    await expect(
+      page.getByRole("main").getByTestId("budget-remaining"),
+    ).toHaveText("50,00 € verbleibend");
+    await expect(
+      page.getByRole("main").getByTestId("month-available"),
+    ).toHaveText("950,00 €");
     await page.screenshot({
       path: testInfo.outputPath("budget-light.png"),
       fullPage: true,
@@ -137,13 +147,15 @@ test("a monthly budget tracks 90 percent, overspending and confirmed removal wit
     );
     await page.getByLabel("Monatslimit (€)").fill("400");
     await save(page, "Budget speichern", "2026-09");
-    await expect(page.getByTestId("budget-remaining")).toHaveText(
-      "−50,00 € verbleibend",
-    );
+    await expect(
+      page.getByRole("main").getByTestId("budget-remaining"),
+    ).toHaveText("−50,00 € verbleibend");
     await expect(
       page.getByText("Budget überschritten", { exact: true }),
     ).toBeVisible();
-    await expect(page.getByTestId("month-available")).toHaveText("950,00 €");
+    await expect(
+      page.getByRole("main").getByTestId("month-available"),
+    ).toHaveText("950,00 €");
     await page.getByRole("button", { name: "Farbschema wechseln" }).click();
     expect(
       await page.evaluate(
@@ -165,9 +177,9 @@ test("a monthly budget tracks 90 percent, overspending and confirmed removal wit
       "Bitte bestätige",
     );
     await page.getByRole("link", { name: "Abbrechen und zurück" }).click();
-    await expect(page.getByTestId("budget-remaining")).toHaveText(
-      "−50,00 € verbleibend",
-    );
+    await expect(
+      page.getByRole("main").getByTestId("budget-remaining"),
+    ).toHaveText("−50,00 € verbleibend");
     await page.getByRole("link", { name: "Budget entfernen" }).click();
     await page
       .getByLabel(
@@ -181,7 +193,9 @@ test("a monthly budget tracks 90 percent, overspending and confirmed removal wit
     await expect(
       page.getByRole("link", { name: "Alltag bearbeiten", exact: true }),
     ).toBeVisible();
-    await expect(page.getByTestId("month-available")).toHaveText("950,00 €");
+    await expect(
+      page.getByRole("main").getByTestId("month-available"),
+    ).toHaveText("950,00 €");
   } finally {
     await removeFixture(user.id);
   }

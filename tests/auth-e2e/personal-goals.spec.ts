@@ -81,18 +81,18 @@ test("personal goals need no money and keep edited deadlines and milestone progr
     await page
       .getByRole("button", { name: "Meilenstein speichern", exact: true })
       .click();
-    await expect(page.getByTestId("milestone-count")).toHaveText(
-      "0 von 1 Meilensteinen erledigt",
-    );
+    await expect(
+      page.getByRole("main").getByTestId("milestone-count"),
+    ).toHaveText("0 von 1 Meilensteinen erledigt");
     const done = page.getByRole("button", {
       name: "Als erledigt markieren: Ersten Kurs abschließen",
       exact: true,
     });
     await done.focus();
     await page.keyboard.press("Enter");
-    await expect(page.getByTestId("milestone-count")).toHaveText(
-      "1 von 1 Meilensteinen erledigt",
-    );
+    await expect(
+      page.getByRole("main").getByTestId("milestone-count"),
+    ).toHaveText("1 von 1 Meilensteinen erledigt");
     await page.reload();
     await expect(page.getByRole("progressbar")).toHaveAttribute("value", "100");
     await page
@@ -107,9 +107,9 @@ test("personal goals need no money and keep edited deadlines and milestone progr
     await expect(page.getByRole("main")).toContainText(
       "Kein Zieldatum festgelegt",
     );
-    await expect(page.getByTestId("milestone-count")).toHaveText(
-      "1 von 1 Meilensteinen erledigt",
-    );
+    await expect(
+      page.getByRole("main").getByTestId("milestone-count"),
+    ).toHaveText("1 von 1 Meilensteinen erledigt");
     await expect(page.getByRole("main")).not.toContainText("Sparstand");
     expect(
       await page.evaluate(
@@ -129,9 +129,9 @@ test("personal goals need no money and keep edited deadlines and milestone progr
         exact: true,
       })
       .click();
-    await expect(page.getByTestId("milestone-count")).toHaveText(
-      "0 von 1 Meilensteinen erledigt",
-    );
+    await expect(
+      page.getByRole("main").getByTestId("milestone-count"),
+    ).toHaveText("0 von 1 Meilensteinen erledigt");
     await page.getByRole("link", { name: "Alle persönlichen Ziele" }).click();
     await expect(
       page.getByRole("heading", { name: "Italienisch sicher sprechen" }),
