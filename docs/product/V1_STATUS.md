@@ -32,6 +32,8 @@ Am 17.10.2026 bestanden beide GitHub-Prüfungen des Home-Testpaket-PR #24. Eine 
 
 Eine [durchgesetzte Content Security Policy](../CONTENT_SECURITY_POLICY_STATUS.md) ergänzt inzwischen den Browserschutz für Vorschau, Auth und Konto. Die vollständige Produktionshärtung einschließlich Prüfung in der späteren Hostingumgebung bleibt offen.
 
+Eine [lokale logische Wiederherstellungsprobe](../BACKUP_RESTORE_STATUS.md) ergänzt Paket 3: fiktive Daten werden tatsächlich gesichert und in eine leere Datenbank zurückgespielt; Daten, Schema und Rechte werden verglichen. Die gemeinsame Rollenbasis, synthetischen Auth-Referenzen und offenen Betriebsanforderungen sind ausdrücklich abgegrenzt. Dies ersetzt keine vollständige Supabase-/Cloud-Wiederherstellung oder Migrationsprobe mit vorhandenem Datenbestand.
+
 Diese Prüfliste zerlegt die drei Pakete; die Zeilen sind keine zusätzlichen Produktphasen. Sie ist eine Bestandsaufnahme, keine Freigabe für Cloud-Ausgaben, Veröffentlichung oder Zusammenführen von Pull Requests.
 
 | Bereich                  | Offener Abschluss / Nachweis                                                                                                                                                                                                                                                    |

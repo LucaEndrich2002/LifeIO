@@ -40,6 +40,10 @@ jobs:
       - name: Start local database and apply migrations
         run: node scripts/start-test-database.mjs
       - run: pnpm test:integration
+      - name: Rehearse an isolated logical database restore
+        run: |
+          docker pull public.ecr.aws/supabase/postgres:17.6.1.167
+          pnpm test:restore
       - run: pnpm test:auth
       - name: Prepare fictional material for the manual Home study
         run: pnpm test:home:prepare
