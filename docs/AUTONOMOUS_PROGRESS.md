@@ -16,6 +16,8 @@ Beide PRs sind offen und zur Prüfung bereit. Kein Main-Merge oder Deployment er
 
 Auch Lint, Typecheck, Formatprüfung, 196 Unit-Tests, Produktionsbuild und 16 öffentliche Browserprüfungen bestanden für den Nachtrag lokal. Der vollständige private Nachlauf und die Datenbankintegration werden separat in GitHub nachgewiesen.
 
+[PR #28](https://github.com/LucaEndrich2002/LifeIO/pull/28) auf Commit `360bfb1`: Push-Lauf `40648063828` bestanden, PR-Lauf `40648101271` mit 123/124 privaten Fällen fehlgeschlagen. Die neue Mobilprüfung entfernte die Abbruchroute zu früh; der ursprüngliche Eigentümer-POST konnte noch durchgehen. Korrektur wartet auf `requestfailed` statt nur auf `request`, ohne Sicherheitsprüfungen abzuschwächen. Danach lokal 20/20 gezielte Fälle (beide Abläufe/Desktop/Mobil je fünfmal ohne Retries) und erneut alle Pflichtprüfungen einschließlich 196 Unit-Tests, Build und 16 öffentlichen Browserprüfungen bestanden. Den vollständigen GitHub-Nachlauf der Korrektur noch prüfen; bis dahin kein abgeschlossener Nachweis für diesen Nachtrag.
+
 `src/server/identity.ts` prüft über `getUser`. Die inventarisierten privaten Action-Einstiege verwenden `requireIdentity(true)`; `changePassword` prüft `getUser` direkt. Öffentliche Auth-Aktionen benötigen eine getrennte Bewertung. Vorhandene Browserprüfungen decken Sitzungserneuerung, Logout mit erneutem Seitenaufruf, Passwortwiederherstellung und gefälschte Sitzungscookies ab.
 
 ## Nächste autonome Arbeit

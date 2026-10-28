@@ -51,10 +51,12 @@ test("a direct task action rejects foreign, absent and forged identity before al
         await route.abort();
       else await route.continue();
     });
-    const pendingAction = page.waitForRequest(
-      (request) =>
+    // A request event precedes route handling. Wait for the abort to reach the
+    // browser before removing the route, otherwise the owner POST can escape.
+    const pendingAction = page.waitForEvent("requestfailed", {
+      predicate: (request) =>
         request.method() === "POST" && !!request.headers()["next-action"],
-    );
+    });
     await page
       .getByRole("button", { name: `Als erledigt markieren: ${privateTitle}` })
       .click();
