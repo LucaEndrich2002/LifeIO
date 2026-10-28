@@ -16,6 +16,8 @@ Diese drei PRs sind offen und zur Prüfung bereit. Kein Main-Merge oder Deployme
 
 `codex/backup-restore-rehearsal` basiert auf dem vollständig geprüften PR-28-Commit `4020790`. Bisher nur Fortsetzungsdokumentation und Bestandsaufnahme; noch keine Sicherungs-/Wiederherstellungsprobe implementiert oder ausgeführt. Der PR-28-Branch bleibt unverändert auf seinem geprüften Stand.
 
+Kontingentprüfung am 28.10. um 08:02 UTC: reguläre Nutzung erlaubt, aber nur 6 % Rest im Fünfstundenfenster (85 % im Wochenfenster). Deshalb gemäß Nutzergrenze keine neue Implementierung oder umfangreichen Tests begonnen. Beim nächsten Heartbeat Limits erneut prüfen und erst bei mindestens 10 % Rest in allen verfügbaren Fenstern fortsetzen. Automation bleibt aktiv; keine Credits oder Resets eingesetzt. Der Arbeitsbaum war vor diesem Dokumentationsnachtrag sauber.
+
 Die aktuelle CI legt eine frische lokale Supabase-Datenbank an und wendet Migrationen an. Ein eigenständiger Backup-/Restore-Ablauf wurde in `scripts` und `tests` nicht gefunden. Daher als nächstes einen isolierten Wiederherstellungsnachweis mit ausschließlich fiktiven Daten ergänzen. Reale lokale Daten und vorhandene Volumes weder sichern noch zurücksetzen oder ersetzen.
 
 Vorbereitung: PostgreSQL-Image `public.ecr.aws/supabase/postgres:17.6.1.167` ist vorhanden, C: hatte am 28.10. rund 7,8 GiB frei. Vor zusätzlicher Laufzeit Speicher erneut prüfen; keine Images/Volumes aufräumen. Eigene eindeutige Testprojekt-/Container-Namen, Loopback-Endpunkte, begrenzte Laufzeit und überprüfbare Bereinigung nur der selbst angelegten Ressourcen vorsehen. Noch keine konkrete Isolationsvariante als bewiesen betrachten.
