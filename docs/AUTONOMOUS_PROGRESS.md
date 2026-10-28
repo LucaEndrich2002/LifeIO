@@ -12,13 +12,15 @@ Beide PRs sind offen und zur Prüfung bereit. Kein Main-Merge oder Deployment er
 
 ## Aktueller Ausgangspunkt
 
-`codex/session-action-ownership` basiert auf dem geprüften PR-27-Commit. Bisher enthält der neue Branch nur diesen dokumentierten Abschluss; noch keine neue Verhaltensänderung oder neue Sicherheitsabnahme. `codex/session-boundary-audit` bleibt unverändert der Branch von PR #27.
+`codex/session-action-ownership` basiert auf dem geprüften PR-27-Commit. Der neue Nachweis prüft denselben echten Aufgabenabschluss-POST mit fremder, fehlender und gefälschter Identität sowie abschließend mit der echten Eigentümersitzung. Die drei unberechtigten Varianten lassen beide Testnutzer-Datenstände unverändert; nur der Eigentümer kann genau einmal abschließen. Alle vier betroffenen Desktop-/Mobilfälle einschließlich des Profiltests bestehen lokal. Der gemeinsame Request-Helfer kopiert keine Cookies. Keine Produkt-, Schema- oder Abhängigkeitsänderung. Vollständigen GitHub-Prüfstand des Nachtrags kontrollieren; 124 private Fälle werden erwartet.
+
+Auch Lint, Typecheck, Formatprüfung, 196 Unit-Tests, Produktionsbuild und 16 öffentliche Browserprüfungen bestanden für den Nachtrag lokal. Der vollständige private Nachlauf und die Datenbankintegration werden separat in GitHub nachgewiesen.
 
 `src/server/identity.ts` prüft über `getUser`. Die inventarisierten privaten Action-Einstiege verwenden `requireIdentity(true)`; `changePassword` prüft `getUser` direkt. Öffentliche Auth-Aktionen benötigen eine getrennte Bewertung. Vorhandene Browserprüfungen decken Sitzungserneuerung, Logout mit erneutem Seitenaufruf, Passwortwiederherstellung und gefälschte Sitzungscookies ab.
 
 ## Nächste autonome Arbeit
 
-1. Als nächsten begrenzten Nachweis einen weiteren direkten Schreibaufruf mit fehlender/ungültiger oder fremder Identität prüfen, vorzugsweise eine Datenänderung mit expliziter Eigentümer-ID. Vorhandene RLS-/Fremdnutzerprüfungen berücksichtigen; nicht bloß dieselbe Implementierung erneut testen. Erst tatsächliches Verhalten prüfen, dann notwendige Korrekturen.
+1. Nach vollständigem GitHub-Nachweis des Eigentümer-Nachtrags die verbleibenden lokalen Sicherheits-/Betriebsarbeiten priorisieren. Der direkte Aufgabenaufruf ergänzt bereits die RLS-/Fremdnutzerprüfungen; ähnliche Wiederholungen ohne zusätzlichen Risikofall vermeiden. Als nächstes die noch offenen Betriebsanforderungen (Protokollierung, Geheimnisse, Anfragegrenzen, Backup/Restore) aus V1_STATUS inventarisieren und einen begrenzten tatsächlich fehlenden Nachweis auswählen.
 2. Keine sofortige Ungültigkeit zuvor kopierter Zugriffstokens oder Abmeldung anderer Geräte aus dem Profiltest ableiten. Keine bestandenen CSP-/Logout-Prüfungen ohne neue Änderung oder konkrete Sorge wiederholen.
 3. Danach weitere lokale Sicherheits-/Betriebsarbeiten gemäß [V1_STATUS.md](product/V1_STATUS.md). Menschliche Home-Abnahme (J05), Cloudregion/-kosten, Hauptbranch-Integration und Veröffentlichung benötigen weiterhin tatsächliche Durchführung bzw. Nutzerentscheidung. Keine späteren Produktphasen, Käufe, öffentlichen Deployments, Main-Merges oder Nachrichten an Dritte ohne Freigabe.
 4. Sind keine unabhängigen freigegebenen Arbeiten mehr möglich, verbleibende Entscheidungen einmal melden und die Automation pausieren. Unveränderte nicht bearbeitbare Zustände still behandeln.

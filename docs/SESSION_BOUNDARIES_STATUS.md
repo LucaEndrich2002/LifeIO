@@ -13,10 +13,22 @@ Stand: 28.10.2026. Begrenzter Nachweis der V1-Sicherheit; keine vollständige Au
 
 Der installierte Next.js-Action-Handler übermittelt Fetch-Action-Weiterleitungen mit HTTP 200 und `x-action-redirect`. Der Test prüft deshalb diesen Weiterleitungsheader und die tatsächliche Datenbankwirkung. Die anfängliche Annahme HTTP 303 war für diese Fetch-Action falsch; die unveränderte Datenbank und der Login-Verweis wurden separat bestätigt.
 
+## Direkte Aufgabenänderung und Eigentümer
+
+`tests/auth-e2e/action-ownership.spec.ts` ergänzt auf Desktop und Mobil den direkten Abschluss einer bestehenden Aufgabe. Der Test übernimmt den echten POST aus dem Eigentümerformular, hält dessen erste Übertragung jedoch an, damit Aufgaben-ID und Revision für alle Wiederholungen aktuell bleiben.
+
+- Ein anderer vollständig eingerichteter Nutzer sendet denselben POST. Er erhält eine generische Fehlermeldung ohne den privaten Aufgabentitel; weder die fremde noch seine eigene Kontrollaufgabe ändern sich.
+- Ohne Sitzung und mit einem synthetisch gefälschten Sitzungscookie, das die Identität des Eigentümers behauptet, führt der POST zur Anmeldung. Beide Datenbankstände bleiben unverändert.
+- Erst der abschließende identische POST mit der echten Eigentümersitzung setzt die Aufgabe auf erledigt und erhöht ihre Revision genau einmal. Dadurch beweist der Test, dass die vorigen Ablehnungen nicht allein an einer falschen Kodierung, ungültigen Action-Kennung oder veralteten Revision lagen.
+
+Der gemeinsame Helfer `tests/server-actions.ts` bewahrt nur URL, kodierten Inhalt und ausdrücklich benötigte Protokollheader im Arbeitsspeicher auf. Cookies werden nicht kopiert; jeder Aufruf verwendet den aktuellen Sitzungsspeicher seines eigenen Browserkontexts. Der bestehende Profiltest nutzt denselben Helfer und wurde erneut auf beiden Ansichten geprüft. Für die Kontrolle der Datenbankstände werden ausschließlich die gewöhnlichen Sitzungen der jeweiligen Testnutzer verwendet.
+
+Die vier betroffenen Desktop-/Mobilfälle bestehen lokal, ebenso Lint, Typecheck, Formatprüfung, 196 Unit-Tests, Produktionsbuild und 16 öffentliche Browserprüfungen. Die vollständige private Suite umfasst damit 124 Fälle; der GitHub-Nachweis dieses Nachtrags ist getrennt vom unten dokumentierten PR-27-Ergebnis zu kontrollieren. Keine Änderungen an Produktcode, Datenbankschema oder Abhängigkeiten.
+
 ## Umfang und Grenzen
 
 Das bestehende Verhalten benötigt für diesen Fall keine Produktänderung: `requireIdentity(true)` prüft die aktuelle Identität vor der Profiländerung. Abmeldung verwendet `scope: "local"`. Bestehende Browserprüfungen decken außerdem Sitzungserneuerung, erneuten Seitenzugriff nach Logout, Passwortwiederherstellung und gefälschte Sitzungscookies ab.
 
-Dieser Test beweist weder die sofortige Ungültigkeit zuvor kopierter Zugriffstokens noch die Abmeldung anderer Geräte. Er deckt eine repräsentative Profilmutation ab, nicht alle Server Actions. Weitere direkte Schreibaufrufe, ungültige/abgelaufene Identitäten, fremde Eigentümer und die konkrete Hosting-/Proxy-Konfiguration bleiben Gegenstand weiterer begrenzter Prüfungen. RLS-Integrationstests bleiben eigenständige Nachweise.
+Diese Tests beweisen weder die sofortige Ungültigkeit zuvor kopierter Zugriffstokens noch die Abmeldung anderer Geräte. Sie decken Profilaktualisierung nach Abmeldung und Aufgabenabschluss mit fremder, fehlender oder gefälschter Identität ab, nicht alle Server Actions. Weitere Schreiboperationen, tatsächlich abgelaufene Tokens und die konkrete Hosting-/Proxy-Konfiguration bleiben Gegenstand weiterer begrenzter Prüfungen. RLS-Integrationstests bleiben eigenständige Nachweise.
 
 Lokal bestanden Lint, Typecheck, Formatprüfung, 196 Unit-Tests, Produktionsbuild, 16 öffentliche Browserprüfungen und beide neuen Desktop-/Mobilprüfungen. Auf Commit `3ce55dd` bestanden außerdem beide vollständigen GitHub-Läufe: [Push](https://github.com/LucaEndrich2002/LifeIO/actions/runs/40640882027) und [Pull Request](https://github.com/LucaEndrich2002/LifeIO/actions/runs/40640912416), einschließlich Datenbankintegration, aller 122 privaten Browserprüfungen und Home-Testpaket. [PR #27](https://github.com/LucaEndrich2002/LifeIO/pull/27) ist zur Prüfung bereit; nicht gemergt. Keine echten KI-Aufrufe, produktiven Konten, neuen Abhängigkeiten oder Datenbankänderungen.
