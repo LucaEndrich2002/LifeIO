@@ -23,9 +23,9 @@ GitHub am veröffentlichten Commit: [Push 40735961567](https://github.com/LucaEn
 
 ## Aktueller Sicherheitsschritt
 
-Branch `codex/security-operations-audit` basiert auf `ec32ece` und den Dokumentationscheckpoints. Das [Inventar für Logs, Geheimnisse und Anfragegrenzen](LOGS_SECRETS_LIMITS_STATUS.md) ist erstellt. Gefunden und behoben: ungefilterte JSON-/URL-Fehler beim Parsen privilegierter CLI-Ausgabe im lokalen Teststarter. Neuer Parser gibt nur vier geprüfte Konfigurationswerte zurück und lehnt Fehler ohne Rohwerte oder Ursache ab. 18 neue Werkzeugtests, einschließlich echtem Wrapper mit lokalen Attrappen, bestehen; die ursprüngliche Wrapper-Kopie scheitert an der Gegenprobe. Keine Produkt-/Schemaänderung oder neue Abhängigkeit.
+Branch `codex/security-operations-audit` basiert auf `ec32ece` und den Dokumentationscheckpoints. Das [Inventar für Logs, Geheimnisse und Anfragegrenzen](LOGS_SECRETS_LIMITS_STATUS.md) ist erstellt. Gefunden und behoben: ungefilterte JSON-/URL-Fehler beim Parsen privilegierter CLI-Ausgabe im lokalen Teststarter. Neuer Parser gibt nur vier geprüfte Konfigurationswerte zurück und lehnt Fehler ohne Rohwerte oder Ursache ab. 19 neue Werkzeugtests, einschließlich echtem Wrapper mit lokalen Attrappen, bestehen; die ursprüngliche Wrapper-Kopie scheitert an der Gegenprobe. Keine Produkt-/Schemaänderung oder neue Abhängigkeit.
 
-Lokal bestanden Lint, Typecheck, 196 Unit-Tests, 18 Werkzeugtests, Build, Formatprüfung und 132 Integrationstests mit dem neuen Starter. Auch 16 öffentliche Browserprüfungen bestanden. Vollständige GitHub-Prüfungen und PR stehen noch aus. Vorherige PR-Ergebnisse nicht auf diesen Code übertragen.
+Lokal bestanden Lint, Typecheck, 196 Unit-Tests, 19 Werkzeugtests, Build, Formatprüfung und 132 Integrationstests mit dem neuen Starter. Auch 16 öffentliche Browserprüfungen bestanden. Vollständige GitHub-Prüfungen und PR stehen noch aus. Vorherige PR-Ergebnisse nicht auf diesen Code übertragen.
 
 Reguläres Kontingent am 28.10. um 23:16 MEZ erneuert: 98 % im Fünfstunden- und 52 % im Wochenfenster verbleibend. Keine Credits/Resets verwendet. Vor weiterem umfangreichen Schritt erneut prüfen.
 

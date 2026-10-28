@@ -106,6 +106,10 @@ for (const [label, value] of [
     "control character in key",
     JSON.stringify({ ...legacy, SECRET_KEY: `${canary}\n` }),
   ],
+  [
+    "non-whitespace control character in key",
+    JSON.stringify({ ...legacy, SECRET_KEY: `${canary}\u001b` }),
+  ],
 ]) {
   test(`rejects ${label} without retaining input in the error`, () => {
     assert.throws(

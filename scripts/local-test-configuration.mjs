@@ -18,7 +18,7 @@ function loopbackOrigin(value) {
 }
 
 function credential(value) {
-  if (typeof value !== "string" || !value.length || /[\s\0]/u.test(value))
+  if (typeof value !== "string" || !value.length || /[\s\p{Cc}]/u.test(value))
     throw new Error();
   return value;
 }

@@ -8,7 +8,7 @@ Stand: 28.10.2026. Begrenzte Prüfung des aktuellen Repository-Codes und seiner 
 
 Die neue interne Funktion `parseLocalTestConfiguration` übernimmt nur API-Origin, öffentlichen Testschlüssel, privaten Fixture-Schlüssel und Mail-Origin. Sie akzeptiert ausschließlich lokale HTTP(S)-Origins ohne Zugangsdaten, Pfad, Query oder Fragment sowie nichtleere Schlüssel ohne Leer-/Steuerzeichen. Aktuelle und ältere CLI-Feldnamen bleiben unterstützt. Mail ist bereits für die gemeinsamen Fixtures erforderlich. Syntax-, URL-, Form- und Typfehler erzeugen eine feste Meldung ohne Werte, ursprünglichen Fehler oder `cause`. Ungültige Konfigurationen starten keine Tests. Ein fehlgeschlagener CLI-Unterprozess gibt weiterhin weder stdout noch stderr preis.
 
-`pnpm test:tooling` prüft dies mit 18 Node-Tests. Darunter läuft der echte Teststarter gegen lokale CLI-/Testprogramm-Attrappen: fehlerhafte Ausgaben und entfernte Mailziele werden vor dem Teststart abgewiesen; der erfolgreiche Kontrolllauf erhält die fiktiven Fixture-Daten und deaktiviert die Providerkonfiguration. Kein Docker, Netzwerk oder echter Account wird für diese neuen Tests verwendet. Eine nur lokal erzeugte Kopie des ursprünglichen Wrappers scheitert am neuen Unterprozesstest. CI führt die Werkzeugtests zusätzlich zu allen bestehenden Prüfungen aus.
+`pnpm test:tooling` prüft dies mit 19 Node-Tests. Darunter läuft der echte Teststarter gegen lokale CLI-/Testprogramm-Attrappen: fehlerhafte Ausgaben und entfernte Mailziele werden vor dem Teststart abgewiesen; der erfolgreiche Kontrolllauf erhält die fiktiven Fixture-Daten und deaktiviert die Providerkonfiguration. Kein Docker, Netzwerk oder echter Account wird für diese neuen Tests verwendet. Eine nur lokal erzeugte Kopie des ursprünglichen Wrappers scheitert am neuen Unterprozesstest. CI führt die Werkzeugtests zusätzlich zu allen bestehenden Prüfungen aus.
 
 ## Inventar und vorhandene Nachweise
 
@@ -32,4 +32,4 @@ Die neue interne Funktion `parseLocalTestConfiguration` übernimmt nur API-Origi
 
 ## Prüfstand
 
-Die 18 neuen Werkzeugtests bestehen lokal; die ursprüngliche Wrapper-Kopie besteht deren Fehlergrenzen-Test nicht. Lint, Typecheck und 196 Unit-Tests bestanden. Vollständiger aktueller Prüf-/PR-Stand wird im [Fortsetzungsstand](AUTONOMOUS_PROGRESS.md) dokumentiert. Keine neue Abhängigkeit, keine Produkt- oder Datenbankschemaänderung, kein Merge oder Deployment.
+Die 19 neuen Werkzeugtests bestehen lokal; die ursprüngliche Wrapper-Kopie besteht deren Fehlergrenzen-Test nicht. Lint, Typecheck und 196 Unit-Tests bestanden. Vollständiger aktueller Prüf-/PR-Stand wird im [Fortsetzungsstand](AUTONOMOUS_PROGRESS.md) dokumentiert. Keine neue Abhängigkeit, keine Produkt- oder Datenbankschemaänderung, kein Merge oder Deployment.
