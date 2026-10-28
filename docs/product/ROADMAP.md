@@ -1,5 +1,7 @@
 # LifeOS – Roadmap
 
+Ergänzung 28.10.2026: Eine [isolierte logische Wiederherstellungsprobe](../BACKUP_RESTORE_STATUS.md) sichert fiktive Daten aller 15 Anwendungstabellen und spielt sie in eine leere Datenbank zurück. Daten, Schema, Rechte und Eigentümerzugriffe werden verglichen. Migrationen mit bestehendem Datenbestand, vollständiger Auth-Wiederanlauf und produktive Sicherungs-/Aufbewahrungsregeln bleiben offen.
+
 Ergänzung 28.10.2026: Ein begrenzter [Nachweis der Sitzungsgrenzen](../SESSION_BOUNDARIES_STATUS.md) prüft direkte Profil-Schreibaufrufe und noch offene Formulare nach Abmeldung. Ein weiterer Nachtrag prüft den direkten Aufgabenabschluss mit fremder, fehlender und gefälschter Identität samt erfolgreichem Eigentümer-Kontrollaufruf. Das bestehende Verhalten schützt die geprüften Daten; weitere Auth-/Sitzungsfälle und die vollständige Sicherheitsabnahme bleiben offen.
 
 Ergänzung 27.10.2026: Die [Content Security Policy](../CONTENT_SECURITY_POLICY_STATUS.md) schützt Vorschau, Auth und Konto mit individuellen Skriptfreigaben pro Dokument. Damit wird auch die öffentliche Vorschau pro Anfrage gerendert. Produktionshärtung und vollständige Sicherheitsabnahme bleiben offen; echte KI-Tests bleiben ausgesetzt.

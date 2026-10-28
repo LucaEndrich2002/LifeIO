@@ -19,6 +19,7 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "test:integration": "node scripts/test-supabase.mjs integration",
+    "test:restore": "node scripts/test-restore.mjs",
     "test:auth": "node scripts/test-supabase.mjs e2e",
     "test:home:prepare": "node scripts/test-supabase.mjs home-study",
     "db:doctor": "node scripts/db-doctor.mjs",
