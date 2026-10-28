@@ -39,7 +39,7 @@ Die vorhandene lokale Datenbank und deren Volumes werden vom Prüfsystem weder a
 
 Die lokale Probe besteht. Zusätzlich wurden drei nur für die lokale Prüfung erzeugte Skriptkopien nach dem Restore absichtlich verändert: ein Geldbetrag, eine zusätzliche SELECT-Freigabe für `anon` und die Monatsgrenze eines CHECK-Constraints. Jeder Lauf wurde mit passender Fehlerkategorie abgewiesen und bereinigt. Danach waren keine gekennzeichneten Testcontainer mehr vorhanden; die bestehende Supabase-Datenbank lief weiter. Diese zusätzlichen Gegenproben sind keine drei neuen dauerhaft mitlaufenden CI-Testfälle.
 
-Lint, Typecheck, 196 Unit-Tests, Produktionsbuild, Formatprüfung und 16 öffentliche Browserfälle bestanden lokal. Der neue CI-Schritt läuft nach der bisherigen Datenbankintegration; der vollständige GitHub-Nachweis dieses Inkrements steht noch aus. Frühere PR-Ergebnisse werden nicht als Nachweis für diese Erweiterung gewertet.
+Lint, Typecheck, 196 Unit-Tests, Produktionsbuild, Formatprüfung und 16 öffentliche Browserfälle bestanden lokal. Auf Commit `761a202` bestanden außerdem beide vollständigen GitHub-Läufe: [Push](https://github.com/LucaEndrich2002/LifeIO/actions/runs/40689643861) und [Pull Request](https://github.com/LucaEndrich2002/LifeIO/actions/runs/40689648373), einschließlich 132 Datenbanktests, neuer Restore-Probe, aller 124 privaten Browserfälle und Home-Testpaket. [PR #29](https://github.com/LucaEndrich2002/LifeIO/pull/29) ist offen und zur Prüfung bereit; kein Merge oder Deployment.
 
 ## Verbleibende Grenzen
 
