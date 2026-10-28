@@ -6,7 +6,9 @@ Stand: 28.10.2026. Der Nutzer hat die selbständige Fortsetzung der freigegebene
 
 Der CSP-Schritt ist auf `65c8f22` abgeschlossen: [PR #26](https://github.com/LucaEndrich2002/LifeIO/pull/26), beide vollständigen GitHub-Prüfungen erfolgreich. Technische Entscheidung, Caching-Folgen und Grenzen: [CONTENT_SECURITY_POLICY_STATUS.md](CONTENT_SECURITY_POLICY_STATUS.md). Kein Main-Merge oder Deployment erfolgt.
 
-Der nächste Arbeitsbranch `codex/session-boundary-audit` basiert auf diesem geprüften CSP-Commit. Bisher ist nur der Ausgangsstand inventarisiert und dokumentiert; noch keine neue Änderung am Sitzungsverhalten oder neue Sicherheitsabnahme.
+Der Arbeitsbranch `codex/session-boundary-audit` basiert auf diesem geprüften CSP-Commit. Ein begrenzter [Nachweis der Sitzungsgrenzen](SESSION_BOUNDARIES_STATUS.md) ergänzt einen realen Profil-Action-POST und ein offenes Formular nach Abmeldung. Beide werden zurückgewiesen, der Datenbankstand bleibt erhalten; Desktop und Mobil bestanden lokal. Produktverhalten, Abhängigkeiten und Datenbankschema bleiben unverändert. Vollständigen Prüfstand des Branches in GitHub kontrollieren, bevor weitere Änderungen beginnen.
+
+Für diesen Nachtrag bestanden lokal Lint, Typecheck, Formatprüfung, 196 Unit-Tests, Build, 16 öffentliche Browserprüfungen und die zwei neuen privaten Prüfungen. Die vollständige private Suite (jetzt 122 Fälle) und Datenbankintegration sind im neuen GitHub-Lauf zu kontrollieren. Die vorherige Übertragung wurde vom erreichten regulären Kontingent verhindert; nach regulärer Erneuerung kann der geprüfte Stand ohne Credits oder Reset fortgesetzt werden.
 
 ## Tatsächlicher Prüfstand
 
@@ -27,7 +29,7 @@ Die Produktionsvorschau wurde auf `http://127.0.0.1:3000/` gestartet (damalige P
 ## Nächste autonome Arbeit
 
 1. Auf `codex/session-boundary-audit` die serverseitigen Sitzungsgrenzen prüfen. `src/server/identity.ts` verifiziert über `getUser`; `src/server/auth-actions.ts` meldet mit `scope: "local"` ab. `tests/auth-e2e/account.spec.ts` deckt Sitzungserneuerung, Logout mit erneutem Seitenaufruf, Passwortwiederherstellung und gefälschte Sitzungen bereits ab.
-2. Die Suche in privaten Browser-/Supabase-Tests fand bisher keine direkten POST-/`Next-Action`-Prüfungen. Den nächsten begrenzten Nachweis auf direkte Schreibaufrufe ohne gültige Identität und ein noch geöffnetes Formular nach Abmeldung ausrichten; vorhandene RLS-/Fremdnutzerprüfungen berücksichtigen. Erst das konkrete Verhalten prüfen, dann nötige Korrekturen. Keine sofortige Ungültigkeit bereits ausgestellter Tokens ungeprüft behaupten. Keine bestandenen CSP-Prüfungen ohne neuen Anlass wiederholen.
+2. `tests/auth-e2e/session-boundaries.spec.ts` schließt die bisher fehlende direkte POST-Prüfung für Profiländerung nach Logout samt positivem Kontrollaufruf und offenem Formular. Die erste Testannahme HTTP 303 war falsch; installierte Next-Fetch-Actions melden den Redirect über Header mit HTTP 200. Nächste Lücke: weitere direkte Schreibaufrufe mit fehlender/ungültiger oder fremder Identität prüfen, vorhandene RLS-/Fremdnutzerprüfungen berücksichtigen. Keine sofortige Ungültigkeit bereits ausgestellter Tokens ungeprüft behaupten. Keine bestandenen CSP-Prüfungen ohne neuen Anlass wiederholen.
 3. Weitere lokal umsetzbare Sicherheits-/Betriebsarbeiten gemäß [V1_STATUS.md](product/V1_STATUS.md) in getrennten überprüfbaren Schritten erledigen. Für menschliche Home-Abnahme, Cloudregion/-kosten, Hauptbranch-Integration und Veröffentlichung bleibt eine konkrete Nutzerentscheidung bzw. externe Durchführung nötig.
 4. Sind keine unabhängigen freigegebenen Arbeiten mehr möglich, die verbleibenden Entscheidungen einmal melden und die automatische Fortsetzung pausieren. Unveränderte Blockaden nicht stündlich wiederholen.
 

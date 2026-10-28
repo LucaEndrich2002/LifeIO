@@ -1,5 +1,7 @@
 # LifeOS – Roadmap
 
+Ergänzung 28.10.2026: Ein begrenzter [Nachweis der Sitzungsgrenzen](../SESSION_BOUNDARIES_STATUS.md) prüft direkte Profil-Schreibaufrufe und noch offene Formulare nach Abmeldung. Das bestehende Verhalten weist beide zurück; weitere Auth-/Sitzungsfälle und die vollständige Sicherheitsabnahme bleiben offen.
+
 Ergänzung 27.10.2026: Die [Content Security Policy](../CONTENT_SECURITY_POLICY_STATUS.md) schützt Vorschau, Auth und Konto mit individuellen Skriptfreigaben pro Dokument. Damit wird auch die öffentliche Vorschau pro Anfrage gerendert. Produktionshärtung und vollständige Sicherheitsabnahme bleiben offen; echte KI-Tests bleiben ausgesetzt.
 
 Ergänzung 17.10.2026: Eine [gemeinsame Prüfung der Datenbankrechte](../DATABASE_SECURITY_STATUS.md) ergänzt die bestehenden Zwei-Nutzer-Tests um das vollständige Tabellen-/Funktionsinventar und wirksame Rollen-/Spaltenrechte. Dieser begrenzte Nachweis ist keine vollständige Sicherheits- oder Beta-Freigabe. Beide GitHub-Prüfungen von PR #24 sind erfolgreich; J05 und echte KI-Antwortqualität bleiben offen.
