@@ -1,6 +1,6 @@
 # LifeOS – Content Security Policy
 
-Stand: 27.10.2026. Begrenztes Inkrement der Produktionshärtung aus Phase 10; keine vollständige Sicherheits- oder Beta-Freigabe.
+Stand: 28.10.2026. Begrenztes Inkrement der Produktionshärtung aus Phase 10; keine vollständige Sicherheits- oder Beta-Freigabe.
 
 ## Verhalten und Architektur
 
@@ -25,9 +25,11 @@ Eine Richtlinie nur auf den privaten Routen würde bei einer Clientnavigation au
 
 Die Prüfung verwendet die reale Richtlinie des Produktionsbuilds. Skriptinjektion erfolgt über die HTML-Antwort, nicht durch das privilegierte JavaScript-Ausführungsumfeld der Browserautomation. Es werden keine echten KI-Anfragen gesendet.
 
-## Lokaler Prüfstand am 27.10.2026
+## Prüfstand am 28.10.2026
 
-Lint, Typecheck, Formatprüfung und Produktionsbuild bestehen. Alle 196 Unit-/Komponententests und 16 öffentlichen Browserprüfungen bestehen. Die private Gesamtsuite lieferte zunächst 118 erfolgreiche Prüfungen und zwei Fehler durch mehrdeutige Treffer in temporären unsichtbaren Framework-Inhalten. Nach Einschränkung dieser Anzeige-Locators auf den sichtbaren Hauptbereich bestanden alle zwölf Home-/Wochenrückblick-Prüfungen auf Desktop und Mobil; damit liegen für alle 120 privaten Abläufe erfolgreiche Ergebnisse vor. Der Nachlauf ersetzt nicht die noch ausstehende vollständige GitHub-Prüfung des endgültigen Commits.
+Lint, Typecheck, Formatprüfung und Produktionsbuild bestehen. Alle 196 Unit-/Komponententests und 16 öffentlichen Browserprüfungen bestehen. Die private Gesamtsuite lieferte zunächst 118 erfolgreiche Prüfungen und zwei Fehler durch mehrdeutige Treffer in temporären unsichtbaren Framework-Inhalten. Nach Einschränkung dieser Anzeige-Locators auf den sichtbaren Hauptbereich bestanden alle zwölf Home-/Wochenrückblick-Prüfungen auf Desktop und Mobil.
+
+Der vollständige [GitHub-Push-Lauf für dd5dbb8](https://github.com/LucaEndrich2002/LifeIO/actions/runs/40574219737) bestand anschließend einschließlich Datenbankprüfungen, aller 120 privaten Browserprüfungen und Home-Testpaket. Im parallelen [PR-Lauf](https://github.com/LucaEndrich2002/LifeIO/actions/runs/40574252055) blieb eine weitere mehrdeutige `goal-balance`-Anzeigeabfrage (119/120 erfolgreich). Der Nachtrag begrenzt die positiven Abfragen dieses Wertes in den drei betroffenen Testdateien ebenfalls auf den sichtbaren Hauptbereich. Alle 20 zugehörigen Desktop-/Mobilprüfungen sowie Lint, Typecheck und Formatprüfung bestanden danach lokal. Der Nachtrag ändert ausschließlich Tests und Dokumentation; die vollständigen Prüfungen des jeweils aktuellen Commits sind in [PR #26](https://github.com/LucaEndrich2002/LifeIO/pull/26) einzusehen.
 
 Die Zugriffsprüfungen wurden nicht gelockert. Eine separate lokale Diagnose mit sechs vollständigen Home-Aufrufen fand nach dem Laden jeweils einen sichtbaren Inhalt und keine CSP-Verstöße. Der Entwicklungs-Smoke-Test bestätigte Themewechsel, Navigation und die lokale Hot-Reload-Verbindung. Die Datenbanksuite wurde in diesem Schritt mangels Änderungen an Schema oder Datenzugriff nicht erneut lokal ausgeführt; CI führt sie weiterhin aus. Echte KI-Aufrufe bleiben deaktiviert.
 

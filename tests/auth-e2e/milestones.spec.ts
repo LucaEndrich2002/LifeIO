@@ -89,7 +89,9 @@ test("milestones can be edited, completed, reopened and removed without changing
     await expect(page.getByTestId("milestone-count")).toHaveText(
       "1 von 2 Meilensteinen erledigt",
     );
-    await expect(page.getByTestId("goal-balance")).toHaveText("3.500,00 €");
+    await expect(page.getByRole("main").getByTestId("goal-balance")).toHaveText(
+      "3.500,00 €",
+    );
     await expect(page.getByTestId("goal-forecast")).toContainText(
       "Noch 13 geplante Beiträge.",
     );
@@ -140,7 +142,9 @@ test("milestones can be edited, completed, reopened and removed without changing
       "Du hast noch keine Meilensteine angelegt.",
     );
     await expect(section.getByRole("progressbar")).toHaveCount(0);
-    await expect(page.getByTestId("goal-balance")).toHaveText("3.500,00 €");
+    await expect(page.getByRole("main").getByTestId("goal-balance")).toHaveText(
+      "3.500,00 €",
+    );
   } finally {
     await removeFixture(user.id);
   }

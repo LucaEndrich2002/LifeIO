@@ -69,7 +69,9 @@ test("budgets link both goal kinds, navigate both ways and unlink only after con
     });
     await expect(section).toContainText("500,00 €");
     await expect(section).toContainText("reserviert kein Geld");
-    await expect(page.getByTestId("goal-balance")).toHaveText("3.500,00 €");
+    await expect(page.getByRole("main").getByTestId("goal-balance")).toHaveText(
+      "3.500,00 €",
+    );
     await page.reload();
     await expect(
       section.getByRole("heading", { name: "Alltagsbudget" }),
@@ -155,7 +157,9 @@ test("budgets link both goal kinds, navigate both ways and unlink only after con
     await expect(page).toHaveURL(/\/account\/money\?month=2026-09$/);
     await page.goto(`/account/goals/${goal}`);
     await expect(section).toContainText("Du hast noch kein Monatsbudget");
-    await expect(page.getByTestId("goal-balance")).toHaveText("3.500,00 €");
+    await expect(page.getByRole("main").getByTestId("goal-balance")).toHaveText(
+      "3.500,00 €",
+    );
     expect(violations).toEqual([]);
   } finally {
     await removeFixture(user.id);

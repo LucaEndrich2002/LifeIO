@@ -53,7 +53,9 @@ test("empty goals can be filled and edited while Money preserves the earlier sav
     await page.getByLabel("Zielbetrag (€)").fill("1000");
     await saveGoal(page);
     const url = page.url();
-    await expect(page.getByTestId("goal-balance")).toHaveText("0,00 €");
+    await expect(page.getByRole("main").getByTestId("goal-balance")).toHaveText(
+      "0,00 €",
+    );
     await page
       .getByRole("link", { name: "Sparziel bearbeiten", exact: true })
       .click();
@@ -71,7 +73,9 @@ test("empty goals can be filled and edited while Money preserves the earlier sav
     await page.getByLabel("Zieldatum (optional)").fill("2027-06-30");
     await saveGoal(page);
     await page.reload();
-    await expect(page.getByTestId("goal-balance")).toHaveText("100,00 €");
+    await expect(page.getByRole("main").getByTestId("goal-balance")).toHaveText(
+      "100,00 €",
+    );
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
       "Große Reise",
     );
@@ -112,7 +116,9 @@ test("real deposits can exceed the target and are cancelled only after confirmat
   try {
     await login(page, user);
     const url = await openOriginal(page);
-    await expect(page.getByTestId("goal-balance")).toHaveText("3.500,00 €");
+    await expect(page.getByRole("main").getByTestId("goal-balance")).toHaveText(
+      "3.500,00 €",
+    );
     await expect(page.getByTestId("goal-progress")).toHaveText("35 % erreicht");
     await page
       .getByRole("link", { name: "Einzahlung erfassen", exact: true })
@@ -134,7 +140,9 @@ test("real deposits can exceed the target and are cancelled only after confirmat
       .click();
     await expect(page).toHaveURL(url);
     await page.reload();
-    await expect(page.getByTestId("goal-balance")).toHaveText("10.500,01 €");
+    await expect(page.getByRole("main").getByTestId("goal-balance")).toHaveText(
+      "10.500,01 €",
+    );
     await expect(page.getByTestId("goal-progress")).toHaveText(
       "105 % erreicht",
     );
@@ -172,7 +180,9 @@ test("real deposits can exceed the target and are cancelled only after confirmat
       "Bitte bestätige",
     );
     await page.getByRole("link", { name: "Abbrechen und zurück" }).click();
-    await expect(page.getByTestId("goal-balance")).toHaveText("10.500,01 €");
+    await expect(page.getByRole("main").getByTestId("goal-balance")).toHaveText(
+      "10.500,01 €",
+    );
     await page
       .getByRole("link", { name: /^Einzahlung vom .* stornieren$/ })
       .click();
@@ -183,7 +193,9 @@ test("real deposits can exceed the target and are cancelled only after confirmat
       .getByRole("button", { name: "Stornierung bestätigen", exact: true })
       .click();
     await expect(page).toHaveURL(url);
-    await expect(page.getByTestId("goal-balance")).toHaveText("3.500,00 €");
+    await expect(page.getByRole("main").getByTestId("goal-balance")).toHaveText(
+      "3.500,00 €",
+    );
     await expect(page.getByTestId("goal-forecast")).toContainText(
       "Noch 13 geplante Beiträge.",
     );
@@ -312,7 +324,9 @@ test("forecast explains future contributions, flags deadlines and follows saved 
     await expect(page.getByTestId("goal-deadline")).toContainText(
       "bis zu deinem Zieldatum",
     );
-    await expect(page.getByTestId("goal-balance")).toHaveText("3.500,00 €");
+    await expect(page.getByRole("main").getByTestId("goal-balance")).toHaveText(
+      "3.500,00 €",
+    );
   } finally {
     await removeFixture(user.id);
   }
@@ -353,7 +367,9 @@ test("stale goal edits preserve inputs, and foreign goal pages and contributions
       "Mein neuer Name",
     );
     await page.getByRole("link", { name: "Aktuellen Stand öffnen" }).click();
-    await expect(page.getByTestId("goal-balance")).toHaveText("3.600,00 €");
+    await expect(page.getByRole("main").getByTestId("goal-balance")).toHaveText(
+      "3.600,00 €",
+    );
     const foreignId = (await foreign.client.from("goals").select("id").single())
       .data!.id;
     await page.goto(`/account/goals/${foreignId}?edit=1`);
