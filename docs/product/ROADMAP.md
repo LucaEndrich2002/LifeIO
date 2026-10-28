@@ -1,5 +1,7 @@
 # LifeOS – Roadmap
 
+Ergänzung 28.10.2026: Eine [begrenzte Prüfung von Logs, Geheimnissen und Anfragegrenzen](../LOGS_SECRETS_LIMITS_STATUS.md) dokumentiert vorhandene Nachweise und offene Produktionsfragen. Der lokale Teststarter unterdrückt nun auch Rohwerte aus fehlerhafter CLI-Konfiguration; neue Unterprozesstests prüfen das vor dem Start von Datenbanktests. Produktive Telemetrie, Schlüsselverwaltung und allgemeine Anfragegrenzen bleiben offen.
+
 Ergänzung 28.10.2026: Eine [begrenzte Migrationsprobe mit vorhandenem Datenbestand](../MIGRATION_EXISTING_DATA_STATUS.md) prüft drei ältere Einrichtungszustände durch die Sparziel-Migration bis zum heutigen V1-Schema. Historische Daten, Ratenübernahme, späterer Abschluss und Eigentümerzugriffe werden tatsächlich geprüft. Weitere Ausgangsstände, der Supabase-CLI-Migrationsablauf und produktiver Wiederanlauf bleiben offen.
 
 Ergänzung 28.10.2026: Eine [isolierte logische Wiederherstellungsprobe](../BACKUP_RESTORE_STATUS.md) sichert fiktive Daten aller 15 Anwendungstabellen und spielt sie in eine leere Datenbank zurück. Daten, Schema, Rechte und Eigentümerzugriffe werden verglichen. Migrationen mit bestehendem Datenbestand, vollständiger Auth-Wiederanlauf und produktive Sicherungs-/Aufbewahrungsregeln bleiben offen.

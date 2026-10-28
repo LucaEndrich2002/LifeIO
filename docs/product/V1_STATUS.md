@@ -38,6 +38,8 @@ Eine [begrenzte Migrationsprobe](../MIGRATION_EXISTING_DATA_STATUS.md) ergänzt 
 
 Diese Prüfliste zerlegt die drei Pakete; die Zeilen sind keine zusätzlichen Produktphasen. Sie ist eine Bestandsaufnahme, keine Freigabe für Cloud-Ausgaben, Veröffentlichung oder Zusammenführen von Pull Requests.
 
+Das [Inventar zu Logs, Geheimnissen und Anfragegrenzen](../LOGS_SECRETS_LIMITS_STATUS.md) trennt vorhandene lokale Nachweise von offenen Hosting- und Betriebsaufgaben. Ein gefundener Fehlerpfad im lokalen Teststarter wurde abgesichert: ungültige CLI-Werte werden nicht mehr über rohe Parser-/URL-Fehler ausgegeben. Dies ist keine vollständige Produktionshärtung.
+
 | Bereich                  | Offener Abschluss / Nachweis                                                                                                                                                                                                                                                    |
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Home-Abnahme             | Fünf unbeeinflusste Erstversuche durchführen, Zeit und Antworten erfassen; bei Missverständnissen korrigieren und erneut abnehmen. Das neue Paket liefert Material, keine Testergebnisse.                                                                                       |

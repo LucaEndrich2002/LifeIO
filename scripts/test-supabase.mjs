@@ -1,5 +1,6 @@
 import { spawnSync } from "node:child_process";
 import { isLocalDockerEndpoint, readDockerEndpoint } from "./local-docker.mjs";
+import { parseLocalTestConfiguration } from "./local-test-configuration.mjs";
 
 const mode = process.argv[2];
 if (!["integration", "e2e", "home-study"].includes(mode))
@@ -14,23 +15,18 @@ const status = spawnSync(
 if (status.status !== 0)
   throw new Error("Start local Supabase before running the database tests.");
 // CLI output can contain privileged keys. Never print it or write it to a file.
-const configuration = JSON.parse(status.stdout);
-const url = new URL(configuration.API_URL);
-if (!["127.0.0.1", "localhost", "[::1]"].includes(url.hostname))
-  throw new Error("Remote Supabase tests are forbidden.");
-const key = configuration.PUBLISHABLE_KEY ?? configuration.ANON_KEY;
-const serviceKey = configuration.SECRET_KEY ?? configuration.SERVICE_ROLE_KEY;
-if (!key || !serviceKey)
-  throw new Error("Local Supabase test credentials unavailable.");
+const { url, key, serviceKey, mailUrl } = parseLocalTestConfiguration(
+  status.stdout,
+);
 const env = {
   ...process.env,
   // Database/browser tests never use a real provider, even on configured hosts.
   OPENAI_API_KEY: "",
   OPENAI_MODEL: "",
-  NEXT_PUBLIC_SUPABASE_URL: url.origin,
+  NEXT_PUBLIC_SUPABASE_URL: url,
   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: key,
   LIFEOS_TEST_SERVICE_KEY: serviceKey,
-  LIFEOS_TEST_MAIL_URL: configuration.MAILPIT_URL ?? configuration.INBUCKET_URL,
+  LIFEOS_TEST_MAIL_URL: mailUrl,
 };
 const args =
   mode === "integration"

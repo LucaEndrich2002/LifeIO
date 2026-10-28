@@ -13,7 +13,7 @@ Stand: 28.10.2026. Automation `lifeos-selbst-ndig-weiterentwickeln` aktiv. Nur f
 
 PRs bleiben offen; kein Main-Merge/Deployment. Alte Fehlversuche werden durch spätere Erfolge nicht nachträglich als bestanden behandelt.
 
-## Aktueller Migrationsschritt
+## Zuletzt abgeschlossene Migration
 
 [PR #30](https://github.com/LucaEndrich2002/LifeIO/pull/30), Branch `codex/migration-existing-data`, Code `ec32ece6caa4d2aaaaa516716eeebcaf0640f4c8`, basiert auf PR #29. Drei vor der Sparziel-Migration angelegte Konten: abgeschlossenes Ziel, offene Einrichtung mit Nullrate, ausdrücklich ausgelassenes Ziel. Prüfung sofort nach der Sparziel-Migration und nach allen 17 SQL-Dateien. Alte Spalten bleiben erhalten; spätere Einrichtung, historische Raten und Eigentümer-/Fremd-/Anonymzugriffe geprüft. [Umfang und Grenzen](MIGRATION_EXISTING_DATA_STATUS.md).
 
@@ -21,12 +21,18 @@ Lokal bestanden Lint, Typecheck, 196 Unit-Tests, frischer Build, Formatprüfung,
 
 GitHub am veröffentlichten Commit: [Push 40735961567](https://github.com/LucaEndrich2002/LifeIO/actions/runs/40735961567), [PR 40736032802](https://github.com/LucaEndrich2002/LifeIO/actions/runs/40736032802) beide vollständig bestanden: 196 Unit-, 132 Integrations-, 16 öffentliche und 124 private Browserprüfungen, beide isolierten Datenbankproben und Home-Testpaket. PR #30 offen und prüfbereit.
 
-Lokaler Folgebranch `codex/security-operations-audit` beginnt bei `ec32ece`. Bisher nur Dokumentationscheckpoint, keine neue Produktimplementierung. PR-30-Branch unverändert. Kontingentprüfung am 28.10. um 19:12 MEZ: 8 % im Fünfstunden- und 54 % im Wochenfenster verbleibend. Wegen der vereinbarten 10-%-Grenze keinen umfangreichen neuen Schritt begonnen. Keine Credits/Resets verwendet; Automation bleibt aktiv und prüft vor der Fortsetzung erneut.
+## Aktueller Sicherheitsschritt
+
+Branch `codex/security-operations-audit` basiert auf `ec32ece` und den Dokumentationscheckpoints. Das [Inventar für Logs, Geheimnisse und Anfragegrenzen](LOGS_SECRETS_LIMITS_STATUS.md) ist erstellt. Gefunden und behoben: ungefilterte JSON-/URL-Fehler beim Parsen privilegierter CLI-Ausgabe im lokalen Teststarter. Neuer Parser gibt nur vier geprüfte Konfigurationswerte zurück und lehnt Fehler ohne Rohwerte oder Ursache ab. 18 neue Werkzeugtests, einschließlich echtem Wrapper mit lokalen Attrappen, bestehen; die ursprüngliche Wrapper-Kopie scheitert an der Gegenprobe. Keine Produkt-/Schemaänderung oder neue Abhängigkeit.
+
+Lokal bestanden Lint, Typecheck, 196 Unit-Tests, 18 Werkzeugtests, Build, Formatprüfung und 132 Integrationstests mit dem neuen Starter. Auch 16 öffentliche Browserprüfungen bestanden. Vollständige GitHub-Prüfungen und PR stehen noch aus. Vorherige PR-Ergebnisse nicht auf diesen Code übertragen.
+
+Reguläres Kontingent am 28.10. um 23:16 MEZ erneuert: 98 % im Fünfstunden- und 52 % im Wochenfenster verbleibend. Keine Credits/Resets verwendet. Vor weiterem umfangreichen Schritt erneut prüfen.
 
 ## Nächste Arbeit
 
-1. PR #30 ist vollständig geprüft; kein weiterer Prüf-/Implementierungsrest für dieses Inkrement. Bestandene Prüfungen nur bei neuer Änderung oder konkreter Sorge wiederholen. Keine automatische Hauptbranch-Integration.
-2. Danach begrenztes Inventar von Logs, Geheimnissen und Anfragegrenzen erstellen. Vorprüfung: keine eigenen `console`-Aufrufe in `src`; öffentliche Konfiguration lehnt private Schlüssel ohne Ausgabe ab; AI-Fehler liefern generische Antworten. `tests/integration/ai-answer.test.ts` prüft bereits parallele Ansprüche, 30-Sekunden-Abstand, 20/UTC-Tag, Eigentümergrenzen sowie sensible Fehler/Logout ohne Provider-Liveaufruf. Vorhandene Nachweise nicht duplizieren. `CalendarTimeError` enthält feste Domänentexte; lokale Mailgrenze in `supabase/config.toml` ist Testkonfiguration, keine Produktionsfreigabe. Vollständige Prüfung steht aus.
+1. Neuen Sicherheitsschritt samt Browserprüfungen, Review und PR auf Basis von `codex/migration-existing-data` abschließen; beide GitHub-Läufe am veröffentlichten Code prüfen. Keine automatische Hauptbranch-Integration.
+2. Das Inventar verweist auf vorhandene Tests für private Konfiguration, sensible Fehler und Anfragezähler; diese Nachweise nicht duplizieren. Produktive Telemetrie, Geheimniswechsel und allgemeine Auth-/Proxy-/Hostinggrenzen bleiben offen.
 3. Weitere lokale Betriebsarbeit: tatsächlicher Supabase-CLI-Migrationsablauf, vollständiger Supabase-/Auth-Wiederanlauf mit unabhängiger Rollenbasis, Wiederanlauf-/Rückfallablauf und ausführbare Löschprozesse. Keine vollständige Cloud-Restore-Abnahme oder sofortige Ungültigkeit kopierter Zugriffstokens aus bisherigen Proben ableiten.
 4. Nutzer-/Außenentscheidungen laut [V1_STATUS.md](product/V1_STATUS.md): menschliche Home-Abnahme mit fünf Personen, Cloudregion/-kosten, Aufbewahrung, Hauptbranch-Integration, Hosting und Beta. KI-Live-Abnahme bleibt ausgesetzt. Wenn keine unabhängigen freigegebenen V1-Arbeiten mehr verbleiben: Restentscheidungen einmal melden und Automation pausieren.
 
