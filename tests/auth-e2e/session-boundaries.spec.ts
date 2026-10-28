@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { capturedAction } from "../server-actions";
 import { createFixture, removeFixture } from "../supabase/fixtures";
 
 test("logout blocks a captured profile action and a form left open in another tab", async ({
@@ -24,20 +25,8 @@ test("logout blocks a captured profile action and a form left open in another ta
       "Dein Profil wurde gespeichert.",
     );
 
-    const data = action.postDataBuffer();
-    if (!data) throw new Error("Expected a profile action body.");
-    const actionId = action.headers()["next-action"];
-    const contentType = action.headers()["content-type"];
-    if (!actionId || !contentType)
-      throw new Error("Expected profile action routing and encoding headers.");
-    // Keep the real action encoding in memory, but never retain Cookie headers.
     // The API context uses the browser's current cookie jar, including logout.
-    const headers = {
-      "next-action": actionId,
-      "content-type": contentType,
-      accept: "text/x-component",
-      origin: new URL(action.url()).origin,
-    };
+    const replay = capturedAction(action);
     const protectedName = "Geschützter Stand";
     async function setProtectedName() {
       const { error } = await user.client
@@ -59,11 +48,7 @@ test("logout blocks a captured profile action and a form left open in another ta
 
     // Positive control: the exact captured POST really can write while signed in.
     await setProtectedName();
-    const allowed = await context.request.post(action.url(), {
-      headers,
-      data,
-      maxRedirects: 0,
-    });
+    const allowed = await context.request.post(replay.url, replay.options);
     expect(allowed.status()).toBe(200);
     expect(await savedName()).toBe("Erlaubte Änderung");
     await allowed.dispose();
@@ -76,11 +61,7 @@ test("logout blocks a captured profile action and a form left open in another ta
     await page.getByRole("button", { name: "Abmelden", exact: true }).click();
     await expect(page).toHaveURL("/auth/login");
 
-    const denied = await context.request.post(action.url(), {
-      headers,
-      data,
-      maxRedirects: 0,
-    });
+    const denied = await context.request.post(replay.url, replay.options);
     // Next fetch actions return redirects through this header with HTTP 200.
     expect(denied.status()).toBe(200);
     expect(denied.headers()["x-action-redirect"]).toMatch(
