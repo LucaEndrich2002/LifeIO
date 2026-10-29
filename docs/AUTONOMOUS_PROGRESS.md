@@ -37,8 +37,8 @@ Kontingent vor Beginn: 94 % im Fünfstunden- und 36 % im Wochenfenster; im Verla
 
 ## Nächste Arbeit
 
-1. PR #32 ist abgeschlossen und am Code `e3e266c` vollständig geprüft. Folgebranch `codex/auth-recovery-assessment` enthält den Dokumentationscheckpoint und die rein lesend vorbereitete [Auth-Restore-Abnahme](AUTH_RECOVERY_ACCEPTANCE.md). Noch keine neue Testinstanz oder Auth-Wiederherstellung ausgeführt. Keine automatische Hauptbranch-Integration.
-2. Nächster begrenzter Implementierungsschritt: getrennte Quelle mit PostgreSQL/GoTrue/Mailpit und Registrierung, lokaler E-Mail-Bestätigung sowie Passwortanmeldung zweier fiktiver Konten vorbereiten. Anschließend unabhängigen Zielcluster und Restore nach den Abnahmekriterien ergänzen; diesen Auth-/Datenbanknachweis erst nach Data-API-/App-Prüfungen als vollständigen Supabase-Wiederanlauf bezeichnen. Ausführbare Löschprozesse bleiben danach offen. Keine vollständige Cloud-Restore-Abnahme oder sofortige Ungültigkeit kopierter Zugriffstokens aus bisherigen Proben ableiten.
+1. PR #32 ist abgeschlossen und am Code `e3e266c` vollständig geprüft. Folgebranch `codex/auth-recovery-assessment` ergänzt jetzt die ausführbare [Auth-Quellprobe](AUTH_RECOVERY_ACCEPTANCE.md). Die lokale Quelle ist geprüft, ein Restore in einen unabhängigen Zielcluster noch offen. Keine automatische Hauptbranch-Integration.
+2. Zunächst das laufende Auth-Quellinkrement abschließen: endgültige Prüfungen, PR gegen `codex/recovery-runbook` und CI-Ergebnisse dokumentieren. Danach unabhängigen Zielcluster und Restore nach den Abnahmekriterien ergänzen; diesen Auth-/Datenbanknachweis erst nach Data-API-/App-Prüfungen als vollständigen Supabase-Wiederanlauf bezeichnen. Ausführbare Löschprozesse bleiben danach offen. Keine vollständige Cloud-Restore-Abnahme oder sofortige Ungültigkeit kopierter Zugriffstokens aus bisherigen Proben ableiten.
 3. Nutzer-/Außenentscheidungen laut [V1_STATUS.md](product/V1_STATUS.md): menschliche Home-Abnahme mit fünf Personen, Cloudregion/-kosten, Aufbewahrung, Hauptbranch-Integration, Hosting und Beta. Produktive Telemetrie, Geheimniswechsel und allgemeine Auth-/Proxy-/Hostinggrenzen bleiben offen. KI-Live-Abnahme ausgesetzt. Wenn keine unabhängigen freigegebenen V1-Arbeiten mehr verbleiben: Restentscheidungen einmal melden und Automation pausieren.
 
 ## Lokale Laufzeit
@@ -50,3 +50,9 @@ Vorschau zuletzt Port 3000, damalige PID 24732; vor Prozessaktionen Zustand/Pfad
 ## Vorbereitung vom 29.10., 04:29 UTC
 
 Nutzung erlaubt, 21 % im Fünfstunden- und 24 % im Wochenfenster verblieben. Deshalb nur begrenzte lesende Vorbereitung und Dokumentation; kein umfangreicher zweiter Dienstestack begonnen. Installierte Image-Versionen, bestätigte E-Mail-Konfiguration und 6,11 GiB freier Platz auf C: aufgenommen. Bereits vorhandene Images benötigen zunächst keinen neuen Download. Die Auth-/Restore-Lücke ist konkretisiert; kein neuer bestandener Lauf behauptet. Keine Entscheidung des Nutzers notwendig, Automation bleibt aktiv.
+
+## Auth-Quelle vom 29.10., 08:33 UTC
+
+Kontingent bei Beginn 96 % / 21 % verbleibend; zuletzt im Inkrement 56 % / 15 %. Kein weiterer größerer Schritt vor erneuter Prüfung. Neue Probe `test:auth:source`: zwei echte fiktive Auth-Registrierungen, Bestätigung im eigenen Mailpit, unbestätigte/falsche Anmeldung abgewiesen, gültige/fehlende/manipulierte JWTs geprüft. Profile entstehen unter `authenticated` mit RLS; keine PostgREST-/App- oder Restore-Abnahme. Eigene drei Container und Netzwerk, keine Bestandsdatenbank als Testziel. Frühere falsche HTTP-401-Erwartung korrigiert auf nachgewiesenes 403/bad_jwt; vorheriger Lauf nicht bestanden.
+
+Docker-Socket-Fehler erneut reversibel behoben; Laufzeitordner-Backups `.lifeos-socket-backup-20261029-0842`. Sieben vorhandene Dienste wieder gesund. Lokal neue Auth-Quelle, drei bisherige Datenbankproben, Lint, Typecheck, 196 Unit-, 19 Werkzeugtests, Build und 16 öffentliche Browserfälle bestanden. Endgültige Formatprüfung bestanden; PR/CI noch offen. Kein Main-Merge, Deployment, KI-Live-Test oder neue Abhängigkeit.
