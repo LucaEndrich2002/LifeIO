@@ -109,6 +109,8 @@ Die Integrationssuite prüft zusätzlich das vollständige Anwendungsschema auf 
 
 `pnpm test:tooling` prüft die Fehlergrenze des lokalen Supabase-Teststarters mit ausschließlich fiktiven Werten und Unterprozess-Attrappen, ohne Datenbank oder Netzwerk. Ungültige CLI-Konfigurationen werden vor dem Teststart ohne Rohwerte abgewiesen. Inventar vorhandener Grenzen und offene Betriebsfragen: [LOGS_SECRETS_LIMITS_STATUS.md](LOGS_SECRETS_LIMITS_STATUS.md).
 
+`pnpm test:auth:source` erzeugt eine eigene PostgreSQL-/Auth-/Mailpit-Umgebung, registriert zwei fiktive Konten, bestätigt deren lokale E-Mails und prüft Anmeldung sowie abgewiesene Zugangsdaten. Bestehende Datenbanken bleiben unberührt. Diese Quelle ist noch kein Restore-Nachweis: [AUTH_RECOVERY_ACCEPTANCE.md](AUTH_RECOVERY_ACCEPTANCE.md).
+
 Die lokale Auth-Konfiguration verwendet bestätigte E-Mail-Adressen, sechsstellige Codes und sichere Passwortänderungen. Templates liegen unter `supabase/templates`; Supabase-Stop/Start aktiviert Änderungen bei erhaltenen Volumes. Codebestätigung und Wiederherstellung verwenden Server Actions mit festen Weiterleitungen. Der Proxy erneuert Sitzungen; Server Components und Server Actions verwenden getrennte Cookie-Adapter.
 
 ## Projektstruktur und Grenzen

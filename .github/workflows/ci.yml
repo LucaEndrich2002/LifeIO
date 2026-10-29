@@ -49,6 +49,11 @@ jobs:
         run: pnpm test:migrations
       - name: Rehearse CLI migration failure and recovery with fictional data
         run: pnpm test:migrations:cli
+      - name: Prepare an independent Auth recovery source with confirmed accounts
+        run: |
+          docker pull public.ecr.aws/supabase/gotrue:v2.196.0
+          docker pull public.ecr.aws/supabase/mailpit:v1.30.2
+          pnpm test:auth:source
       - run: pnpm test:auth
       - name: Prepare fictional material for the manual Home study
         run: pnpm test:home:prepare

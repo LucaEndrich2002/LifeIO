@@ -1,5 +1,7 @@
 # LifeOS – Roadmap
 
+Ergänzung 29.10.2026: Der [tatsächliche CLI-Migrationsablauf](../RECOVERY_RUNBOOK.md) ist mit vorhandenem fiktivem Datenbestand, kontrolliertem Fehler und korrigierter Fortsetzung lokal sowie in beiden vollständigen GitHub-Läufen von PR #32 geprüft. Die nachfolgenden älteren Einträge beschreiben ihren jeweiligen damaligen Stand. Die [unabhängige Auth-Wiederherstellung](../AUTH_RECOVERY_ACCEPTANCE.md) erhält zunächst eine ausführbare, getrennte Quelle mit bestätigten fiktiven Konten. Ein Restore in den unabhängigen Zielcluster bleibt offen.
+
 Ergänzung 28.10.2026: Eine [begrenzte Prüfung von Logs, Geheimnissen und Anfragegrenzen](../LOGS_SECRETS_LIMITS_STATUS.md) dokumentiert vorhandene Nachweise und offene Produktionsfragen. Der lokale Teststarter unterdrückt nun auch Rohwerte aus fehlerhafter CLI-Konfiguration; neue Unterprozesstests prüfen das vor dem Start von Datenbanktests. Produktive Telemetrie, Schlüsselverwaltung und allgemeine Anfragegrenzen bleiben offen.
 
 Ergänzung 28.10.2026: Eine [begrenzte Migrationsprobe mit vorhandenem Datenbestand](../MIGRATION_EXISTING_DATA_STATUS.md) prüft drei ältere Einrichtungszustände durch die Sparziel-Migration bis zum heutigen V1-Schema. Historische Daten, Ratenübernahme, späterer Abschluss und Eigentümerzugriffe werden tatsächlich geprüft. Weitere Ausgangsstände, der Supabase-CLI-Migrationsablauf und produktiver Wiederanlauf bleiben offen.

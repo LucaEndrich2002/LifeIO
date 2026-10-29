@@ -21,10 +21,13 @@ export function same(actual, expected, message) {
 // Internal harness: fixed repository rehearsals, never a user target.
 export async function withIsolatedDatabase(kind, run) {
   check(
-    ["restore", "migration", "migration-cli"].includes(kind),
+    ["restore", "migration", "migration-cli", "auth-source"].includes(kind),
     "Unknown rehearsal",
   );
   const cli = kind === "migration-cli";
+  const authSource = kind === "auth-source";
+  const networked = cli || authSource;
+  const services = [];
   const image = "public.ecr.aws/supabase/postgres:17.6.1.167";
   const name = `lifeos-${kind}-${randomUUID()}`;
   const label = `io.lifeos.${kind}-rehearsal`;
@@ -79,6 +82,20 @@ export async function withIsolatedDatabase(kind, run) {
     ).stdout.trim();
   }
   function cleanup() {
+    for (const id of [...services].reverse()) {
+      const owned = docker([
+        "inspect",
+        "--format",
+        `{{index .Config.Labels "${label}"}}`,
+        id,
+      ]);
+      check(
+        owned.stdout.trim() === name,
+        "Cleanup refused: service label changed",
+      );
+      docker(["rm", "--force", "--volumes", id]);
+      services.splice(services.indexOf(id), 1);
+    }
     if (container) {
       const owned = docker([
         "inspect",
@@ -128,7 +145,7 @@ export async function withIsolatedDatabase(kind, run) {
       "A local Docker endpoint is required",
     );
     docker(["image", "inspect", image]); // Never pull an image implicitly.
-    if (cli) {
+    if (networked) {
       const version = docker([
         "version",
         "--format",
@@ -136,7 +153,7 @@ export async function withIsolatedDatabase(kind, run) {
       ]).stdout.trim();
       check(
         /^\d+\./.test(version) && Number(version.split(".")[0]) >= 28,
-        "CLI rehearsal requires Docker 28+ for loopback port isolation",
+        "Networked rehearsal requires Docker 28+ for loopback port isolation",
       );
       phase = "private CLI network creation";
       network = docker([
@@ -162,14 +179,20 @@ export async function withIsolatedDatabase(kind, run) {
       name,
       "--label",
       `${label}=${name}`,
-      ...(cli
+      ...(networked
         ? [
             "--network",
             network,
             "--dns",
             "127.0.0.1",
-            "--publish",
-            "127.0.0.1::5432",
+            ...(cli
+              ? ["--publish", "127.0.0.1::5432"]
+              : [
+                  "--publish",
+                  "127.0.0.1::9999",
+                  "--publish",
+                  "127.0.0.1::8025",
+                ]),
           ]
         : ["--network=none"]),
       "--memory=768m",
@@ -195,7 +218,7 @@ export async function withIsolatedDatabase(kind, run) {
         ["exec", container, "pg_isready", "-h", "127.0.0.1", "-U", "postgres"],
         // Docker Desktop can take several seconds to exec into a new bridge.
         // Keep the actual readiness check; do not treat a running PID as ready.
-        { optional: true, timeout: cli ? 15000 : 2000 },
+        { optional: true, timeout: networked ? 15000 : 2000 },
       );
       if (result.status === 0) {
         ready = true;
@@ -232,6 +255,146 @@ export async function withIsolatedDatabase(kind, run) {
         "postgres",
       );
     }
+    function inspectNetworkTarget() {
+      const info = JSON.parse(docker(["inspect", container]).stdout)[0];
+      const net = JSON.parse(docker(["network", "inspect", network]).stdout)[0];
+      check(
+        info.Id === container &&
+          info.State.Running &&
+          info.Config.Labels[label] === name &&
+          net.Id === network &&
+          net.Labels[label] === name &&
+          net.Driver === "bridge" &&
+          !net.Internal &&
+          net.Options["com.docker.network.bridge.enable_ip_masquerade"] ===
+            "false" &&
+          net.Options["com.docker.network.bridge.gateway_mode_ipv4"] ===
+            "nat" &&
+          Object.keys(net.Containers).length === 1 &&
+          net.Containers[container] &&
+          Object.values(info.NetworkSettings.Networks).length === 1 &&
+          Object.values(info.NetworkSettings.Networks)[0].NetworkID === network,
+        "Test network ownership changed",
+      );
+      return info;
+    }
+    function authOrigin(port) {
+      check(
+        authSource && [9999, 8025].includes(port),
+        "Unknown Auth test endpoint",
+      );
+      const info = inspectNetworkTarget();
+      const published = Object.entries(info.NetworkSettings.Ports).filter(
+        ([, bindings]) => bindings?.length,
+      );
+      check(
+        published.length === 2 &&
+          published.every(
+            ([key, bindings]) =>
+              ["9999/tcp", "8025/tcp"].includes(key) &&
+              bindings.length === 1 &&
+              bindings[0].HostIp === "127.0.0.1" &&
+              /^\d+$/.test(bindings[0].HostPort) &&
+              Number(bindings[0].HostPort) >= 1024 &&
+              Number(bindings[0].HostPort) <= 65535 &&
+              ![3000, 54321, 54322, 54323, 54324].includes(
+                Number(bindings[0].HostPort),
+              ),
+          ),
+        "Auth test ports must be private loopback bindings",
+      );
+      for (const id of services) {
+        const service = JSON.parse(docker(["inspect", id]).stdout)[0];
+        check(
+          service.Id === id &&
+            service.State.Running &&
+            service.Config.Labels[label] === name &&
+            service.HostConfig.NetworkMode === `container:${container}`,
+          "Auth service ownership changed",
+        );
+      }
+      return `http://127.0.0.1:${info.NetworkSettings.Ports[`${port}/tcp`][0].HostPort}`;
+    }
+    function startAuthServices() {
+      check(
+        authSource && services.length === 0,
+        "Auth services already started or unavailable",
+      );
+      const authImage = "public.ecr.aws/supabase/gotrue:v2.196.0";
+      const mailImage = "public.ecr.aws/supabase/mailpit:v1.30.2";
+      for (const serviceImage of [authImage, mailImage])
+        docker(["image", "inspect", serviceImage]);
+      const origin = authOrigin(9999);
+      sql(
+        source,
+        `alter role supabase_auth_admin password ${literal(password)};`,
+      );
+      const specs = [
+        [
+          "mail",
+          mailImage,
+          "128m",
+          [
+            "MP_DATABASE=/tmp/mailpit.db",
+            "MP_MAX_MESSAGES=10",
+            "MP_SMTP_BIND_ADDR=127.0.0.1:1025",
+            "MP_UI_BIND_ADDR=0.0.0.0:8025",
+          ],
+        ],
+        [
+          "auth",
+          authImage,
+          "256m",
+          [
+            "GOTRUE_API_HOST=0.0.0.0",
+            "GOTRUE_API_PORT=9999",
+            `API_EXTERNAL_URL=${origin}`,
+            "GOTRUE_SITE_URL=http://127.0.0.1:3000",
+            "GOTRUE_DB_DRIVER=postgres",
+            `GOTRUE_DB_DATABASE_URL=postgresql://supabase_auth_admin:${password}@127.0.0.1:5432/postgres?sslmode=disable`,
+            "GOTRUE_DB_MAX_POOL_SIZE=5",
+            `GOTRUE_JWT_SECRET=${randomUUID()}${randomUUID()}`,
+            "GOTRUE_JWT_AUD=authenticated",
+            "GOTRUE_JWT_DEFAULT_GROUP_NAME=authenticated",
+            "GOTRUE_JWT_EXP=3600",
+            "GOTRUE_EXTERNAL_EMAIL_ENABLED=true",
+            "GOTRUE_MAILER_AUTOCONFIRM=false",
+            "GOTRUE_SMTP_HOST=127.0.0.1",
+            "GOTRUE_SMTP_PORT=1025",
+            "GOTRUE_SMTP_ADMIN_EMAIL=auth@example.test",
+            "GOTRUE_RATE_LIMIT_EMAIL_SENT=10",
+            "GOTRUE_TRACING_ENABLED=false",
+            "LOG_LEVEL=error",
+          ],
+        ],
+      ];
+      for (const [suffix, serviceImage, memory, values] of specs) {
+        const id = docker([
+          "create",
+          "--pull=never",
+          "--name",
+          `${name}-${suffix}`,
+          "--label",
+          `${label}=${name}`,
+          "--network",
+          `container:${container}`,
+          "--memory",
+          memory,
+          "--log-driver=none",
+          "--tmpfs",
+          "/tmp:rw,size=33554432",
+          ...values.flatMap((value) => ["--env", value]),
+          serviceImage,
+        ]).stdout.trim();
+        check(/^[a-f0-9]{64}$/.test(id), "Invalid Auth service ID");
+        services.push(id);
+        docker(["start", id]);
+      }
+      return {
+        origin: () => authOrigin(9999),
+        mailOrigin: () => authOrigin(8025),
+      };
+    }
     await run({
       sql,
       docker,
@@ -240,36 +403,11 @@ export async function withIsolatedDatabase(kind, run) {
       target,
       migrations,
       migrate,
+      startAuthServices: authSource ? startAuthServices : undefined,
       // Only the CLI rehearsal gets a connection, derived from its own container.
       cliConnection: cli
         ? () => {
-            const info = JSON.parse(docker(["inspect", container]).stdout)[0];
-            const net = JSON.parse(
-              docker(["network", "inspect", network]).stdout,
-            )[0];
-            check(
-              info.Id === container &&
-                info.State.Running &&
-                info.Config.Labels[label] === name,
-              "CLI target ownership changed",
-            );
-            check(
-              net.Id === network &&
-                net.Driver === "bridge" &&
-                !net.Internal &&
-                net.Options[
-                  "com.docker.network.bridge.enable_ip_masquerade"
-                ] === "false" &&
-                net.Options["com.docker.network.bridge.gateway_mode_ipv4"] ===
-                  "nat" &&
-                net.Labels[label] === name &&
-                Object.keys(net.Containers).length === 1 &&
-                net.Containers[container] &&
-                Object.values(info.NetworkSettings.Networks).length === 1 &&
-                Object.values(info.NetworkSettings.Networks)[0].NetworkID ===
-                  network,
-              "CLI target network changed",
-            );
+            const info = inspectNetworkTarget();
             const ports = info.NetworkSettings.Ports;
             const binding = ports["5432/tcp"];
             check(

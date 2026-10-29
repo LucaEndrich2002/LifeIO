@@ -65,3 +65,5 @@ Die Planungserklärung zeigt offene Aufgaben dieser Woche und noch anstehende Te
 Schreibende KI-Aktionen, externe Kalender, Bankanbindung und die späteren Produktversionen gehören nicht in diesen Restumfang. Eine Zahlungsintegration folgt erst nach belegtem Produktnutzen. Historische Fixkostenkorrekturen benötigen eine eigene Regelentscheidung; bestehende Fassungen bleiben erhalten, rückwirkendes Umschreiben wird nicht stillschweigend eingeführt.
 
 Grundlage: [PRD](PRD.md), [Roadmap](ROADMAP.md), [Home-KI](../HOME_AI_STATUS.md).
+
+Die [getrennte Auth-Quellprobe](../AUTH_RECOVERY_ACCEPTANCE.md) prüft Registrierung, lokale E-Mail-Bestätigung, Passwortanmeldung und abgewiesene Zugangsdaten mit eigenen kurzlebigen Diensten. Sie ersetzt noch keine Wiederherstellung in einen unabhängigen Zielcluster oder eine Abnahme der Data API nach Restore.
