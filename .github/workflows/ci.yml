@@ -47,6 +47,8 @@ jobs:
           pnpm test:restore
       - name: Upgrade fictional existing data through repository migrations
         run: pnpm test:migrations
+      - name: Rehearse CLI migration failure and recovery with fictional data
+        run: pnpm test:migrations:cli
       - run: pnpm test:auth
       - name: Prepare fictional material for the manual Home study
         run: pnpm test:home:prepare

@@ -1,6 +1,6 @@
 # LifeOS – Fortsetzungsstand
 
-Stand: 28.10.2026. Automation `lifeos-selbst-ndig-weiterentwickeln` aktiv. Nur freigegebene V1, kleine Arbeitsbranches, fremde Änderungen erhalten. Vor umfangreicher Arbeit Limits prüfen; bei gesperrter regulärer Nutzung oder weniger als 10 % Rest in einem Fenster warten. Keine Credits/Resets. Echte KI-Live-Tests ausgesetzt. Keine Käufe, öffentlichen Deployments, Main-Merges oder Nachrichten an Dritte ohne Freigabe. Unveränderte Blockaden still behandeln.
+Stand: 29.10.2026. Automation `lifeos-selbst-ndig-weiterentwickeln` aktiv. Nur freigegebene V1, kleine Arbeitsbranches, fremde Änderungen erhalten. Vor umfangreicher Arbeit Limits prüfen; bei gesperrter regulärer Nutzung oder weniger als 10 % Rest in einem Fenster warten. Keine Credits/Resets. Echte KI-Live-Tests ausgesetzt. Keine Käufe, öffentlichen Deployments, Main-Merges oder Nachrichten an Dritte ohne Freigabe. Unveränderte Blockaden still behandeln.
 
 ## Abgeschlossene Nachweise
 
@@ -27,17 +27,22 @@ GitHub am veröffentlichten Commit: [Push 40735961567](https://github.com/LucaEn
 
 Lokal bestanden Lint, Typecheck, 196 Unit-Tests, 19 Werkzeugtests, Build, Formatprüfung und 132 Integrationstests mit dem neuen Starter. Auch 16 öffentliche Browserprüfungen bestanden. Beide vollständigen finalen GitHub-Läufe bestanden: [Push 40781136035](https://github.com/LucaEndrich2002/LifeIO/actions/runs/40781136035), [PR 40781140949](https://github.com/LucaEndrich2002/LifeIO/actions/runs/40781140949). Enthalten: 196 Unit-, 19 Werkzeug-, 132 Integrations-, 16 öffentliche und 124 private Browserprüfungen, Restore-/Migrationsproben und Home-Testpaket. PR #31 ist offen und prüfbereit. Die früheren Läufe auf `b28bef2` wurden nach der Steuerzeichenkorrektur automatisch abgebrochen; sie zählen nicht als vollständig bestanden.
 
-Lokaler Folgebranch `codex/recovery-runbook` beginnt bei `5ab6fa3`; bisher nur Dokumentationscheckpoint, keine neue Implementierung. Kontingent zuletzt im laufenden Prüfschritt: 37 % im Fünfstunden- und 43 % im Wochenfenster verbleibend. Keine Credits/Resets verwendet. Vor weiterem umfangreichen Schritt erneut prüfen.
+## Laufendes Inkrement: Wiederanlauf und CLI-Migration
+
+Branch `codex/recovery-runbook` basiert auf PR #31. Neuer `test:migrations:cli` verwendet die installierte CLI gegen eine eigens erzeugte Testdatenbank und ein temporäres Projekt ohne Verknüpfung/Umgebungsdateien. 17 Migrationen, drei fiktive Altkonten, Daten-/Rechteprüfungen, erneuter unveränderter Lauf und absichtlicher SQL-Fehler mit Rücknahme sowie korrigierter Fortsetzung. Gemeinsame fachliche Prüflogik aus der SQL-Probe extrahiert. Keine Produkt-/Schemaänderung, kein Reset bestehender Daten, keine neue Abhängigkeit.
+
+Lokal bestanden CLI-/SQL-/Restore-Proben, Lint, Typecheck, 196 Unit-, 19 Werkzeugtests, Build und 16 öffentliche Browserfälle. Frühere Startzeitüberschreitungen und abgewiesene fehlende Portbindung sind im [Wiederanlaufleitfaden](RECOVERY_RUNBOOK.md) dokumentiert. Endgültige Formatprüfung bestanden; PR und CI noch offen; erst nach tatsächlichem Abschluss als bestanden melden.
+
+Kontingent vor Beginn: 94 % im Fünfstunden- und 36 % im Wochenfenster; im Verlauf zuletzt 65 % / 31 % verbleibend. Keine Credits/Resets. Vor neuem umfangreichen Schritt erneut prüfen.
 
 ## Nächste Arbeit
 
-1. PR #31 ist abgeschlossen und am Code `5ab6fa3` vollständig geprüft. Kein weiterer Implementierungs-/Prüfrest für dieses Inkrement. Keine automatische Hauptbranch-Integration.
-2. Danach lokalen Wiederanlauf-/Rückfallablauf konkretisieren und den tatsächlichen Supabase-CLI-Migrationspfad als nächsten begrenzten Nachweis untersuchen. CLI-Probe ausschließlich gegen einen eigens erzeugten, nachgewiesen isolierten Testbestand; keine vorhandene Datenbank zurücksetzen oder als Ziel übernehmen. Vorbereitete SQL-Dateiprobe nicht als CLI-Nachweis ausgeben. Das Sicherheitsinventar ist abgeschlossen; vorhandene Tests nicht duplizieren. Produktive Telemetrie, Geheimniswechsel und allgemeine Auth-/Proxy-/Hostinggrenzen bleiben offen.
-3. Weitere lokale Betriebsarbeit: tatsächlicher Supabase-CLI-Migrationsablauf, vollständiger Supabase-/Auth-Wiederanlauf mit unabhängiger Rollenbasis, Wiederanlauf-/Rückfallablauf und ausführbare Löschprozesse. Keine vollständige Cloud-Restore-Abnahme oder sofortige Ungültigkeit kopierter Zugriffstokens aus bisherigen Proben ableiten.
-4. Nutzer-/Außenentscheidungen laut [V1_STATUS.md](product/V1_STATUS.md): menschliche Home-Abnahme mit fünf Personen, Cloudregion/-kosten, Aufbewahrung, Hauptbranch-Integration, Hosting und Beta. KI-Live-Abnahme bleibt ausgesetzt. Wenn keine unabhängigen freigegebenen V1-Arbeiten mehr verbleiben: Restentscheidungen einmal melden und Automation pausieren.
+1. Dieses Inkrement prüfen, dokumentieren und als PR gegen `codex/security-operations-audit` bereitstellen. Keine automatische Hauptbranch-Integration.
+2. Danach verbleibende lokale Betriebsarbeit begrenzen: vollständiger Supabase-/Auth-Wiederanlauf mit unabhängiger Rollenbasis oder ausführbare Löschprozesse. Keine vollständige Cloud-Restore-Abnahme oder sofortige Ungültigkeit kopierter Zugriffstokens aus bisherigen Proben ableiten.
+3. Nutzer-/Außenentscheidungen laut [V1_STATUS.md](product/V1_STATUS.md): menschliche Home-Abnahme mit fünf Personen, Cloudregion/-kosten, Aufbewahrung, Hauptbranch-Integration, Hosting und Beta. Produktive Telemetrie, Geheimniswechsel und allgemeine Auth-/Proxy-/Hostinggrenzen bleiben offen. KI-Live-Abnahme ausgesetzt. Wenn keine unabhängigen freigegebenen V1-Arbeiten mehr verbleiben: Restentscheidungen einmal melden und Automation pausieren.
 
 ## Lokale Laufzeit
 
-Docker/Supabase vorhanden. Letzte reversible Socket-Reparatur am 27.10.: [LOCAL_SUPABASE.md](LOCAL_SUPABASE.md). Image `public.ecr.aws/supabase/postgres:17.6.1.167` lokal. Isolierte Proben ohne Netzwerk/Hostmounts, 768 MiB RAM / 512 MiB Daten-tmpfs, eigene Container nach Prüfungen entfernt; bestehende Datenbank erhalten.
+Docker/Supabase vorhanden. Letzte reversible Socket-Reparatur am 27.10.: [LOCAL_SUPABASE.md](LOCAL_SUPABASE.md). Image `public.ecr.aws/supabase/postgres:17.6.1.167` lokal. SQL-/Restore-Proben ohne Netzwerk/Hostmounts; CLI-Probe mit eigenem Bridge und geprüftem Loopback-Port, 768 MiB RAM / 512 MiB Daten-tmpfs, eigene Container nach Prüfungen entfernt; bestehende Datenbank erhalten.
 
 Vorschau zuletzt Port 3000, damalige PID 24732; vor Prozessaktionen Zustand/Pfad erneut prüfen. Fiktives Home-Material: `.cache/home-study/2026-10-27T19-59-04-470Z`; keine menschliche J05-Abnahme. Keine Geheimnisse oder Testpasswörter hier speichern.

@@ -105,6 +105,8 @@ Die Integrationssuite prüft zusätzlich das vollständige Anwendungsschema auf 
 
 `pnpm test:migrations` verwendet dieselbe isolierte Umgebung für drei tatsächlich vor der Sparziel-Migration erzeugte fiktive Konten. Es prüft Datenübernahme, historische Raten, späteren Einrichtungsabschluss und Eigentümerrechte bis zum aktuellen V1-Schema. Der SQL-Dateilauf ersetzt keine Prüfung des Supabase-CLI-Migrationsablaufs: [MIGRATION_EXISTING_DATA_STATUS.md](MIGRATION_EXISTING_DATA_STATUS.md).
 
+`pnpm test:migrations:cli` ergänzt den tatsächlichen CLI-Lauf mit demselben fiktiven Altbestand, einer absichtlich fehlerhaften temporären Migration und geprüfter Fortsetzung. Eigene Testdatenbank mit eigenem Bridge und geprüftem Loopback-Port; kein Reset vorhandener Daten. Ablauf und Grenzen: [RECOVERY_RUNBOOK.md](RECOVERY_RUNBOOK.md).
+
 `pnpm test:tooling` prüft die Fehlergrenze des lokalen Supabase-Teststarters mit ausschließlich fiktiven Werten und Unterprozess-Attrappen, ohne Datenbank oder Netzwerk. Ungültige CLI-Konfigurationen werden vor dem Teststart ohne Rohwerte abgewiesen. Inventar vorhandener Grenzen und offene Betriebsfragen: [LOGS_SECRETS_LIMITS_STATUS.md](LOGS_SECRETS_LIMITS_STATUS.md).
 
 Die lokale Auth-Konfiguration verwendet bestätigte E-Mail-Adressen, sechsstellige Codes und sichere Passwortänderungen. Templates liegen unter `supabase/templates`; Supabase-Stop/Start aktiviert Änderungen bei erhaltenen Volumes. Codebestätigung und Wiederherstellung verwenden Server Actions mit festen Weiterleitungen. Der Proxy erneuert Sitzungen; Server Components und Server Actions verwenden getrennte Cookie-Adapter.

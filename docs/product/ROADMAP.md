@@ -90,6 +90,8 @@ Quellen: [README](../../README.md), Abschnitte 9, 10 und 21, sowie [PRD](PRD.md)
 
 Security, Typprüfung, Validierung und Isolation beginnen bei der ersten Implementierung. Phase 10 prüft den Gesamtablauf vor der Beta; sie verschiebt diese Pflichten nicht ans Projektende.
 
+Die [CLI-Migrationsprobe und der lokale Wiederanlaufleitfaden](../RECOVERY_RUNBOOK.md) ergänzen Phase 10. Der Nachweis bleibt auf fiktive Altdaten und einen kontrollierten SQL-Fehler begrenzt; vollständiger Supabase-/Auth-Restore und produktiver Rückfall bleiben offen.
+
 ## Referenz: Scope des technischen Projektfundaments
 
 **Ausgangsproblem:** Der Projektordner enthielt nur Produktdokumentation und keine ausführbare Anwendung. Die folgenden Kriterien beschreiben den Umfang des inzwischen lokal angelegten Fundaments; externe Voraussetzungen bleiben wie oben beschrieben offen.

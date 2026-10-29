@@ -31,7 +31,7 @@ pnpm test:migrations
 
 Voraussetzungen: lokaler Docker und das vorhandene Image `public.ecr.aws/supabase/postgres:17.6.1.167`. CI lädt das Image ausdrücklich und führt die Migrationsprobe nach der Wiederherstellungsprobe aus. Keine neue Abhängigkeit.
 
-`scripts/isolated-database.mjs` enthält die gemeinsame interne Umgebung für Migrations- und [Wiederherstellungsprobe](BACKUP_RESTORE_STATUS.md). Sie akzeptiert keine Befehlszeilenargumente oder fremden Datenbankziele: ausschließlich ein neuer Container ohne Netzwerk, Ports oder Hostverzeichnisse, maximal 768 MiB RAM und 512 MiB für das private Datenverzeichnis. Keine bestehende Datenbank wird angesprochen oder zurückgesetzt. Rohdaten, SQL-Fehlerdetails und Zugangsdaten werden nicht ausgegeben.
+`scripts/isolated-database.mjs` enthält die gemeinsame interne Umgebung für Migrations- und [Wiederherstellungsprobe](BACKUP_RESTORE_STATUS.md). Sie akzeptiert keine Befehlszeilenargumente oder fremden Datenbankziele: für diese SQL-Dateiprobe ausschließlich ein neuer Container ohne Netzwerk, Ports oder Hostverzeichnisse, maximal 768 MiB RAM und 512 MiB für das private Datenverzeichnis. Keine bestehende Datenbank wird angesprochen oder zurückgesetzt. Rohdaten, SQL-Fehlerdetails und Zugangsdaten werden nicht ausgegeben.
 
 Erfolg und Fehler entfernen nur den eigenen, per ID und Kennzeichnung geprüften Container samt dessen anonymen Volumes. Nach hartem Prozessabbruch ausschließlich den konkreten Container `lifeos-migration-…` mit Kennzeichnung `io.lifeos.migration-rehearsal` untersuchen; keine allgemeine Docker-Bereinigung. Die bisherigen Restore-Kennzeichnungen bleiben unverändert.
 
@@ -44,3 +44,5 @@ Lint, Typecheck und 196 Unit-Tests bestanden. Der anfängliche Unit-Lauf in der 
 Geprüft werden Repository-SQL-Dateien über `psql` unter der Migrationsrolle `postgres` mit einfacher Historientabelle. Das belegt weder den Supabase-CLI-Migrationsablauf samt Fehler-/Wiederaufnahmeverhalten noch unterbrechungsfreie Cloud-Upgrades. Kontoreferenzen sind synthetisch; kein Auth-Dienst oder Login. Der Nachweis umfasst diesen älteren Ausgangsstand und drei Sparziel-Fälle, nicht alle historischen Bestände, Datenmengen oder konkurrierenden Schreibvorgänge.
 
 Unabhängige Rollen-/Auth-Wiederherstellung, produktive Sicherungs-/Aufbewahrungsregeln und dokumentierter Wiederanlauf-/Rückfallablauf bleiben offen. Echte KI-Tests bleiben ausgesetzt; keine Cloud-Buchung, Veröffentlichung oder Integration in den Hauptbranch.
+
+Eine separate [CLI-Probe](RECOVERY_RUNBOOK.md) verwendet dieselben fachlichen Prüfungen, führt die Dateien aber mit der installierten Supabase-CLI in einer eigenen Testdatenbank aus. Sie ergänzt kontrollierten Fehler, Rücknahme und erneuten Lauf; die hier dokumentierte SQL-Probe bleibt unverändert abgegrenzt.
