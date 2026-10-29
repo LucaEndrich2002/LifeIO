@@ -37,8 +37,8 @@ Kontingent vor Beginn: 94 % im Fünfstunden- und 36 % im Wochenfenster; im Verla
 
 ## Nächste Arbeit
 
-1. PR #32 ist abgeschlossen und am Code `e3e266c` vollständig geprüft. Lokaler Folgebranch `codex/auth-recovery-assessment` enthält bislang nur diesen Dokumentationscheckpoint. Keine automatische Hauptbranch-Integration.
-2. Danach verbleibende lokale Betriebsarbeit begrenzen: vollständiger Supabase-/Auth-Wiederanlauf mit unabhängiger Rollenbasis oder ausführbare Löschprozesse. Keine vollständige Cloud-Restore-Abnahme oder sofortige Ungültigkeit kopierter Zugriffstokens aus bisherigen Proben ableiten.
+1. PR #32 ist abgeschlossen und am Code `e3e266c` vollständig geprüft. Folgebranch `codex/auth-recovery-assessment` enthält den Dokumentationscheckpoint und die rein lesend vorbereitete [Auth-Restore-Abnahme](AUTH_RECOVERY_ACCEPTANCE.md). Noch keine neue Testinstanz oder Auth-Wiederherstellung ausgeführt. Keine automatische Hauptbranch-Integration.
+2. Nächster begrenzter Implementierungsschritt: getrennte Quelle mit PostgreSQL/GoTrue/Mailpit und Registrierung, lokaler E-Mail-Bestätigung sowie Passwortanmeldung zweier fiktiver Konten vorbereiten. Anschließend unabhängigen Zielcluster und Restore nach den Abnahmekriterien ergänzen; diesen Auth-/Datenbanknachweis erst nach Data-API-/App-Prüfungen als vollständigen Supabase-Wiederanlauf bezeichnen. Ausführbare Löschprozesse bleiben danach offen. Keine vollständige Cloud-Restore-Abnahme oder sofortige Ungültigkeit kopierter Zugriffstokens aus bisherigen Proben ableiten.
 3. Nutzer-/Außenentscheidungen laut [V1_STATUS.md](product/V1_STATUS.md): menschliche Home-Abnahme mit fünf Personen, Cloudregion/-kosten, Aufbewahrung, Hauptbranch-Integration, Hosting und Beta. Produktive Telemetrie, Geheimniswechsel und allgemeine Auth-/Proxy-/Hostinggrenzen bleiben offen. KI-Live-Abnahme ausgesetzt. Wenn keine unabhängigen freigegebenen V1-Arbeiten mehr verbleiben: Restentscheidungen einmal melden und Automation pausieren.
 
 ## Lokale Laufzeit
@@ -46,3 +46,7 @@ Kontingent vor Beginn: 94 % im Fünfstunden- und 36 % im Wochenfenster; im Verla
 Docker/Supabase vorhanden. Letzte reversible Socket-Reparatur am 27.10.: [LOCAL_SUPABASE.md](LOCAL_SUPABASE.md). Image `public.ecr.aws/supabase/postgres:17.6.1.167` lokal. SQL-/Restore-Proben ohne Netzwerk/Hostmounts; CLI-Probe mit eigenem Bridge und geprüftem Loopback-Port, 768 MiB RAM / 512 MiB Daten-tmpfs, eigene Container nach Prüfungen entfernt; bestehende Datenbank erhalten.
 
 Vorschau zuletzt Port 3000, damalige PID 24732; vor Prozessaktionen Zustand/Pfad erneut prüfen. Fiktives Home-Material: `.cache/home-study/2026-10-27T19-59-04-470Z`; keine menschliche J05-Abnahme. Keine Geheimnisse oder Testpasswörter hier speichern.
+
+## Vorbereitung vom 29.10., 04:29 UTC
+
+Nutzung erlaubt, 21 % im Fünfstunden- und 24 % im Wochenfenster verblieben. Deshalb nur begrenzte lesende Vorbereitung und Dokumentation; kein umfangreicher zweiter Dienstestack begonnen. Installierte Image-Versionen, bestätigte E-Mail-Konfiguration und 6,11 GiB freier Platz auf C: aufgenommen. Bereits vorhandene Images benötigen zunächst keinen neuen Download. Die Auth-/Restore-Lücke ist konkretisiert; kein neuer bestandener Lauf behauptet. Keine Entscheidung des Nutzers notwendig, Automation bleibt aktiv.
