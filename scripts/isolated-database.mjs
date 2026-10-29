@@ -18,9 +18,13 @@ export function same(actual, expected, message) {
   check(JSON.stringify(actual) === JSON.stringify(expected), message);
 }
 
-// Internal harness: only the two fixed repository rehearsals, never a user target.
+// Internal harness: fixed repository rehearsals, never a user target.
 export async function withIsolatedDatabase(kind, run) {
-  check(["restore", "migration"].includes(kind), "Unknown rehearsal");
+  check(
+    ["restore", "migration", "migration-cli"].includes(kind),
+    "Unknown rehearsal",
+  );
+  const cli = kind === "migration-cli";
   const image = "public.ecr.aws/supabase/postgres:17.6.1.167";
   const name = `lifeos-${kind}-${randomUUID()}`;
   const label = `io.lifeos.${kind}-rehearsal`;
@@ -28,6 +32,8 @@ export async function withIsolatedDatabase(kind, run) {
   const target = "lifeos_restore_target";
   const endpoint = readDockerEndpoint();
   let container;
+  let network;
+  const password = `fictional-${randomUUID()}`;
   let phase = "local environment validation";
   const env = { ...process.env };
   delete env.DOCKER_CONTEXT;
@@ -73,20 +79,36 @@ export async function withIsolatedDatabase(kind, run) {
     ).stdout.trim();
   }
   function cleanup() {
-    if (!container) return;
-    const owned = docker([
-      "inspect",
-      "--format",
-      `{{index .Config.Labels "${label}"}}`,
-      container,
-    ]);
-    check(
-      owned.stdout.trim() === name,
-      "Cleanup refused: container label changed",
-    );
-    // Only this invocation's validated ID; includes only its anonymous volumes.
-    docker(["rm", "--force", "--volumes", container]);
-    container = undefined;
+    if (container) {
+      const owned = docker([
+        "inspect",
+        "--format",
+        `{{index .Config.Labels "${label}"}}`,
+        container,
+      ]);
+      check(
+        owned.stdout.trim() === name,
+        "Cleanup refused: container label changed",
+      );
+      // Only this invocation's validated ID; includes only its anonymous volumes.
+      docker(["rm", "--force", "--volumes", container]);
+      container = undefined;
+    }
+    if (network) {
+      const owned = docker([
+        "network",
+        "inspect",
+        "--format",
+        `{{index .Labels "${label}"}}`,
+        network,
+      ]);
+      check(
+        owned.stdout.trim() === name,
+        "Cleanup refused: network label changed",
+      );
+      docker(["network", "rm", network]);
+      network = undefined;
+    }
   }
   for (const signal of ["SIGINT", "SIGTERM"]) {
     process.once(signal, () => {
@@ -106,6 +128,32 @@ export async function withIsolatedDatabase(kind, run) {
       "A local Docker endpoint is required",
     );
     docker(["image", "inspect", image]); // Never pull an image implicitly.
+    if (cli) {
+      const version = docker([
+        "version",
+        "--format",
+        "{{.Server.Version}}",
+      ]).stdout.trim();
+      check(
+        /^\d+\./.test(version) && Number(version.split(".")[0]) >= 28,
+        "CLI rehearsal requires Docker 28+ for loopback port isolation",
+      );
+      phase = "private CLI network creation";
+      network = docker([
+        "network",
+        "create",
+        "--driver",
+        "bridge",
+        "--opt",
+        "com.docker.network.bridge.enable_ip_masquerade=false",
+        "--opt",
+        "com.docker.network.bridge.gateway_mode_ipv4=nat",
+        "--label",
+        `${label}=${name}`,
+        name,
+      ]).stdout.trim();
+      check(/^[a-f0-9]{64}$/.test(network), "Invalid network ID");
+    }
     phase = "isolated container creation";
     container = docker([
       "create",
@@ -114,12 +162,21 @@ export async function withIsolatedDatabase(kind, run) {
       name,
       "--label",
       `${label}=${name}`,
-      "--network=none",
+      ...(cli
+        ? [
+            "--network",
+            network,
+            "--dns",
+            "127.0.0.1",
+            "--publish",
+            "127.0.0.1::5432",
+          ]
+        : ["--network=none"]),
       "--memory=768m",
       "--tmpfs",
       "/var/lib/postgresql/data:rw,size=536870912",
       "--env",
-      `POSTGRES_PASSWORD=fictional-${randomUUID()}`,
+      `POSTGRES_PASSWORD=${password}`,
       image,
       "postgres",
       "-c",
@@ -136,7 +193,9 @@ export async function withIsolatedDatabase(kind, run) {
     for (let attempt = 0; attempt < 45; attempt++) {
       const result = docker(
         ["exec", container, "pg_isready", "-h", "127.0.0.1", "-U", "postgres"],
-        { optional: true, timeout: 2000 },
+        // Docker Desktop can take several seconds to exec into a new bridge.
+        // Keep the actual readiness check; do not treat a running PID as ready.
+        { optional: true, timeout: cli ? 15000 : 2000 },
       );
       if (result.status === 0) {
         ready = true;
@@ -149,11 +208,12 @@ export async function withIsolatedDatabase(kind, run) {
       sql(source, "show data_directory;") === "/var/lib/postgresql/data",
       "Data must use the private tmpfs mount",
     );
-    sql(
-      source,
-      "create schema supabase_migrations; create table supabase_migrations.schema_migrations(version text primary key, statements text[], name text);",
-      "postgres",
-    );
+    if (!cli)
+      sql(
+        source,
+        "create schema supabase_migrations; create table supabase_migrations.schema_migrations(version text primary key, statements text[], name text);",
+        "postgres",
+      );
     const migrations = readdirSync(
       new URL("supabase/migrations/", root),
     ).sort();
@@ -180,6 +240,51 @@ export async function withIsolatedDatabase(kind, run) {
       target,
       migrations,
       migrate,
+      // Only the CLI rehearsal gets a connection, derived from its own container.
+      cliConnection: cli
+        ? () => {
+            const info = JSON.parse(docker(["inspect", container]).stdout)[0];
+            const net = JSON.parse(
+              docker(["network", "inspect", network]).stdout,
+            )[0];
+            check(
+              info.Id === container &&
+                info.State.Running &&
+                info.Config.Labels[label] === name,
+              "CLI target ownership changed",
+            );
+            check(
+              net.Id === network &&
+                net.Driver === "bridge" &&
+                !net.Internal &&
+                net.Options[
+                  "com.docker.network.bridge.enable_ip_masquerade"
+                ] === "false" &&
+                net.Options["com.docker.network.bridge.gateway_mode_ipv4"] ===
+                  "nat" &&
+                net.Labels[label] === name &&
+                Object.keys(net.Containers).length === 1 &&
+                net.Containers[container] &&
+                Object.values(info.NetworkSettings.Networks).length === 1 &&
+                Object.values(info.NetworkSettings.Networks)[0].NetworkID ===
+                  network,
+              "CLI target network changed",
+            );
+            const ports = info.NetworkSettings.Ports;
+            const binding = ports["5432/tcp"];
+            check(
+              Object.keys(ports).length === 1 &&
+                binding?.length === 1 &&
+                binding[0].HostIp === "127.0.0.1" &&
+                /^\d+$/.test(binding[0].HostPort) &&
+                Number(binding[0].HostPort) >= 1024 &&
+                Number(binding[0].HostPort) <= 65535 &&
+                Number(binding[0].HostPort) !== 54322,
+              "CLI target must have a private loopback port",
+            );
+            return `postgresql://postgres:${password}@127.0.0.1:${binding[0].HostPort}/postgres?sslmode=disable`;
+          }
+        : undefined,
       setPhase: (value) => {
         phase = value;
       },

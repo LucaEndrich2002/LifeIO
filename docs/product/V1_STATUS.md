@@ -34,9 +34,11 @@ Eine [durchgesetzte Content Security Policy](../CONTENT_SECURITY_POLICY_STATUS.m
 
 Eine [lokale logische Wiederherstellungsprobe](../BACKUP_RESTORE_STATUS.md) ergänzt Paket 3: fiktive Daten werden tatsächlich gesichert und in eine leere Datenbank zurückgespielt; Daten, Schema und Rechte werden verglichen. Die gemeinsame Rollenbasis, synthetischen Auth-Referenzen und offenen Betriebsanforderungen sind ausdrücklich abgegrenzt. Dies ersetzt keine vollständige Supabase-/Cloud-Wiederherstellung oder Migrationsprobe mit vorhandenem Datenbestand.
 
-Eine [begrenzte Migrationsprobe](../MIGRATION_EXISTING_DATA_STATUS.md) ergänzt inzwischen drei bereits vor der Sparziel-Migration angelegte fiktive Konten. Sie prüft Erhalt alter Daten, historische Raten, späteren Einrichtungsabschluss und Eigentümerrechte durch alle nachfolgenden SQL-Dateien. Andere Altbestände und der tatsächliche Supabase-CLI-Migrationsablauf bleiben offen.
+Eine [begrenzte Migrationsprobe](../MIGRATION_EXISTING_DATA_STATUS.md) ergänzt inzwischen drei bereits vor der Sparziel-Migration angelegte fiktive Konten. Sie prüft Erhalt alter Daten, historische Raten, späteren Einrichtungsabschluss und Eigentümerrechte durch alle nachfolgenden SQL-Dateien. Andere Altbestände bleiben offen; den tatsächlichen CLI-Ablauf ergänzt die unten beschriebene Probe.
 
 Diese Prüfliste zerlegt die drei Pakete; die Zeilen sind keine zusätzlichen Produktphasen. Sie ist eine Bestandsaufnahme, keine Freigabe für Cloud-Ausgaben, Veröffentlichung oder Zusammenführen von Pull Requests.
+
+Der [Wiederanlaufleitfaden und die CLI-Probe](../RECOVERY_RUNBOOK.md) ergänzen den tatsächlichen Migrationsweg einschließlich kontrolliertem Fehler, Rücknahme und erneutem Lauf. Die vollständige Supabase-/Auth-Wiederherstellung bleibt offen.
 
 Das [Inventar zu Logs, Geheimnissen und Anfragegrenzen](../LOGS_SECRETS_LIMITS_STATUS.md) trennt vorhandene lokale Nachweise von offenen Hosting- und Betriebsaufgaben. Ein gefundener Fehlerpfad im lokalen Teststarter wurde abgesichert: ungültige CLI-Werte werden nicht mehr über rohe Parser-/URL-Fehler ausgegeben. Dies ist keine vollständige Produktionshärtung.
 
