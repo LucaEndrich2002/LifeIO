@@ -27,17 +27,17 @@ GitHub am veröffentlichten Commit: [Push 40735961567](https://github.com/LucaEn
 
 Lokal bestanden Lint, Typecheck, 196 Unit-Tests, 19 Werkzeugtests, Build, Formatprüfung und 132 Integrationstests mit dem neuen Starter. Auch 16 öffentliche Browserprüfungen bestanden. Beide vollständigen finalen GitHub-Läufe bestanden: [Push 40781136035](https://github.com/LucaEndrich2002/LifeIO/actions/runs/40781136035), [PR 40781140949](https://github.com/LucaEndrich2002/LifeIO/actions/runs/40781140949). Enthalten: 196 Unit-, 19 Werkzeug-, 132 Integrations-, 16 öffentliche und 124 private Browserprüfungen, Restore-/Migrationsproben und Home-Testpaket. PR #31 ist offen und prüfbereit. Die früheren Läufe auf `b28bef2` wurden nach der Steuerzeichenkorrektur automatisch abgebrochen; sie zählen nicht als vollständig bestanden.
 
-## Laufendes Inkrement: Wiederanlauf und CLI-Migration
+## Abgeschlossenes Inkrement: Wiederanlauf und CLI-Migration
 
 Branch `codex/recovery-runbook` basiert auf PR #31. Neuer `test:migrations:cli` verwendet die installierte CLI gegen eine eigens erzeugte Testdatenbank und ein temporäres Projekt ohne Verknüpfung/Umgebungsdateien. 17 Migrationen, drei fiktive Altkonten, Daten-/Rechteprüfungen, erneuter unveränderter Lauf und absichtlicher SQL-Fehler mit Rücknahme sowie korrigierter Fortsetzung. Gemeinsame fachliche Prüflogik aus der SQL-Probe extrahiert. Keine Produkt-/Schemaänderung, kein Reset bestehender Daten, keine neue Abhängigkeit.
 
-Lokal bestanden CLI-/SQL-/Restore-Proben, Lint, Typecheck, 196 Unit-, 19 Werkzeugtests, Build und 16 öffentliche Browserfälle. Frühere Startzeitüberschreitungen und abgewiesene fehlende Portbindung sind im [Wiederanlaufleitfaden](RECOVERY_RUNBOOK.md) dokumentiert. Endgültige Formatprüfung bestanden; PR und CI noch offen; erst nach tatsächlichem Abschluss als bestanden melden.
+Lokal bestanden CLI-/SQL-/Restore-Proben, Lint, Typecheck, 196 Unit-, 19 Werkzeugtests, Build und 16 öffentliche Browserfälle. Frühere Startzeitüberschreitungen und abgewiesene fehlende Portbindung sind im [Wiederanlaufleitfaden](RECOVERY_RUNBOOK.md) dokumentiert. [PR #32](https://github.com/LucaEndrich2002/LifeIO/pull/32), Code `e3e266c5995463dadaaac2fee1f7a64ca65dc90d`: beide vollständigen GitHub-Läufe bestanden, [Push 40813904077](https://github.com/LucaEndrich2002/LifeIO/actions/runs/40813904077) und [PR 40813908871](https://github.com/LucaEndrich2002/LifeIO/actions/runs/40813908871). Enthalten: Lint, Format, Typecheck, Build, 196 Unit-, 19 Werkzeug-, 132 Integrations-, 16 öffentliche und 124 private Browserprüfungen, alle drei Datenbankproben und das Home-Testpaket. Der Push-Lauf benötigte beim Download einer GitHub Action einen automatischen Wiederholungsversuch und endete erfolgreich. Kein Main-Merge oder Deployment.
 
 Kontingent vor Beginn: 94 % im Fünfstunden- und 36 % im Wochenfenster; im Verlauf zuletzt 65 % / 31 % verbleibend. Keine Credits/Resets. Vor neuem umfangreichen Schritt erneut prüfen.
 
 ## Nächste Arbeit
 
-1. Dieses Inkrement prüfen, dokumentieren und als PR gegen `codex/security-operations-audit` bereitstellen. Keine automatische Hauptbranch-Integration.
+1. PR #32 ist abgeschlossen und am Code `e3e266c` vollständig geprüft. Lokaler Folgebranch `codex/auth-recovery-assessment` enthält bislang nur diesen Dokumentationscheckpoint. Keine automatische Hauptbranch-Integration.
 2. Danach verbleibende lokale Betriebsarbeit begrenzen: vollständiger Supabase-/Auth-Wiederanlauf mit unabhängiger Rollenbasis oder ausführbare Löschprozesse. Keine vollständige Cloud-Restore-Abnahme oder sofortige Ungültigkeit kopierter Zugriffstokens aus bisherigen Proben ableiten.
 3. Nutzer-/Außenentscheidungen laut [V1_STATUS.md](product/V1_STATUS.md): menschliche Home-Abnahme mit fünf Personen, Cloudregion/-kosten, Aufbewahrung, Hauptbranch-Integration, Hosting und Beta. Produktive Telemetrie, Geheimniswechsel und allgemeine Auth-/Proxy-/Hostinggrenzen bleiben offen. KI-Live-Abnahme ausgesetzt. Wenn keine unabhängigen freigegebenen V1-Arbeiten mehr verbleiben: Restentscheidungen einmal melden und Automation pausieren.
 
