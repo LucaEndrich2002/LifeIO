@@ -51,8 +51,12 @@ Erfolg und Fehler entfernen nur die eigenen per Kennzeichnung geprüften Dienste
 
 ## Prüfstand dieses Inkrements
 
-Die neue Auth-Quelle besteht lokal, ebenso die bisherigen drei Datenbankproben, Lint, Typecheck, 196 Unit-Tests, 19 Werkzeugtests, Build und 16 öffentliche Browserfälle. Die endgültige Formatprüfung besteht; GitHub-Prüfungen stehen noch aus. Eine erste Erwartung von HTTP 401 für manipulierte Tokens war falsch: die isolierte Diagnose bestätigte 403, `bad_jwt` und keine zurückgegebene Identität. Die Prüfung verlangt jetzt genau diese Ablehnung; der frühere Lauf zählt nicht als bestanden.
+Die neue Auth-Quelle besteht lokal, ebenso die bisherigen drei Datenbankproben, Lint, Typecheck, 196 Unit-Tests, 19 Werkzeugtests, Build und 16 öffentliche Browserfälle. Die endgültige Formatprüfung besteht. Eine erste Erwartung von HTTP 401 für manipulierte Tokens war falsch: die isolierte Diagnose bestätigte 403, `bad_jwt` und keine zurückgegebene Identität. Die Prüfung verlangt jetzt genau diese Ablehnung; der frühere Lauf zählt nicht als bestanden.
 
 Vor der Ausführung musste der erneut bestätigte lokale Docker-Socket-Fehler mit dem dokumentierten reversiblen Verfahren behoben werden. Die sieben vorhandenen LifeOS-Dienste liefen anschließend wieder; eigene Probecontainer und Netzwerke wurden entfernt. Details: [LOCAL_SUPABASE.md](LOCAL_SUPABASE.md).
 
 Noch kein neues Backup, Zielcluster oder Restore ausgeführt. Neustart, Schlüsselwechsel, tatsächliche Data-API-/App-Zugriffe und die obigen Wiederherstellungskriterien bleiben offen. Dieses Inkrement schafft ausschließlich die bestätigte Auth-Quelle für die nächste Probe.
+
+[PR #33](https://github.com/LucaEndrich2002/LifeIO/pull/33), Code `d3e8b1ebf3b4b7bfa1d70a1b544acd16be5d79ea`: beide vollständigen GitHub-Läufe bestanden, [Push 40855330613](https://github.com/LucaEndrich2002/LifeIO/actions/runs/40855330613) und [PR 40855339892](https://github.com/LucaEndrich2002/LifeIO/actions/runs/40855339892). Enthalten: Format, Lint, Typecheck, Build, 196 Unit-, 19 Werkzeug-, 132 Integrations-, 16 öffentliche und 124 private Browserprüfungen, alle vier Datenbank-/Auth-Proben und das Home-Testpaket. Kein Main-Merge oder Deployment.
+
+Eine zusätzliche lokale Prüfkopie mit automatischer E-Mail-Bestätigung scheiterte erwartungsgemäß vor dem erfolgreichen Login. Ihre eigenen Ressourcen wurden entfernt. Diese Gegenprobe ist kein zusätzlicher permanenter CI-Testfall.
