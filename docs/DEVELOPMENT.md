@@ -72,6 +72,8 @@ Vitest prüft Konfigurationsvalidierung und zugängliche Navigation. Playwright 
 
 ## Supabase lokal
 
+`pnpm test:recovery:money` prüft nach einer eigenen unabhängigen Wiederherstellung die Monatsübersicht, Ausgabe-Erstellen und Kontentrennung auf Desktop und Mobil. Die separate bisherige Browserprobe bleibt erhalten. Umfang und tatsächlicher Prüfstand: [RECOVERY_MONEY_STATUS.md](RECOVERY_MONEY_STATUS.md).
+
 `pnpm test:recovery:browser` ergänzt die unabhängige Auth-Wiederherstellung um einen eigenen minimalen Gateway und einen getrennten Produktions-Build. Desktop und Mobil prüfen Anmeldung, Profil, Einkommen und Abmeldung gegen das restaurierte Ziel. Voraussetzungen, Prüfstand und Grenzen: [RECOVERY_BROWSER_STATUS.md](RECOVERY_BROWSER_STATUS.md).
 
 `pnpm test:auth:restore` prüft die Wiederherstellung bestätigter fiktiver Konten in einen unabhängigen PostgreSQL-Cluster, neue Anmeldungen, tatsächliche Data-API-Zugriffsrechte und Auth-Neustart. Benötigt vorhandene PostgreSQL-/GoTrue-/Mailpit-/PostgREST-Images; keine bestehende Datenbank oder echte Schlüssel. Umfang und Grenzen: [AUTH_RECOVERY_ACCEPTANCE.md](AUTH_RECOVERY_ACCEPTANCE.md).

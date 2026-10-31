@@ -62,6 +62,8 @@ jobs:
         run: |
           docker pull public.ecr.aws/supabase/kong:2.8.1
           pnpm test:recovery:browser
+      - name: Verify Money reads and new expenses after an independent restore
+        run: pnpm test:recovery:money
       - run: pnpm test:auth
       - name: Prepare fictional material for the manual Home study
         run: pnpm test:home:prepare
