@@ -1,5 +1,6 @@
 import { spawnSync } from "node:child_process";
-import { randomUUID } from "node:crypto";
+import { createHmac, randomUUID } from "node:crypto";
+import { recoveryGatewayConfig } from "./recovery-gateway.mjs";
 import { readFileSync, readdirSync } from "node:fs";
 import {
   dockerCommand,
@@ -12,16 +13,21 @@ export const read = (path) => readFileSync(new URL(path, root), "utf8");
 const literal = (value) => `'${value.replaceAll("'", "''")}'`;
 class RehearsalError extends Error {}
 const activeCleanups = new Map();
-function interruptRehearsals() {
+async function interruptRehearsals() {
   // Nested source/target rehearsals must both clean up before exiting.
   for (const [cleanup, name] of [...activeCleanups].reverse()) {
     try {
-      cleanup();
+      await cleanup();
     } catch {
       console.error(`Cleanup required for ${name}.`);
     }
   }
   process.exit(130);
+}
+export function registerRehearsalCleanup(cleanup, name) {
+  check(activeCleanups.size > 0, "Cleanup must belong to an active rehearsal");
+  activeCleanups.set(cleanup, name);
+  return () => activeCleanups.delete(cleanup);
 }
 export function check(condition, message) {
   if (!condition) throw new RehearsalError(message);
@@ -39,15 +45,19 @@ export async function withIsolatedDatabase(kind, run) {
       "migration-cli",
       "auth-source",
       "auth-target",
+      "browser-target",
     ].includes(kind),
     "Unknown rehearsal",
   );
   const cli = kind === "migration-cli";
   const authSource = kind === "auth-source";
-  const authTarget = kind === "auth-target";
+  const browserTarget = kind === "browser-target";
+  const authTarget = kind === "auth-target" || browserTarget;
   const auth = authSource || authTarget;
   const networked = cli || auth;
-  const httpPorts = authTarget ? [9999, 8025, 3001] : [9999, 8025];
+  const httpPorts = authTarget
+    ? [9999, 8025, 3001, ...(browserTarget ? [8000] : [])]
+    : [9999, 8025];
   const services = [];
   const image = "public.ecr.aws/supabase/postgres:17.6.1.167";
   const name = `lifeos-${kind}-${randomUUID()}`;
@@ -336,14 +346,19 @@ export async function withIsolatedDatabase(kind, run) {
       const authImage = "public.ecr.aws/supabase/gotrue:v2.196.0";
       const mailImage = "public.ecr.aws/supabase/mailpit:v1.30.2";
       const restImage = "public.ecr.aws/supabase/postgrest:v16.2";
+      const gatewayImage = "public.ecr.aws/supabase/kong:2.8.1";
       const jwtSecret = `${randomUUID()}${randomUUID()}`;
       for (const serviceImage of [
         authImage,
         mailImage,
         ...(authTarget ? [restImage] : []),
+        ...(browserTarget ? [gatewayImage] : []),
       ])
         docker(["image", "inspect", serviceImage]);
-      const origin = authOrigin(9999);
+      const origin = browserTarget
+        ? `${authOrigin(8000)}/auth/v1`
+        : authOrigin(9999);
+      let anonKey;
       sql(
         source,
         `alter role supabase_auth_admin password ${literal(password)};`,
@@ -407,6 +422,45 @@ export async function withIsolatedDatabase(kind, run) {
           ],
         ]);
       }
+      if (browserTarget) {
+        const now = Math.floor(Date.now() / 1000);
+        const unsigned = [
+          { alg: "HS256", typ: "JWT" },
+          {
+            role: "anon",
+            iss: "supabase",
+            aud: "authenticated",
+            iat: now,
+            exp: now + 3600,
+          },
+        ]
+          .map((value) =>
+            Buffer.from(JSON.stringify(value)).toString("base64url"),
+          )
+          .join(".");
+        anonKey = `${unsigned}.${createHmac("sha256", jwtSecret).update(unsigned).digest("base64url")}`;
+        specs.push([
+          "gateway",
+          gatewayImage,
+          "256m",
+          [
+            "KONG_DATABASE=off",
+            "KONG_PREFIX=/tmp/kong",
+            "KONG_PROXY_LISTEN=0.0.0.0:8000",
+            "KONG_ADMIN_LISTEN=off",
+            "KONG_STATUS_LISTEN=off",
+            "KONG_NGINX_WORKER_PROCESSES=1",
+            "KONG_MEM_CACHE_SIZE=16m",
+            "KONG_PLUGINS=cors,key-auth",
+            "KONG_ANONYMOUS_REPORTS=off",
+            "KONG_PROXY_ACCESS_LOG=off",
+            "KONG_ADMIN_ACCESS_LOG=off",
+            "KONG_PROXY_ERROR_LOG=/dev/null",
+            "KONG_ADMIN_ERROR_LOG=/dev/null",
+            `KONG_DECLARATIVE_CONFIG_STRING=${recoveryGatewayConfig(anonKey)}`,
+          ],
+        ]);
+      }
       let authService;
       for (const [suffix, serviceImage, memory, values] of specs) {
         const id = docker([
@@ -435,6 +489,9 @@ export async function withIsolatedDatabase(kind, run) {
         origin: () => authOrigin(9999),
         mailOrigin: () => authOrigin(8025),
         ...(authTarget ? { restOrigin: () => authOrigin(3001) } : {}),
+        ...(browserTarget
+          ? { gatewayOrigin: () => authOrigin(8000), anonKey }
+          : {}),
         restartAuth: () => {
           authOrigin(9999); // Validate ownership before restarting our service.
           docker(["restart", authService]);

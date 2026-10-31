@@ -2,6 +2,8 @@
 
 Stand: 28.10.2026. Begrenztes Inkrement der Produktionshärtung aus Phase 10; keine vollständige Sicherheits- oder Beta-Freigabe.
 
+Ergänzung 31.10.: Die [Wiederherstellungsprobe im Browser](RECOVERY_BROWSER_STATUS.md) fand beim ersten Aufruf eines befüllten Einkommensformulars einen abgefangenen `Function()`-Fähigkeitstest von Zod. Die Browser-Initialisierung setzt nun `jitless: true`, damit Zod ohne dynamische Code-Erzeugung validiert. Die Richtlinie wird nicht gelockert. Der korrigierte lokale Desktop-/Mobil-Lauf besteht ohne CSP-Verstöße; der jeweilige CI-Stand steht im verlinkten Bericht.
+
 ## Verhalten und Architektur
 
 - Der Proxy erzeugt für jede Seitenanfrage eine kryptografisch zufällige Nonce aus 32 Bytes. Eingehende `x-nonce`- und CSP-Header werden überschrieben. Die Richtlinie wird an Next.js weitergegeben und als durchgesetzter `Content-Security-Policy`-Antwortheader ausgeliefert.

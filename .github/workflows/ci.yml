@@ -58,6 +58,10 @@ jobs:
         run: |
           docker pull public.ecr.aws/supabase/postgrest:v16.2
           pnpm test:auth:restore
+      - name: Verify restored accounts through the gateway and production browser
+        run: |
+          docker pull public.ecr.aws/supabase/kong:2.8.1
+          pnpm test:recovery:browser
       - run: pnpm test:auth
       - name: Prepare fictional material for the manual Home study
         run: pnpm test:home:prepare

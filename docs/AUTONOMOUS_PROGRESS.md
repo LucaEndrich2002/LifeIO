@@ -1,31 +1,29 @@
 # LifeOS – Autonomer Fortsetzungsstand
 
-Stand: 31.10.2026. Freigegeben ist ausschließlich V1 in kleinen überprüfbaren Inkrementen. Echte KI-/OpenAI-Live-Tests bleiben ausgesetzt. Keine bezahlten Credits/Resets, öffentlichen Deployments, Main-Merges oder Nachrichten an Dritte. Vor umfangreicher Fortsetzung reguläre Nutzung und mindestens 10 % Rest in jedem verfügbaren Kontingentfenster prüfen; bei unverändertem Warten still bleiben.
+Stand: 31.10.2026, Fortsetzung ab 15:11 UTC. Freigegeben ist ausschließlich V1 in kleinen überprüfbaren Inkrementen. Keine KI-/OpenAI-Live-Tests, bezahlten Credits/Resets, öffentlichen Deployments, Main-Merges oder Nachrichten an Dritte. Bei weniger als 10 % Rest in einem verfügbaren Kontingentfenster keine umfangreiche neue Arbeit.
 
-## Abgeschlossene Grundlage
+## Grundlage
 
-CSP ist mit [PR #26](https://github.com/LucaEndrich2002/LifeIO/pull/26) abgeschlossen; die frühere Browserblockade ist behoben. Danach folgen die geprüften PRs [#27](https://github.com/LucaEndrich2002/LifeIO/pull/27) und [#28](https://github.com/LucaEndrich2002/LifeIO/pull/28) zu Sitzungs-/Eigentümergrenzen, [#29](https://github.com/LucaEndrich2002/LifeIO/pull/29) zur logischen Wiederherstellung, [#30](https://github.com/LucaEndrich2002/LifeIO/pull/30) zu Migrationen mit Altbestand und [#31](https://github.com/LucaEndrich2002/LifeIO/pull/31) zu Logs/Geheimnissen/Anfragegrenzen. Details und jeweilige Nachweise stehen in den zugehörigen Statusberichten; keine automatische Hauptbranch-Integration.
+CSP und Folgearbeiten sind über PRs #26–34 dokumentiert. [PR #34](https://github.com/LucaEndrich2002/LifeIO/pull/34), Code `f4f65dad8ff05d1e00d24368e83adc4de28b101a`, besteht beide vollständigen CI-Läufe (41148480772, 41148487628). Umfang und Grenzen: [AUTH_RECOVERY_ACCEPTANCE.md](AUTH_RECOVERY_ACCEPTANCE.md). Keine automatische Hauptbranch-Integration.
 
-[PR #32](https://github.com/LucaEndrich2002/LifeIO/pull/32), Code `e3e266c5995463dadaaac2fee1f7a64ca65dc90d`: tatsächlicher CLI-Migrationsablauf einschließlich Fehler/Rücknahme/Fortsetzung. [Push 40813904077](https://github.com/LucaEndrich2002/LifeIO/actions/runs/40813904077) und [PR-Lauf 40813908871](https://github.com/LucaEndrich2002/LifeIO/actions/runs/40813908871) vollständig bestanden. [Wiederanlaufleitfaden](RECOVERY_RUNBOOK.md).
+## Aktueller Schritt: Gateway und Browser nach Restore
 
-[PR #33](https://github.com/LucaEndrich2002/LifeIO/pull/33), Code `d3e8b1ebf3b4b7bfa1d70a1b544acd16be5d79ea`: unabhängige Auth-Quelle mit zwei per API registrierten und lokal bestätigten Konten. [Push 40855330613](https://github.com/LucaEndrich2002/LifeIO/actions/runs/40855330613) und [PR-Lauf 40855339892](https://github.com/LucaEndrich2002/LifeIO/actions/runs/40855339892) vollständig bestanden: Format, Lint, Typprüfung, Build, 196 Unit-, 19 Werkzeug-, 132 Integrations-, 16 öffentliche und 124 private Browserprüfungen, vier Datenbank-/Auth-Proben und Home-Testpaket. Quellenprobe allein ist kein Restore-Nachweis.
+Branch `codex/recovery-browser-assessment`, [Entwurf #35](https://github.com/LucaEndrich2002/LifeIO/pull/35), Basis `codex/auth-restore-target`. Veröffentlicht war bisher `b05f77d36acaa24c569ea64f547345be3cb26d82`. Dessen CI-Läufe 41191960214 und 41191970044 scheiterten an der neuen Browserprobe; private Standardsuite und Home-Testpaket wurden anschließend übersprungen. Diese Ergebnisse bleiben fehlgeschlagen.
 
-## Aktuelles Inkrement
+Ursachen inzwischen eingegrenzt und lokal korrigiert:
 
-Branch `codex/auth-restore-target` basiert auf PR #33 plus Dokumentationscheckpoint `ad5716e`. `test:auth:restore` überträgt die Sicherung in einen eigenen PostgreSQL-Cluster, vergleicht Daten/Schema/Rechte/Rollen, meldet die ursprünglichen Konten neu an und prüft echte Ziel-JWTs über PostgREST sowie Auth-Neustart. Falsche Passwörter, unbestätigtes Konto, fremde Zugriffe, ein fremder Signierschlüssel und ein abgeschnittenes Archiv werden abgewiesen. Keine Produkt-/historische Schema-/Abhängigkeitsänderung. [Ausführlicher Nachweis und Grenzen](AUTH_RECOVERY_ACCEPTANCE.md).
+- Die Einkommensseite besitzt keinen Abmeldeknopf. Für Abmeldung wechselt die Probe jetzt ins Profil. Präzisere Phasen und ausschließlich datenfreie Fehlerkategorien ergänzen die Diagnose.
+- Zod 4.6.5 löste beim ersten Öffnen des befüllten Einkommensformulars durch seinen abgefangenen Function()-Fähigkeitstest einen CSP-Verstoß aus. `src/instrumentation-client.ts` setzt vor der Clientinitialisierung `jitless: true`. Validierungsregeln und CSP unverändert, keine Abhängigkeit oder Migration geändert.
+- Die temporäre App-Kopie begrenzt die Build-Arbeiter auf zwei. Der normale lokale Kontrollbuild verwendet dieselbe Workerzahl über die bestehende Next-Umgebungsoption; keine dauerhafte Änderung der Produktionskonfiguration.
 
-Gefunden und korrigiert: Public-Schema-Standardrecht ging in der bisherigen leeren Restore-Vorbereitung verloren. Jetzt bleibt das initdb-Schema erhalten; nur dessen exakt geprüfter doppelter CREATE-Eintrag wird ausgelassen, alle ACLs werden angewandt. ACL-Vergleiche berücksichtigen Reihenfolge und PostgreSQL-Standardrechte bei NULL, ohne Rechte zu entfernen. Gemeinsame Snapshot-Prüfung erweitert; ursprüngliche fehlgeschlagene Diagnose-/Restore-Läufe bleiben im Bericht ausgewiesen.
+Der elfte lokale Lauf `pnpm test:recovery:browser` besteht vollständig (Exit 0): beide Konten, Desktop/Mobil, falsche/unbestätigte Anmeldung, Profiländerung/Neuladen, erhaltenes Einkommen, Abmeldung, private Routen, keine CSP-Verstöße sowie alle darunterliegenden Auth-Restore-Prüfungen. Vorherige Fehlversuche: [RECOVERY_BROWSER_STATUS.md](RECOVERY_BROWSER_STATUS.md). Regulärer Lint, Typprüfung, 196 Unit-/19 Werkzeugtests, Build und 16 öffentliche Browserprüfungen sind für diesen Code erneut bestanden; Log `.cache/recovery-fix-checks-20261031.log`. Abschließende Format-/Diffprüfung, Commit/Push, aktualisierte PR-Beschreibung und vollständiger neuer CI-Nachweis folgen. Kein neuer V1-Schritt vor diesem Abschluss.
 
-Lokal bestehen neue Auth-Zielprobe, alle vier bisherigen Datenbank-/Auth-Proben, 196 Unit-, 19 Werkzeug-, 16 öffentliche Browserfälle, Typprüfung und Build. Beschädigte Auth-Daten werden in einer lokalen Gegenprobe erkannt; der anschließende positive Lauf besteht. Abschließender Lint/Format und SIGTERM-Abbruchbereinigung beider verschachtelter Testcontainer bestehen ebenfalls. Commit/PR und vollständige GitHub-Prüfungen werden vor Abschluss ergänzt. Private Browserfälle werden nicht aus früheren Läufen als neu bestanden übernommen.
+## Weiterarbeit und Grenzen
 
-## Nächste Arbeit und offene Entscheidungen
+1. Laufende lokale Checks abschließen, Korrektur zu PR #35 übertragen und beide neuen CI-Läufe am tatsächlichen Commit prüfen. Entwurf erst nach vollständigem Erfolg prüfbereit machen. Dokumentation an das tatsächliche Ergebnis anpassen.
+2. Danach verbleiben weitere Kernjourneys auf dem Restore-Ziel, produktive Schlüsselrotation/Refresh-Sitzungen, externe Sicherung/Aufbewahrung und ausführbare Löschprozesse. Der begrenzte Browsernachweis ist kein vollständiger Cloud-Wiederanlauf.
+3. Menschliche Home-Abnahme, Cloudregion/-kosten, Aufbewahrung, Hauptbranch-Integration, Hosting und Beta benötigen gesonderte Entscheidungen: [V1_STATUS.md](product/V1_STATUS.md). Sind alle unabhängig ausführbaren V1-Arbeiten erschöpft: Restentscheidungen einmal melden und Automation pausieren.
 
-1. Aktuelles Inkrement bis zum prüfbaren PR und tatsächlichen vollständigen GitHub-Ergebnis abschließen; keine fehlgeschlagenen oder ausstehenden Läufe als grün behandeln.
-2. Danach als begrenzten Folgeschritt Gateway und LifeOS-Browserabläufe am wiederhergestellten Ziel vorbereiten. Der aktuelle Test mit direkter Data API ist kein vollständiger Supabase-/App-/Cloud-Wiederanlauf. Globale Rollen werden frisch bereitgestellt und geprüft, nicht als vollständiges Globals-Backup wiederhergestellt. Produktive Schlüsselrotation, Refresh-Sitzungen, externe Sicherung und Aufbewahrung bleiben offen. Ausführbare Löschprozesse sind weitere lokale V1-Arbeit.
-3. Menschliche Home-Abnahme mit fünf Personen, Cloudregion/-kosten, Aufbewahrung, Hauptbranch-Integration, Hosting und Beta benötigen Nutzer-/Außenentscheidungen laut [V1_STATUS.md](product/V1_STATUS.md). Wenn keine unabhängig ausführbare V1-Arbeit mehr verbleibt: Restentscheidungen einmal melden und Automation pausieren.
+## Ressourcen
 
-## Laufzeit und Kontingent
-
-Beim Wiederbeginn waren reguläre Nutzung erlaubt, 93 % im Fünfstunden- und 99 % im Wochenfenster frei. Kein Kredit-/Resetkauf. Vor neuem umfangreichen Schritt erneut prüfen.
-
-Lokaler Docker Engine 29.8.0 und benötigte Images vorhanden; beim Start 7,21 GiB frei auf C:. Bestehende Datenbank wird nicht zurückgesetzt. Neue Probecontainer/Netzwerke ausschließlich anhand eigener Kennzeichnungen bereinigen; kein allgemeines Prune. Bekannter reversibel behobener Docker-Socket-Fehler: [LOCAL_SUPABASE.md](LOCAL_SUPABASE.md). Vorschau-PIDs vor Prozessaktionen neu prüfen. Keine Zugangsdaten, Kontotokens oder Auth-Antworten in Dokumentation/Logs speichern.
+Nutzung zu Beginn erlaubt, 98 % / 52 % verbleibend; zuletzt 34 % / 42 %. Keine Credits/Resets verwendet. C: zu Beginn wieder 6,56 GiB frei; frühere Spitze bis auf 160 MiB ist dokumentiert. Vor Builds freien Platz erneut prüfen. Bestehende Datenbanken nicht zurücksetzen. Nur selbst erzeugte UUID-Proberessourcen und verifizierte temporäre App-Pfade bereinigen, kein allgemeines Prune. Keine Zugangsdaten oder Rohantworten in Logs/Dokumentation.

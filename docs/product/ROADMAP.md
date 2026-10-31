@@ -1,6 +1,6 @@
 # LifeOS – Roadmap
 
-Ergänzung 31.10.2026: Die [unabhängige Auth-Wiederherstellung](../AUTH_RECOVERY_ACCEPTANCE.md) ergänzt einen zweiten PostgreSQL-Cluster und direkte Data-API-Prüfungen. Die Probe prüft echte Zielanmeldungen, erhaltene Rechte und einen Auth-Neustart. Gateway und Browserabläufe am wiederhergestellten Ziel sowie Cloud-Betrieb bleiben offen. Der abschließende Prüfstand steht im verlinkten Bericht.
+Ergänzung 31.10.2026: Die [unabhängige Auth-Wiederherstellung](../AUTH_RECOVERY_ACCEPTANCE.md) ergänzt einen zweiten PostgreSQL-Cluster und direkte Data-API-Prüfungen. Die Probe prüft echte Zielanmeldungen, erhaltene Rechte und einen Auth-Neustart. Der folgende begrenzte [Gateway-/Browsernachweis](../RECOVERY_BROWSER_STATUS.md) prüft Anmeldung, Profil, Einkommen und Abmeldung am restaurierten Ziel; sein tatsächlicher Prüfstand steht im Bericht. Vollständige Kernjourneys und Cloud-Betrieb bleiben offen.
 
 Ergänzung 29.10.2026: Der [tatsächliche CLI-Migrationsablauf](../RECOVERY_RUNBOOK.md) ist mit vorhandenem fiktivem Datenbestand, kontrolliertem Fehler und korrigierter Fortsetzung lokal sowie in beiden vollständigen GitHub-Läufen von PR #32 geprüft. Die nachfolgenden älteren Einträge beschreiben ihren jeweiligen damaligen Stand. Die [unabhängige Auth-Wiederherstellung](../AUTH_RECOVERY_ACCEPTANCE.md) erhält zunächst eine ausführbare, getrennte Quelle mit bestätigten fiktiven Konten. Ein Restore in den unabhängigen Zielcluster bleibt offen.
 

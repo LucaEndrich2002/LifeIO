@@ -25,6 +25,7 @@
     "test:migrations:cli": "node scripts/test-migrations-cli.mjs",
     "test:auth:source": "node scripts/test-auth-source.mjs",
     "test:auth:restore": "node scripts/test-auth-restore.mjs",
+    "test:recovery:browser": "node scripts/test-recovery-browser.mjs",
     "test:auth": "node scripts/test-supabase.mjs e2e",
     "test:home:prepare": "node scripts/test-supabase.mjs home-study",
     "db:doctor": "node scripts/db-doctor.mjs",
