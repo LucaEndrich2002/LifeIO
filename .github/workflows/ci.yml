@@ -54,6 +54,10 @@ jobs:
           docker pull public.ecr.aws/supabase/gotrue:v2.196.0
           docker pull public.ecr.aws/supabase/mailpit:v1.30.2
           pnpm test:auth:source
+      - name: Restore confirmed accounts into an independent cluster and Data API
+        run: |
+          docker pull public.ecr.aws/supabase/postgrest:v16.2
+          pnpm test:auth:restore
       - run: pnpm test:auth
       - name: Prepare fictional material for the manual Home study
         run: pnpm test:home:prepare

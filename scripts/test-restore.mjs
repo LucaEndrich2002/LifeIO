@@ -1,3 +1,5 @@
+import { recoverySnapshot } from "./recovery-snapshot.mjs";
+import { restoreArchive } from "./restore-archive.mjs";
 import {
   check,
   read,
@@ -17,51 +19,13 @@ await withIsolatedDatabase(
     migrate,
     setPhase,
   }) => {
-    function catalog(database) {
-      return JSON.parse(
-        sql(database, read("tests/supabase/security-catalog.sql")),
-      );
-    }
-    function rows(database) {
-      const tables = JSON.parse(
-        sql(
-          database,
-          `
-    select jsonb_agg(n.nspname || '.' || c.relname order by n.nspname,c.relname)
-    from pg_class c join pg_namespace n on n.oid=c.relnamespace
-    where n.nspname in ('public','auth','supabase_migrations') and c.relkind='r';
-  `,
-        ),
-      );
-      return Object.fromEntries(
-        tables.map((table) => {
-          check(
-            /^(public|auth|supabase_migrations)\.[a-z_][a-z0-9_]*$/.test(table),
-            "Unexpected table",
-          );
-          const value = JSON.parse(
-            sql(
-              database,
-              `select coalesce(jsonb_agg(to_jsonb(t) order by to_jsonb(t)::text),'[]') from ${table} t;`,
-            ),
-          );
-          return [table, value];
-        }),
-      );
-    }
-    function schema(database) {
-      return JSON.parse(sql(database, read("tests/recovery/schema.sql")));
-    }
+    const snapshot = recoverySnapshot(sql);
     for (const filename of migrations) migrate(filename);
     setPhase("fictional data setup");
     sql(source, read("tests/recovery/fixtures.sql"));
     setPhase("source access controls");
     sql(source, read("tests/recovery/verify-access.sql"));
-    const before = {
-      catalog: catalog(source),
-      rows: rows(source),
-      schema: schema(source),
-    };
+    const before = snapshot(source);
     check(
       before.catalog.relations.length === 15 &&
         before.catalog.functions.length === 28,
@@ -107,7 +71,7 @@ await withIsolatedDatabase(
     ]);
     setPhase("empty restore target");
     sql(source, `create database ${target} template template0 owner postgres;`);
-    sql(target, "drop schema public;");
+    // Preserve initdb's public-schema ACL baseline for pg_restore.
     check(
       sql(
         target,
@@ -116,30 +80,21 @@ await withIsolatedDatabase(
       "Restore target must be empty",
     );
     setPhase("restore into the empty database");
-    docker([
-      "exec",
-      container,
-      "pg_restore",
-      "-U",
-      "supabase_admin",
-      "--dbname",
-      target,
-      "--exit-on-error",
-      "--single-transaction",
-      "/tmp/lifeos-rehearsal.dump",
-    ]);
+    const archive = docker(
+      ["exec", container, "cat", "/tmp/lifeos-rehearsal.dump"],
+      { encoding: "buffer" },
+    ).stdout;
+    restoreArchive({ sql, docker, container }, target, archive);
     setPhase("restored data, schema and privileges");
-    same(rows(target), before.rows, "Restored rows differ (contents omitted)");
-    same(catalog(target), before.catalog, "Restored privileges differ");
     same(
-      schema(target),
-      before.schema,
-      "Restored definitions or constraints differ",
+      snapshot(target),
+      before,
+      "Restored data, schema or privileges differ (contents omitted)",
     );
     setPhase("restored access controls and writable owner flow");
     sql(target, read("tests/recovery/verify-access.sql"));
     same(
-      rows(target),
+      snapshot(target).rows,
       before.rows,
       "Access checks must roll back their test writes",
     );
