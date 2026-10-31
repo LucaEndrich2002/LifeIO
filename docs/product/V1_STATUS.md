@@ -16,6 +16,8 @@ Implementierter Funktionsumfang ersetzt keine ausstehende Gesamtabnahme oder Ver
 
 ## Drei offene Arbeitspakete
 
+Der [Auth-Restore-Nachweis](../AUTH_RECOVERY_ACCEPTANCE.md) vom 31.10. ergänzt die lokale Betriebsprüfung um einen unabhängigen Zielcluster, neue Anmeldungen und Zugriffe über die direkte Data API. Er ersetzt keine Wiederanlaufabnahme mit Gateway, LifeOS-Browser und produktiver Infrastruktur.
+
 | Paket                                 | Noch erforderlich                                                                                                                                                                                                                                                                                                                  | Bezug             |
 | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
 | 1. Life AI abschließen                | Tatsächliche Antwortqualität prüfen. Dies ist auf Nutzerwunsch ausdrücklich ausgesetzt; die lesenden Ansichten einschließlich des Home-KI-Bereichs sind implementiert.                                                                                                                                                             | Phase 8, R11–R12  |

@@ -2,6 +2,8 @@
 
 Stand: 28.10.2026. Ein begrenzter Nachweis für die logische Wiederherstellung der V1-Anwendungsdatenbank. Keine vollständige Betriebs-, Auth- oder Cloud-Backup-Abnahme.
 
+Ergänzung 31.10.: Der gemeinsame Snapshot prüft jetzt zusätzlich Schema-/Relations-/Funktionseigentümer und vollständige ACLs. Die Zielvorbereitung erhält das leere Public-Schema mit seinen initdb-Standardrechten; nur der doppelte Schema-CREATE-Eintrag wird aus der Restore-Liste ausgenommen, alle ACLs bleiben aktiv. Die Auth-Zielprobe hat den vorher fehlenden PUBLIC-USAGE-Nachweis aufgedeckt. Details und abschließende Prüfung: [AUTH_RECOVERY_ACCEPTANCE.md](AUTH_RECOVERY_ACCEPTANCE.md).
+
 ## Ablauf und Nachweis
 
 `pnpm test:restore` führt `scripts/test-restore.mjs` aus. Das Skript legt einen neuen, eindeutig bezeichneten PostgreSQL-Container an, wendet die 17 Repository-Migrationen an und erfasst deren Version, Namen und SQL in einer Migrationshistorie. Ausschließlich fiktive Kontoreferenzen und Daten werden erzeugt. Die fachlichen Datensätze entstehen mit der Rolle `authenticated` über die vorhandenen Profilrechte und Datenbankfunktionen.

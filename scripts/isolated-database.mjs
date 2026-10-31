@@ -11,6 +11,18 @@ const root = new URL("../", import.meta.url);
 export const read = (path) => readFileSync(new URL(path, root), "utf8");
 const literal = (value) => `'${value.replaceAll("'", "''")}'`;
 class RehearsalError extends Error {}
+const activeCleanups = new Map();
+function interruptRehearsals() {
+  // Nested source/target rehearsals must both clean up before exiting.
+  for (const [cleanup, name] of [...activeCleanups].reverse()) {
+    try {
+      cleanup();
+    } catch {
+      console.error(`Cleanup required for ${name}.`);
+    }
+  }
+  process.exit(130);
+}
 export function check(condition, message) {
   if (!condition) throw new RehearsalError(message);
 }
@@ -21,12 +33,21 @@ export function same(actual, expected, message) {
 // Internal harness: fixed repository rehearsals, never a user target.
 export async function withIsolatedDatabase(kind, run) {
   check(
-    ["restore", "migration", "migration-cli", "auth-source"].includes(kind),
+    [
+      "restore",
+      "migration",
+      "migration-cli",
+      "auth-source",
+      "auth-target",
+    ].includes(kind),
     "Unknown rehearsal",
   );
   const cli = kind === "migration-cli";
   const authSource = kind === "auth-source";
-  const networked = cli || authSource;
+  const authTarget = kind === "auth-target";
+  const auth = authSource || authTarget;
+  const networked = cli || auth;
+  const httpPorts = authTarget ? [9999, 8025, 3001] : [9999, 8025];
   const services = [];
   const image = "public.ecr.aws/supabase/postgres:17.6.1.167";
   const name = `lifeos-${kind}-${randomUUID()}`;
@@ -42,11 +63,14 @@ export async function withIsolatedDatabase(kind, run) {
   delete env.DOCKER_CONTEXT;
   delete env.DOCKER_HOST;
 
-  function docker(args, { input, timeout = 30000, optional = false } = {}) {
+  function docker(
+    args,
+    { input, timeout = 30000, optional = false, encoding = "utf8" } = {},
+  ) {
     const result = spawnSync(dockerCommand, ["--host", endpoint, ...args], {
       env,
       input,
-      encoding: "utf8",
+      encoding,
       windowsHide: true,
       timeout,
       maxBuffer: 8 * 1024 * 1024,
@@ -127,16 +151,10 @@ export async function withIsolatedDatabase(kind, run) {
       network = undefined;
     }
   }
-  for (const signal of ["SIGINT", "SIGTERM"]) {
-    process.once(signal, () => {
-      try {
-        cleanup();
-      } catch {
-        console.error(`Cleanup required for ${name}.`);
-      }
-      process.exit(130);
-    });
-  }
+  if (activeCleanups.size === 0)
+    for (const signal of ["SIGINT", "SIGTERM"])
+      process.once(signal, interruptRehearsals);
+  activeCleanups.set(cleanup, name);
 
   try {
     check(process.argv.length === 2, "This rehearsal accepts no arguments");
@@ -187,12 +205,10 @@ export async function withIsolatedDatabase(kind, run) {
             "127.0.0.1",
             ...(cli
               ? ["--publish", "127.0.0.1::5432"]
-              : [
+              : httpPorts.flatMap((port) => [
                   "--publish",
-                  "127.0.0.1::9999",
-                  "--publish",
-                  "127.0.0.1::8025",
-                ]),
+                  `127.0.0.1::${port}`,
+                ])),
           ]
         : ["--network=none"]),
       "--memory=768m",
@@ -231,7 +247,7 @@ export async function withIsolatedDatabase(kind, run) {
       sql(source, "show data_directory;") === "/var/lib/postgresql/data",
       "Data must use the private tmpfs mount",
     );
-    if (!cli)
+    if (!cli && !authTarget)
       sql(
         source,
         "create schema supabase_migrations; create table supabase_migrations.schema_migrations(version text primary key, statements text[], name text);",
@@ -279,19 +295,16 @@ export async function withIsolatedDatabase(kind, run) {
       return info;
     }
     function authOrigin(port) {
-      check(
-        authSource && [9999, 8025].includes(port),
-        "Unknown Auth test endpoint",
-      );
+      check(auth && httpPorts.includes(port), "Unknown Auth test endpoint");
       const info = inspectNetworkTarget();
       const published = Object.entries(info.NetworkSettings.Ports).filter(
         ([, bindings]) => bindings?.length,
       );
       check(
-        published.length === 2 &&
+        published.length === httpPorts.length &&
           published.every(
             ([key, bindings]) =>
-              ["9999/tcp", "8025/tcp"].includes(key) &&
+              httpPorts.some((allowed) => key === `${allowed}/tcp`) &&
               bindings.length === 1 &&
               bindings[0].HostIp === "127.0.0.1" &&
               /^\d+$/.test(bindings[0].HostPort) &&
@@ -315,14 +328,20 @@ export async function withIsolatedDatabase(kind, run) {
       }
       return `http://127.0.0.1:${info.NetworkSettings.Ports[`${port}/tcp`][0].HostPort}`;
     }
-    function startAuthServices() {
+    function startAuthServices(database = source) {
       check(
-        authSource && services.length === 0,
+        auth && services.length === 0 && [source, target].includes(database),
         "Auth services already started or unavailable",
       );
       const authImage = "public.ecr.aws/supabase/gotrue:v2.196.0";
       const mailImage = "public.ecr.aws/supabase/mailpit:v1.30.2";
-      for (const serviceImage of [authImage, mailImage])
+      const restImage = "public.ecr.aws/supabase/postgrest:v16.2";
+      const jwtSecret = `${randomUUID()}${randomUUID()}`;
+      for (const serviceImage of [
+        authImage,
+        mailImage,
+        ...(authTarget ? [restImage] : []),
+      ])
         docker(["image", "inspect", serviceImage]);
       const origin = authOrigin(9999);
       sql(
@@ -351,9 +370,9 @@ export async function withIsolatedDatabase(kind, run) {
             `API_EXTERNAL_URL=${origin}`,
             "GOTRUE_SITE_URL=http://127.0.0.1:3000",
             "GOTRUE_DB_DRIVER=postgres",
-            `GOTRUE_DB_DATABASE_URL=postgresql://supabase_auth_admin:${password}@127.0.0.1:5432/postgres?sslmode=disable`,
+            `GOTRUE_DB_DATABASE_URL=postgresql://supabase_auth_admin:${password}@127.0.0.1:5432/${database}?sslmode=disable`,
             "GOTRUE_DB_MAX_POOL_SIZE=5",
-            `GOTRUE_JWT_SECRET=${randomUUID()}${randomUUID()}`,
+            `GOTRUE_JWT_SECRET=${jwtSecret}`,
             "GOTRUE_JWT_AUD=authenticated",
             "GOTRUE_JWT_DEFAULT_GROUP_NAME=authenticated",
             "GOTRUE_JWT_EXP=3600",
@@ -368,6 +387,27 @@ export async function withIsolatedDatabase(kind, run) {
           ],
         ],
       ];
+      if (authTarget) {
+        sql(source, `alter role authenticator password ${literal(password)};`);
+        specs.push([
+          "rest",
+          restImage,
+          "128m",
+          [
+            `PGRST_DB_URI=postgresql://authenticator:${password}@127.0.0.1:5432/${database}?sslmode=disable`,
+            "PGRST_DB_SCHEMAS=public",
+            "PGRST_DB_ANON_ROLE=anon",
+            "PGRST_DB_POOL=5",
+            "PGRST_DB_CONFIG=false",
+            `PGRST_JWT_SECRET=${jwtSecret}`,
+            "PGRST_JWT_AUD=authenticated",
+            "PGRST_SERVER_HOST=0.0.0.0",
+            "PGRST_SERVER_PORT=3001",
+            "PGRST_LOG_LEVEL=crit",
+          ],
+        ]);
+      }
+      let authService;
       for (const [suffix, serviceImage, memory, values] of specs) {
         const id = docker([
           "create",
@@ -388,11 +428,17 @@ export async function withIsolatedDatabase(kind, run) {
         ]).stdout.trim();
         check(/^[a-f0-9]{64}$/.test(id), "Invalid Auth service ID");
         services.push(id);
+        if (suffix === "auth") authService = id;
         docker(["start", id]);
       }
       return {
         origin: () => authOrigin(9999),
         mailOrigin: () => authOrigin(8025),
+        ...(authTarget ? { restOrigin: () => authOrigin(3001) } : {}),
+        restartAuth: () => {
+          authOrigin(9999); // Validate ownership before restarting our service.
+          docker(["restart", authService]);
+        },
       };
     }
     await run({
@@ -403,7 +449,7 @@ export async function withIsolatedDatabase(kind, run) {
       target,
       migrations,
       migrate,
-      startAuthServices: authSource ? startAuthServices : undefined,
+      startAuthServices: auth ? startAuthServices : undefined,
       // Only the CLI rehearsal gets a connection, derived from its own container.
       cliConnection: cli
         ? () => {
@@ -441,6 +487,11 @@ export async function withIsolatedDatabase(kind, run) {
         `Cleanup failed; inspect only the rehearsal container ${name}.`,
       );
       process.exitCode = 1;
+    } finally {
+      activeCleanups.delete(cleanup);
+      if (activeCleanups.size === 0)
+        for (const signal of ["SIGINT", "SIGTERM"])
+          process.removeListener(signal, interruptRehearsals);
     }
   }
 }
