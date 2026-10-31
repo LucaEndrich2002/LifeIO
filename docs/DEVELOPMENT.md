@@ -72,6 +72,8 @@ Vitest prüft Konfigurationsvalidierung und zugängliche Navigation. Playwright 
 
 ## Supabase lokal
 
+`pnpm test:recovery:browser` ergänzt die unabhängige Auth-Wiederherstellung um einen eigenen minimalen Gateway und einen getrennten Produktions-Build. Desktop und Mobil prüfen Anmeldung, Profil, Einkommen und Abmeldung gegen das restaurierte Ziel. Voraussetzungen, Prüfstand und Grenzen: [RECOVERY_BROWSER_STATUS.md](RECOVERY_BROWSER_STATUS.md).
+
 `pnpm test:auth:restore` prüft die Wiederherstellung bestätigter fiktiver Konten in einen unabhängigen PostgreSQL-Cluster, neue Anmeldungen, tatsächliche Data-API-Zugriffsrechte und Auth-Neustart. Benötigt vorhandene PostgreSQL-/GoTrue-/Mailpit-/PostgREST-Images; keine bestehende Datenbank oder echte Schlüssel. Umfang und Grenzen: [AUTH_RECOVERY_ACCEPTANCE.md](AUTH_RECOVERY_ACCEPTANCE.md).
 
 Die In-App-Benachrichtigungen unter `/account/notifications` benötigen `20261012090000_notifications.sql`. Mit `pnpm exec supabase migration up --local` additiv anwenden; kein Reset. „Hinweise“ in der privaten Navigation öffnet die Liste, „Hinweise prüfen“ wertet die vier V1-Auslöser aus. Kein Hintergrunddienst oder Providerzugang erforderlich. Regeln und Prüfstand: [NOTIFICATIONS_STATUS.md](NOTIFICATIONS_STATUS.md).

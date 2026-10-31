@@ -4,7 +4,7 @@ import { check, same } from "./isolated-database.mjs";
 export async function request(
   origin,
   path,
-  { body, token, method, prefer } = {},
+  { body, token, method, prefer, apiKey } = {},
 ) {
   const response = await fetch(`${origin()}${path}`, {
     method: method ?? (body === undefined ? "GET" : "POST"),
@@ -13,6 +13,7 @@ export async function request(
       "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...(prefer ? { Prefer: prefer } : {}),
+      ...(apiKey ? { apikey: apiKey } : {}),
     },
     body: body === undefined ? undefined : JSON.stringify(body),
     signal: AbortSignal.timeout(10000),
