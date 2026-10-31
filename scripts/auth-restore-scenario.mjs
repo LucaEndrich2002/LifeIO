@@ -9,7 +9,10 @@ import { prepareAuthSource, request, waitForAuth } from "./auth-rehearsal.mjs";
 import { recoverySnapshot } from "./recovery-snapshot.mjs";
 import { restoreArchive } from "./restore-archive.mjs";
 
-export async function rehearseAuthRestore(verifyApplication) {
+export async function rehearseAuthRestore(
+  verifyApplication,
+  prepareApplication,
+) {
   await withIsolatedDatabase("auth-source", async (source) => {
     const { accounts, services: sourceServices } =
       await prepareAuthSource(source);
@@ -38,6 +41,8 @@ export async function rehearseAuthRestore(verifyApplication) {
         !signup.data.email_confirmed_at,
       "Third account must remain unconfirmed",
     );
+
+    if (prepareApplication) await prepareApplication(source, accounts);
 
     const snapshot = (context, database) =>
       recoverySnapshot(context.sql)(database);
@@ -373,6 +378,7 @@ export async function rehearseAuthRestore(verifyApplication) {
         );
         if (verifyApplication)
           await verifyApplication({
+            source,
             target,
             database,
             accounts,
