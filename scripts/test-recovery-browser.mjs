@@ -166,7 +166,8 @@ await rehearseAuthRestore(
       writeFileSync(
         config,
         readFileSync(config, "utf8") +
-          `\nconfig.turbopack = { ...config.turbopack, root: ${JSON.stringify(root)} };\n`,
+          `\nconfig.turbopack = { ...config.turbopack, root: ${JSON.stringify(root)} };\n` +
+          "config.experimental = { ...config.experimental, cpus: 2 };\n",
       );
       const marker = randomUUID();
       writeFileSync(
@@ -297,11 +298,30 @@ await rehearseAuthRestore(
         page.on("console", (message) => {
           if (message.text().startsWith("LifeOS recovery CSP: "))
             violations.push(message.text().slice(21));
+          if (
+            /^LifeOS recovery policy detail: (\/auth\/login|\/account(?:\/onboarding\/income)?|other) (inline|eval|javascript|resource)$/.test(
+              message.text(),
+            )
+          )
+            console.error(message.text());
         });
         await page.addInitScript(() =>
-          document.addEventListener("securitypolicyviolation", (event) =>
-            console.error(`LifeOS recovery CSP: ${event.effectiveDirective}`),
-          ),
+          document.addEventListener("securitypolicyviolation", (event) => {
+            console.error(`LifeOS recovery CSP: ${event.effectiveDirective}`);
+            const blocked = ["inline", "eval"].includes(event.blockedURI)
+              ? event.blockedURI
+              : event.blockedURI.startsWith("javascript:")
+                ? "javascript"
+                : "resource";
+            const path = [
+              "/auth/login",
+              "/account",
+              "/account/onboarding/income",
+            ].includes(location.pathname)
+              ? location.pathname
+              : "other";
+            console.error(`LifeOS recovery policy detail: ${path} ${blocked}`);
+          }),
         );
         async function login(credentials) {
           target.setPhase(`${name} restored login page and form styles`);
@@ -347,6 +367,9 @@ await rehearseAuthRestore(
               `${name} restored account ${index + 1} profile and income`,
             );
             await login(account);
+            target.setPhase(
+              `${name} restored account ${index + 1} profile read`,
+            );
             await expect(page).toHaveURL(`${origin}/account`);
             await expect(page.getByLabel("Anzeigename")).toHaveValue(
               target.sql(
@@ -366,6 +389,9 @@ await rehearseAuthRestore(
               "Private restored page may be cached",
             );
             const value = `Restore ${name} ${index + 1}`;
+            target.setPhase(
+              `${name} restored account ${index + 1} profile write`,
+            );
             await page.getByLabel("Anzeigename").fill(value);
             await page
               .getByRole("button", { name: "Profil speichern", exact: true })
@@ -383,6 +409,9 @@ await rehearseAuthRestore(
               value,
               "Browser write did not reach the restored target",
             );
+            target.setPhase(
+              `${name} restored account ${index + 1} income read`,
+            );
             await page.goto("/account/onboarding/income");
             await expect(
               page.getByLabel("Bezeichnung des Einkommens"),
@@ -396,6 +425,9 @@ await rehearseAuthRestore(
               ),
               "Restored app has horizontal overflow",
             );
+            target.setPhase(`${name} restored account ${index + 1} logout`);
+            // Logout belongs to the profile screen, not the income form.
+            await page.goto("/account");
             await page
               .getByRole("button", { name: "Abmelden", exact: true })
               .click();
@@ -428,8 +460,16 @@ await rehearseAuthRestore(
             .getByText("Das hat gerade nicht geklappt.", { exact: true })
             .count();
           const invalidFields = await page.locator("input:invalid").count();
+          const directives = violations.filter((value) =>
+            /^(?:script-src(?:-elem|-attr)?|style-src(?:-elem|-attr)?|connect-src|img-src|font-src|form-action|frame-src|base-uri|default-src)$/.test(
+              value,
+            ),
+          );
           console.error(
             `Browser failure categories: input=${inputError}, app=${appError}, pageErrors=${pageErrors}, serverErrors=${serverErrors}, submitted=${submittedForms}, failedRequests=${failedRequests}, invalidFields=${invalidFields}, CSP=${violations.length}, unrelatedOrigin=${unexpectedNetwork}; server=${[...serverErrorKinds].join(",") || "none"}.`,
+          );
+          console.error(
+            `CSP directives: ${[...new Set(directives)].join(",") || "none"}.`,
           );
           if (
             [
