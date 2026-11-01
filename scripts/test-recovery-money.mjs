@@ -7,8 +7,8 @@ const expect = baseExpect.configure({ timeout: 15000 });
 const fixtures = new Map();
 const monthPath = "/account/money?month=2026-10";
 const balances = [
-  ["1.776,56 €", "1.765,57 €", "1.754,58 €"],
-  ["1.665,45 €", "1.654,46 €", "1.643,47 €"],
+  ["1.776,56 €", "1.765,57 €"],
+  ["1.665,45 €", "1.654,46 €"],
 ];
 
 function expenses(context, database, userId) {
@@ -68,6 +68,46 @@ await rehearseRecoveryBrowser({
     const main = page.getByRole("main");
     const ownEntry = (name) =>
       main.getByRole("link", { name: `${name} bearbeiten`, exact: true });
+    const currentName = fixture.newNames[visit];
+    function assertIsolated() {
+      same(
+        expenses(target, database, other.id),
+        foreignBefore,
+        "Own operation changed another account",
+      );
+      for (const entry of accounts) {
+        same(
+          expenses(source, source.source, entry.id),
+          fixtures.get(entry.id).sourceRows,
+          "Browser operation changed the backup source",
+        );
+      }
+    }
+    async function selectMonth(month) {
+      await page.getByLabel("Monat auswählen", { exact: true }).fill(month);
+      await main
+        .getByRole("button", { name: "Monat anzeigen", exact: true })
+        .click();
+      await expect(page).toHaveURL(
+        new RegExp(`/account/money\\?month=${month}$`),
+      );
+      await page.reload();
+    }
+    async function assertNovember(amount) {
+      // Income is explicitly monthly; October income must not be invented here.
+      await expect(main.getByTestId("month-available")).toHaveText(
+        "Noch unvollständig",
+      );
+      await expect(
+        main
+          .getByText("Erfasste variable Ausgaben", { exact: true })
+          .locator("..")
+          .locator("dd"),
+      ).toHaveText(amount);
+      for (const name of [fixture.name, foreign.name, ...foreign.newNames]) {
+        await expect(page.getByText(name, { exact: true })).toHaveCount(0);
+      }
+    }
     async function privateOverview() {
       await expect(ownEntry(fixture.name)).toHaveCount(1);
       await expect(ownEntry(fixture.name)).toBeVisible();
@@ -83,7 +123,7 @@ await rehearseRecoveryBrowser({
     await page.goto(monthPath);
     await privateOverview();
     await expect(main.getByTestId("month-available")).toHaveText(
-      balances[index][visit],
+      balances[index][0],
     );
 
     target.setPhase(
@@ -106,12 +146,10 @@ await rehearseRecoveryBrowser({
     await expect(page).toHaveURL(/\/account\/money\?month=2026-10$/);
     await page.reload();
     await privateOverview();
-    for (const name of fixture.newNames.slice(0, visit + 1)) {
-      await expect(ownEntry(name)).toHaveCount(1);
-      await expect(ownEntry(name)).toBeVisible();
-    }
+    await expect(ownEntry(currentName)).toHaveCount(1);
+    await expect(ownEntry(currentName)).toBeVisible();
     await expect(main.getByTestId("month-available")).toHaveText(
-      balances[index][visit + 1],
+      balances[index][1],
     );
 
     target.setPhase(
@@ -156,17 +194,143 @@ await rehearseRecoveryBrowser({
       ],
       "Created expense differs from the authorized integer-cent input",
     );
-    same(
-      expenses(target, database, other.id),
-      foreignBefore,
-      "Own write changed another account",
+    assertIsolated();
+
+    target.setPhase(
+      `${view} restored Money account ${index + 1} expense edit and month move`,
     );
-    for (const entry of accounts) {
-      same(
-        expenses(source, source.source, entry.id),
-        fixtures.get(entry.id).sourceRows,
-        "Browser write changed the backup source",
-      );
+    await selectMonth("2026-11");
+    await assertNovember("Keine erfasst");
+    await selectMonth("2026-10");
+    await ownEntry(currentName).click();
+    await page.getByLabel("Betrag (€)", { exact: true }).fill("25,01");
+    await page.getByLabel("Datum", { exact: true }).fill("2026-11-01");
+    await page.getByLabel("Kategorie", { exact: true }).selectOption("other");
+    await page
+      .getByRole("button", { name: "Eintrag speichern", exact: true })
+      .click();
+    await expect(page).toHaveURL(/\/account\/money\?month=2026-11$/);
+    await page.reload();
+    await assertNovember("25,01 €");
+    await expect(ownEntry(currentName)).toHaveCount(1);
+    await expect(ownEntry(currentName)).toBeVisible();
+    const moved = expenses(target, database, account.id);
+    same(
+      moved.filter((row) => row.id !== created[0].id),
+      ownBefore,
+      "Editing an expense changed an unrelated row",
+    );
+    same(
+      moved
+        .filter((row) => row.id === created[0].id)
+        .map((row) => ({
+          id: row.id,
+          name: row.name,
+          amount: row.amount_minor,
+          currency: row.currency,
+          date: row.spent_on,
+          category: row.category,
+          userId: row.user_id,
+          recurrence: row.recurrence,
+          revision: row.revision,
+        })),
+      [
+        {
+          id: created[0].id,
+          name: currentName,
+          amount: 2501,
+          currency: "EUR",
+          date: "2026-11-01",
+          category: "other",
+          userId: account.id,
+          recurrence: "once",
+          revision: created[0].revision + 1,
+        },
+      ],
+      "Expense edit did not persist exactly once in the destination month",
+    );
+    assertIsolated();
+    await selectMonth("2026-10");
+    await privateOverview();
+    await expect(page.getByText(currentName, { exact: true })).toHaveCount(0);
+    await expect(main.getByTestId("month-available")).toHaveText(
+      balances[index][0],
+    );
+
+    target.setPhase(
+      `${view} restored Money account ${index + 1} deletion confirmation boundary`,
+    );
+    await selectMonth("2026-11");
+    target.setPhase(
+      `${view} restored Money account ${index + 1} delete form opening`,
+    );
+    await main
+      .getByRole("link", { name: `${currentName} löschen`, exact: true })
+      .click();
+    target.setPhase(
+      `${view} restored Money account ${index + 1} unconfirmed delete submission`,
+    );
+    await page
+      .getByRole("button", { name: "Jetzt löschen", exact: true })
+      .click();
+    target.setPhase(
+      `${view} restored Money account ${index + 1} unconfirmed delete rejection`,
+    );
+    await expect(main.getByRole("alert")).toContainText("Bitte bestätige");
+    same(
+      expenses(target, database, account.id),
+      moved,
+      "Unconfirmed deletion changed the expense",
+    );
+    assertIsolated();
+    target.setPhase(
+      `${view} restored Money account ${index + 1} delete cancellation`,
+    );
+    await page
+      .getByRole("link", { name: "Abbrechen und zurück", exact: true })
+      .click();
+    await expect(page).toHaveURL(/\/account\/money\?month=2026-11$/);
+    await page.reload();
+    target.setPhase(
+      `${view} restored Money account ${index + 1} cancelled delete persistence`,
+    );
+    await expect(ownEntry(currentName)).toBeVisible();
+    await assertNovember("25,01 €");
+    same(
+      expenses(target, database, account.id),
+      moved,
+      "Cancelling deletion changed the expense",
+    );
+
+    target.setPhase(
+      `${view} restored Money account ${index + 1} confirmed deletion`,
+    );
+    await main
+      .getByRole("link", { name: `${currentName} löschen`, exact: true })
+      .click();
+    await page
+      .getByLabel("Diesen Eintrag endgültig löschen", { exact: true })
+      .check();
+    await page
+      .getByRole("button", { name: "Jetzt löschen", exact: true })
+      .click();
+    await expect(page).toHaveURL(/\/account\/money\?month=2026-11$/);
+    await page.reload();
+    await assertNovember("Keine erfasst");
+    await expect(page.getByText(currentName, { exact: true })).toHaveCount(0);
+    same(
+      expenses(target, database, account.id),
+      ownBefore,
+      "Confirmed deletion must remove only the created expense",
+    );
+    assertIsolated();
+    await selectMonth("2026-10");
+    await privateOverview();
+    await expect(main.getByTestId("month-available")).toHaveText(
+      balances[index][0],
+    );
+    for (const name of fixture.newNames) {
+      await expect(page.getByText(name, { exact: true })).toHaveCount(0);
     }
 
     target.setPhase(
@@ -192,7 +356,7 @@ await rehearseRecoveryBrowser({
       "Restored Money screen has horizontal overflow",
     );
     console.log(
-      `Restored ${view} Money account ${index + 1} passed: saved month, one exact expense, source isolation and foreign-record denial.`,
+      `Restored ${view} Money account ${index + 1} passed: saved month, exact creation/edit/month move, rejected and confirmed deletion, source isolation and foreign-record denial.`,
     );
   },
 });
