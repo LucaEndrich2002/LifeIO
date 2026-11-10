@@ -1,5 +1,7 @@
 # LifeOS – Roadmap
 
+Ergänzung 11.11.2026: Die [Money-Wiederherstellungsprobe](../RECOVERY_MONEY_STATUS.md) ergänzt Budget-Erstellen und bestätigtes Entfernen mit erhaltenen Ausgaben. Der Bericht unterscheidet die vorbereitete Implementierung vom tatsächlichen Prüfstand. Zielverknüpfungen und weitere restaurierte Kernjourneys bleiben offen.
+
 Ergänzung 07.11.2026: Die bestehende [Money-Wiederherstellungsprobe](../RECOVERY_MONEY_STATUS.md) ergänzt gesicherte Monatsbudgets, Budgetverbrauch beim Erstellen/Verschieben/Löschen einer Ausgabe sowie Limitänderungen und Monats-/Kontentrennung. Der tatsächliche Prüfstand steht im Bericht. Budget-Erstellen/-Löschen und weitere restaurierte Kernjourneys bleiben offen.
 
 Ergänzung 31.10.2026: Die [unabhängige Auth-Wiederherstellung](../AUTH_RECOVERY_ACCEPTANCE.md) ergänzt einen zweiten PostgreSQL-Cluster und direkte Data-API-Prüfungen. Die Probe prüft echte Zielanmeldungen, erhaltene Rechte und einen Auth-Neustart. Der folgende begrenzte [Gateway-/Browsernachweis](../RECOVERY_BROWSER_STATUS.md) prüft Anmeldung, Profil, Einkommen und Abmeldung am restaurierten Ziel. Eine separate [Money-Probe](../RECOVERY_MONEY_STATUS.md) ergänzt Monatsansicht, Ausgabe-Erstellen und Kontentrennung; der tatsächliche Prüfstand steht im jeweiligen Bericht. Vollständige Kernjourneys und Cloud-Betrieb bleiben offen.
