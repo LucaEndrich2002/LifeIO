@@ -57,6 +57,8 @@ Am 29.09.2026 hing die Engine nach einem früheren Speicherplatzfehler beim Been
 
 ## Wiederholbare Vorprüfung
 
+Am 07.11.2026 scheiterte der erneute Desktop-Start wieder am bestätigten `sailor-ingest.sock`-Fehler. Nach Prüfung der Docker-Prozesspfade und der beiden absoluten, nicht verknüpften Laufzeitordner wurden ausschließlich Docker-Prozesse und `docker-desktop` beendet. Die Laufzeitordner wurden mit `.lifeos-socket-backup-20261107-1920` reversibel gesichert. Danach meldete die Engine `linux`; alle sieben vorhandenen Supabase-Dienste liefen, sämtliche konfigurierten Healthchecks waren gesund. Keine Images oder Datenbankvolumes wurden entfernt.
+
 Am 29.10.2026 scheiterte der Desktop-Start erneut am im Backend-Log bestätigten `sailor-ingest.sock`-Fehler. Nach Kontrolle der Prozesspfade und der absoluten, nicht verknüpften Laufzeitordner wurden nur Docker-Prozesse und `docker-desktop` beendet. Die beiden Ordner wurden reversibel mit `.lifeos-socket-backup-20261029-0842` gesichert. Danach startete Docker 29.8.0; die sieben vorhandenen Dienste liefen mit gesunden konfigurierten Healthchecks wieder. Keine Images oder Datenbankvolumes wurden entfernt. Ein während der ersten Prozessprüfung bereits selbst beendeter Prozess erforderte lediglich das Fortsetzen der gezielten Reparatur.
 
 Am 27.10.2026 trat derselbe im Backend-Log bestätigte Socket-Startfehler erneut auf. Nach Prüfung der ausführbaren Dateien und der absoluten, nicht verknüpften Laufzeitpfade wurden nur Docker-Prozesse und `docker-desktop` beendet und die zwei Ordner mit `.lifeos-socket-backup-20261027-2048` reversibel gesichert. Danach liefen alle sieben vorhandenen Supabase-Dienste wieder; sämtliche konfigurierten Healthchecks waren gesund. Datenbankvolumes und Images blieben erhalten.

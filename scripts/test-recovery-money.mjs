@@ -10,6 +10,37 @@ const balances = [
   ["1.776,56 €", "1.765,57 €"],
   ["1.665,45 €", "1.654,46 €"],
 ];
+const budgetCases = [
+  {
+    limit: 15000,
+    display: "150,00 €",
+    spent: "123,45 €",
+    remaining: "26,55 €",
+    usage: 82,
+    createdSpent: "134,44 €",
+    createdRemaining: "15,56 €",
+    createdUsage: 90,
+  },
+  {
+    limit: 25000,
+    display: "250,00 €",
+    spent: "234,56 €",
+    remaining: "15,44 €",
+    usage: 94,
+    createdSpent: "245,55 €",
+    createdRemaining: "4,45 €",
+    createdUsage: 98,
+  },
+];
+
+function budgets(context, database, userId) {
+  return JSON.parse(
+    context.sql(
+      database,
+      `select coalesce(jsonb_agg(to_jsonb(b) order by id),'[]'::jsonb) from public.budgets b where user_id='${userId}';`,
+    ),
+  );
+}
 
 function expenses(context, database, userId) {
   return JSON.parse(
@@ -30,6 +61,10 @@ await rehearseRecoveryBrowser({
         id: randomUUID(),
         name: `Sicherung Konto ${index + 1}`,
         amount: [12345, 23456][index],
+        budgetIds: [randomUUID(), randomUUID()],
+        budgetNames: ["Oktober", "November"].map(
+          (month) => `${month} Budget Konto ${index + 1}`,
+        ),
         newNames: ["desktop", "mobile"].map(
           (view) => `Neu ${view} Konto ${index + 1}`,
         ),
@@ -45,7 +80,17 @@ await rehearseRecoveryBrowser({
         select public.mutate_money('expense','create','${fixture.id}',0,'${JSON.stringify({ name: fixture.name, amount: fixture.amount, spent_on: "2026-10-14", category: "groceries" })}');
         commit;`,
       );
+      for (const [monthIndex, month] of ["2026-10", "2026-11"].entries()) {
+        source.sql(
+          source.source,
+          `begin; set local role authenticated;
+          set local request.jwt.claim.sub='${account.id}';
+          select public.mutate_budget('create','${fixture.budgetIds[monthIndex]}',0,'${JSON.stringify({ name: fixture.budgetNames[monthIndex], amount: monthIndex === 0 ? budgetCases[index].limit : 2000, month })}');
+          commit;`,
+        );
+      }
       fixture.sourceRows = expenses(source, source.source, account.id);
+      fixture.sourceBudgets = budgets(source, source.source, account.id);
       fixtures.set(account.id, fixture);
     }
   },
@@ -65,11 +110,19 @@ await rehearseRecoveryBrowser({
     const visit = view === "desktop" ? 0 : 1;
     const foreignBefore = expenses(target, database, other.id);
     const ownBefore = expenses(target, database, account.id);
+    const ownBudgetsBefore = budgets(target, database, account.id);
+    const foreignBudgetsBefore = budgets(target, database, other.id);
+    const budgetCase = budgetCases[index];
     const main = page.getByRole("main");
     const ownEntry = (name) =>
       main.getByRole("link", { name: `${name} bearbeiten`, exact: true });
     const currentName = fixture.newNames[visit];
     function assertIsolated() {
+      same(
+        budgets(target, database, other.id),
+        foreignBudgetsBefore,
+        "Own operation changed another account's budgets",
+      );
       same(
         expenses(target, database, other.id),
         foreignBefore,
@@ -77,9 +130,46 @@ await rehearseRecoveryBrowser({
       );
       for (const entry of accounts) {
         same(
+          budgets(source, source.source, entry.id),
+          fixtures.get(entry.id).sourceBudgets,
+          "Browser operation changed budgets in the backup source",
+        );
+        same(
           expenses(source, source.source, entry.id),
           fixtures.get(entry.id).sourceRows,
           "Browser operation changed the backup source",
+        );
+      }
+    }
+    async function assertBudget(
+      name,
+      spent,
+      limit,
+      remaining,
+      usage,
+      over = false,
+    ) {
+      const card = main.locator("#budget");
+      await expect(card.getByText(name, { exact: true })).toBeVisible();
+      await expect(
+        card.getByText(`${spent} von ${limit} ausgegeben`, { exact: true }),
+      ).toBeVisible();
+      await expect(card.getByTestId("budget-remaining")).toHaveText(
+        `${remaining} verbleibend`,
+      );
+      await expect(card.getByTestId("budget-usage")).toHaveText(
+        `${usage} % genutzt`,
+      );
+      await expect(card.getByRole("progressbar")).toHaveAttribute(
+        "value",
+        String(Math.min(usage, 100)),
+      );
+      await expect(
+        card.getByText("Budget überschritten", { exact: true }),
+      ).toHaveCount(over ? 1 : 0);
+      for (const foreignName of foreign.budgetNames) {
+        await expect(page.getByText(foreignName, { exact: true })).toHaveCount(
+          0,
         );
       }
     }
@@ -104,6 +194,14 @@ await rehearseRecoveryBrowser({
           .locator("..")
           .locator("dd"),
       ).toHaveText(amount);
+      await assertBudget(
+        fixture.budgetNames[1],
+        amount === "Keine erfasst" ? "0,00 €" : "25,01 €",
+        "20,00 €",
+        amount === "Keine erfasst" ? "20,00 €" : "−5,01 €",
+        amount === "Keine erfasst" ? 0 : 125,
+        amount !== "Keine erfasst",
+      );
       for (const name of [fixture.name, foreign.name, ...foreign.newNames]) {
         await expect(page.getByText(name, { exact: true })).toHaveCount(0);
       }
@@ -116,12 +214,27 @@ await rehearseRecoveryBrowser({
         await expect(page.getByText(name, { exact: true })).toHaveCount(0);
       }
     }
+    async function initialBudget() {
+      await assertBudget(
+        fixture.budgetNames[0],
+        budgetCase.spent,
+        budgetCase.display,
+        budgetCase.remaining,
+        budgetCase.usage,
+      );
+    }
 
     target.setPhase(
       `${view} restored Money account ${index + 1} saved month read`,
     );
     await page.goto(monthPath);
     await privateOverview();
+    await initialBudget();
+    same(
+      ownBudgetsBefore,
+      fixture.targetBudgets ?? fixture.sourceBudgets,
+      "Restored budgets differ from the saved or previously verified state",
+    );
     await expect(main.getByTestId("month-available")).toHaveText(
       balances[index][0],
     );
@@ -150,6 +263,13 @@ await rehearseRecoveryBrowser({
     await expect(ownEntry(currentName)).toBeVisible();
     await expect(main.getByTestId("month-available")).toHaveText(
       balances[index][1],
+    );
+    await assertBudget(
+      fixture.budgetNames[0],
+      budgetCase.createdSpent,
+      budgetCase.display,
+      budgetCase.createdRemaining,
+      budgetCase.createdUsage,
     );
 
     target.setPhase(
@@ -252,6 +372,7 @@ await rehearseRecoveryBrowser({
     assertIsolated();
     await selectMonth("2026-10");
     await privateOverview();
+    await initialBudget();
     await expect(page.getByText(currentName, { exact: true })).toHaveCount(0);
     await expect(main.getByTestId("month-available")).toHaveText(
       balances[index][0],
@@ -326,12 +447,101 @@ await rehearseRecoveryBrowser({
     assertIsolated();
     await selectMonth("2026-10");
     await privateOverview();
+    await initialBudget();
     await expect(main.getByTestId("month-available")).toHaveText(
       balances[index][0],
     );
     for (const name of fixture.newNames) {
       await expect(page.getByText(name, { exact: true })).toHaveCount(0);
     }
+
+    target.setPhase(
+      `${view} restored Money account ${index + 1} budget edit persistence`,
+    );
+    same(
+      budgets(target, database, account.id),
+      ownBudgetsBefore,
+      "Expense lifecycle changed the budget definitions",
+    );
+    await selectMonth("2026-11");
+    await assertNovember("Keine erfasst");
+    const savedBudget = ownBudgetsBefore.find(
+      (row) => row.id === fixture.budgetIds[1],
+    );
+    // Both viewports exercise the real edit form, then restore the original limit
+    // through that same form. This keeps the existing expense cases independent.
+    for (const [step, amount] of ["40,01", "20,00"].entries()) {
+      await main
+        .getByRole("link", { name: "Budget bearbeiten", exact: true })
+        .click();
+      await expect(page.getByLabel("Budgetmonat", { exact: true })).toHaveValue(
+        "2026-11",
+      );
+      await expect(
+        page.getByLabel("Budgetmonat", { exact: true }),
+      ).toHaveAttribute("readonly", "");
+      await page.getByLabel("Monatslimit (€)", { exact: true }).fill(amount);
+      await page
+        .getByRole("button", { name: "Budget speichern", exact: true })
+        .click();
+      await expect(page).toHaveURL(/\/account\/money\?month=2026-11$/);
+      await page.reload();
+      const currentBudgets = budgets(target, database, account.id);
+      same(
+        currentBudgets.filter((row) => row.id !== savedBudget.id),
+        ownBudgetsBefore.filter((row) => row.id !== savedBudget.id),
+        "Budget edit changed another month",
+      );
+      same(
+        currentBudgets.filter((row) => row.id === savedBudget.id),
+        [
+          {
+            ...savedBudget,
+            amount_minor: step === 0 ? 4001 : 2000,
+            revision: savedBudget.revision + step + 1,
+          },
+        ],
+        "Budget edit did not persist the exact limit and revision",
+      );
+      same(
+        expenses(target, database, account.id),
+        ownBefore,
+        "Budget edit changed expense rows",
+      );
+      assertIsolated();
+      await assertBudget(
+        fixture.budgetNames[1],
+        "0,00 €",
+        `${amount} €`,
+        `${amount} €`,
+        0,
+      );
+      await expect(main.getByTestId("month-available")).toHaveText(
+        "Noch unvollständig",
+      );
+    }
+    fixture.targetBudgets = budgets(target, database, account.id);
+    await selectMonth("2026-10");
+    await initialBudget();
+    await expect(main.getByTestId("month-available")).toHaveText(
+      balances[index][0],
+    );
+    target.setPhase(
+      `${view} restored Money account ${index + 1} foreign budget denial`,
+    );
+    await page.goto(
+      `/account/money/budget/${foreign.budgetIds[0]}?month=2026-10`,
+    );
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(
+      "Seite",
+    );
+    await expect(
+      page.getByLabel("Monatslimit (€)", { exact: true }),
+    ).toHaveCount(0);
+    for (const name of foreign.budgetNames) {
+      await expect(page.getByText(name, { exact: true })).toHaveCount(0);
+    }
+    assertIsolated();
 
     target.setPhase(
       `${view} restored Money account ${index + 1} foreign record denial`,
@@ -356,7 +566,7 @@ await rehearseRecoveryBrowser({
       "Restored Money screen has horizontal overflow",
     );
     console.log(
-      `Restored ${view} Money account ${index + 1} passed: saved month, exact creation/edit/month move, rejected and confirmed deletion, source isolation and foreign-record denial.`,
+      `Restored ${view} Money account ${index + 1} passed: saved month, exact creation/edit/month move, rejected and confirmed deletion, budget usage/edit/month isolation, source isolation and foreign-record denial.`,
     );
   },
 });
