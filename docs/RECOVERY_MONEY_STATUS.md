@@ -1,5 +1,13 @@
 # LifeOS – Money nach Wiederherstellung
 
+## Erweiterung: Budget anlegen und bestätigt entfernen
+
+Stand: 11.11.2026, Branch `codex/recovery-budget-lifecycle`, Basis PR #38. Der bestehende Testbefehl erhält einen begrenzten Dezemberablauf für beide Konten auf Desktop/Mobil. Vor der Sicherung entsteht je eine eigene fiktive Dezemberausgabe über 45000 Cent, zunächst ohne Dezemberbudget. Nach Restore legt das echte Formular ein Budget über 50000 Cent an. Neuladen muss genau eine Zeile mit der angeforderten ID, Eigentümer, EUR, Dezembermonat und Revision 0 erhalten. Die Oberfläche zeigt 450,00 Euro Verbrauch, 90 % Nutzung und 50,00 Euro Rest. Ohne Einkommen bleibt der Gesamtplan ausdrücklich unvollständig.
+
+Entfernen ohne Bestätigung wird abgewiesen. Abbrechen und Neuladen erhalten Budget und Ausgaben. Erst das bestätigte Entfernen löscht genau das neue Budget; die gespeicherten Ausgaben bleiben vollständig unverändert und weiter sichtbar. Die alte Bearbeitungsadresse zeigt keine Budgetdaten mehr. Gesicherte Oktober-/Novemberbudgets, Fremdkonto und Quelldaten bleiben erhalten. Jeder Durchlauf endet wieder ohne Dezemberbudget, sodass Desktop und Mobil denselben Lebenszyklus unabhängig ausführen. Bestehende Ausgabe-, Limitänderungs-, Auth- und CSP-Prüfungen bleiben aktiv; keine zusätzliche CI-Buildserie oder Produktänderung.
+
+Prüfstand: Lint, Typprüfung, 196 Unit-/19 Werkzeugtests, Formatprüfung, regulärer Build und 16 öffentliche Browserfälle bestanden (Logs `.cache/recovery-budget-lifecycle-{checks,build,public}-20261111.log`). Diff auf Umfang, Eigentümer-/Monatsgrenzen, Integerbeträge, Bestätigung und unveränderte Ausgangsdaten geprüft. Die erste vollständige erweiterte Restore-Probe besteht nach behobenem Docker-Startproblem (Exit 0; .cache/recovery-budget-lifecycle-first-20261111.log): beide Konten auf Desktop/Mobil einschließlich aller bisherigen Auth-, Ausgabe-, Budgetänderungs- und CSP-Prüfungen. Zuvor hing die Docker-Bereitschaftsabfrage; der reguläre Neustart scheiterte beim Stoppen. Der dokumentierte gezielte Wiederanlauf erhält Images und Datenbankvolumes; die anschließende Engine-Abfrage meldet linux. Die GitHub-Gesamtprüfung des neuen PRs steht noch aus. Zielverknüpfungen und weitere Money-/Goals-/Plan-/Home-Journeys bleiben eigene Schritte. Frühere Nachweise unten beziehen sich ausschließlich auf die dort genannten Commits.
+
 Stand: 31.10.2026. Begrenzte V1-Betriebsprüfung auf `codex/recovery-journeys-assessment`, aufbauend auf dem vollständig geprüften [Browsernachweis #35](https://github.com/LucaEndrich2002/LifeIO/pull/35). Keine Produktänderung, Migration oder neue Abhängigkeit.
 
 ## Umfang

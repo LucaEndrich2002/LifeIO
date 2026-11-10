@@ -72,7 +72,7 @@ Vitest prüft Konfigurationsvalidierung und zugängliche Navigation. Playwright 
 
 ## Supabase lokal
 
-`pnpm test:recovery:money` prüft nach einer eigenen unabhängigen Wiederherstellung die Monatsübersicht, Ausgabe-Erstellen/-Bearbeiten, Monatswechsel, bestätigtes Löschen und Kontentrennung auf Desktop und Mobil. Gesicherte Monatsbudgets ergänzen Restbetrag, Nutzung, Überziehung und Limitänderung bei unveränderten anderen Monaten und Quelldaten. Die separate bisherige Browserprobe bleibt erhalten. Umfang und tatsächlicher Prüfstand: [RECOVERY_MONEY_STATUS.md](RECOVERY_MONEY_STATUS.md).
+`pnpm test:recovery:money` prüft nach einer eigenen unabhängigen Wiederherstellung die Monatsübersicht, Ausgabe-Erstellen/-Bearbeiten, Monatswechsel, bestätigtes Löschen und Kontentrennung auf Desktop und Mobil. Gesicherte Monatsbudgets ergänzen Restbetrag, Nutzung, Überziehung und Limitänderung bei unveränderten anderen Monaten und Quelldaten. Ein eigener Dezemberablauf prüft Budget-Erstellen und abgewiesenes, abgebrochenes sowie bestätigtes Entfernen bei vollständig erhaltenen Ausgaben. Die separate bisherige Browserprobe bleibt erhalten. Umfang und tatsächlicher Prüfstand: [RECOVERY_MONEY_STATUS.md](RECOVERY_MONEY_STATUS.md).
 
 `pnpm test:recovery:browser` ergänzt die unabhängige Auth-Wiederherstellung um einen eigenen minimalen Gateway und einen getrennten Produktions-Build. Desktop und Mobil prüfen Anmeldung, Profil, Einkommen und Abmeldung gegen das restaurierte Ziel. Voraussetzungen, Prüfstand und Grenzen: [RECOVERY_BROWSER_STATUS.md](RECOVERY_BROWSER_STATUS.md).
 
