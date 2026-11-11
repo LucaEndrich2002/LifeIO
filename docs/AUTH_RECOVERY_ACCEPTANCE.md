@@ -1,5 +1,7 @@
 # LifeOS – Abnahme einer unabhängigen Auth-Wiederherstellung
 
+Ergänzung 11.11.2026: [Sitzungserneuerung und lokale Abmeldung nach Auth-Neustart](RECOVERY_SESSION_STATUS.md) werden im gemeinsamen Restore-Ablauf separat geprüft. Umfang, tatsächliche Ergebnisse und Grenzen stehen im ergänzenden Bericht; dies ist keine allgemeine Schlüsselrotations- oder JWT-Widerrufsabnahme.
+
 Stand: 31.10.2026. Die Abschnitte vom 29.10. beschreiben die Vorbereitung und die geprüfte Quelle. Das neue Inkrement für einen unabhängigen Zielcluster samt Prüfstand steht am Ende. Frühere Ergebnisse bleiben in [BACKUP_RESTORE_STATUS.md](BACKUP_RESTORE_STATUS.md) und [RECOVERY_RUNBOOK.md](RECOVERY_RUNBOOK.md) abgegrenzt.
 
 ## Warum ein zusätzlicher Nachweis nötig ist

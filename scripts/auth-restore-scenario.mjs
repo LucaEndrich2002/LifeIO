@@ -8,6 +8,7 @@ import {
 import { prepareAuthSource, request, waitForAuth } from "./auth-rehearsal.mjs";
 import { recoverySnapshot } from "./recovery-snapshot.mjs";
 import { restoreArchive } from "./restore-archive.mjs";
+import { verifyRefreshSessions } from "./recovery-refresh-sessions.mjs";
 
 export async function rehearseAuthRestore(
   verifyApplication,
@@ -211,10 +212,11 @@ export async function rehearseAuthRestore(
             response.status === 200 &&
               response.data.user?.id === account.id &&
               response.data.user.email_confirmed_at &&
-              typeof response.data.access_token === "string",
+              typeof response.data.access_token === "string" &&
+              typeof response.data.refresh_token === "string",
             "Restored confirmed account could not log in with its original password",
           );
-          return response.data.access_token;
+          return response;
         }
         async function deniedLogin(credentials, code) {
           const response = await request(
@@ -232,14 +234,17 @@ export async function rehearseAuthRestore(
         target.setPhase(
           "new target sessions and wrong/unconfirmed credentials",
         );
-        const tokens = [];
+        const initialSessions = [];
         for (const account of accounts) {
-          tokens.push(await login(account));
+          initialSessions.push(await login(account));
           await deniedLogin(
             { email: account.email, password: `Wrong-${randomUUID()}` },
             "invalid_credentials",
           );
         }
+        const tokens = initialSessions.map(
+          (response) => response.data.access_token,
+        );
         await deniedLogin(unconfirmed, "email_not_confirmed");
         const oldToken = await request(services.origin, "/user", {
           token: accounts[0].token,
@@ -358,7 +363,9 @@ export async function rehearseAuthRestore(
         target.setPhase("target Auth restart and fresh password login");
         services.restartAuth();
         await waitForAuth(services);
-        for (const account of accounts) await login(account);
+        const controlSessions = [];
+        for (const account of accounts)
+          controlSessions.push(await login(account));
         const retained = await request(services.origin, "/user", {
           token: tokens[0],
         });
@@ -376,6 +383,18 @@ export async function rehearseAuthRestore(
           { status: 200, data: [{ display_name: "Im Ziel gespeichert" }] },
           "Target write did not persist after restart",
         );
+        await verifyRefreshSessions({
+          source,
+          target,
+          database,
+          services,
+          accounts,
+          initial: initialSessions,
+          controls: controlSessions,
+          applicationTables: Object.keys(before.rows).filter((table) =>
+            table.startsWith("public."),
+          ),
+        });
         if (verifyApplication)
           await verifyApplication({
             source,
