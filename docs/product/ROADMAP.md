@@ -1,5 +1,7 @@
 # LifeOS – Roadmap
 
+Ergänzung 11.11.2026: Die [Money-Wiederherstellungsprobe](../RECOVERY_MONEY_STATUS.md) erhält gespeicherte Verbindungen zwischen beiden Zielarten und Monatsbudgets sowie die Anlage und bestätigte Entfernung einer neuen Zuordnung. Finanz- und Zieldaten müssen unverändert bleiben. Tatsächlicher Prüfstand im Bericht; Aufgaben-/Terminverknüpfungen und weitere restaurierte Kernjourneys bleiben offen.
+
 Ergänzung 11.11.2026: Die [Money-Wiederherstellungsprobe](../RECOVERY_MONEY_STATUS.md) ergänzt Budget-Erstellen und bestätigtes Entfernen mit erhaltenen Ausgaben. Der Bericht unterscheidet die vorbereitete Implementierung vom tatsächlichen Prüfstand. Zielverknüpfungen und weitere restaurierte Kernjourneys bleiben offen.
 
 Ergänzung 07.11.2026: Die bestehende [Money-Wiederherstellungsprobe](../RECOVERY_MONEY_STATUS.md) ergänzt gesicherte Monatsbudgets, Budgetverbrauch beim Erstellen/Verschieben/Löschen einer Ausgabe sowie Limitänderungen und Monats-/Kontentrennung. Der tatsächliche Prüfstand steht im Bericht. Budget-Erstellen/-Löschen und weitere restaurierte Kernjourneys bleiben offen.

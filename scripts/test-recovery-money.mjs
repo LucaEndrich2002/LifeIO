@@ -2,6 +2,10 @@ import { randomUUID } from "node:crypto";
 import { expect as baseExpect } from "@playwright/test";
 import { rehearseRecoveryBrowser } from "./recovery-browser-scenario.mjs";
 import { check, same } from "./isolated-database.mjs";
+import {
+  prepareBudgetLinks,
+  verifyBudgetLinks,
+} from "./recovery-budget-links.mjs";
 
 const expect = baseExpect.configure({ timeout: 15000 });
 const fixtures = new Map();
@@ -95,6 +99,7 @@ await rehearseRecoveryBrowser({
           commit;`,
         );
       }
+      prepareBudgetLinks(source, account, fixture, index);
       fixture.sourceRows = expenses(source, source.source, account.id);
       fixture.sourceBudgets = budgets(source, source.source, account.id);
       fixtures.set(account.id, fixture);
@@ -724,6 +729,30 @@ await rehearseRecoveryBrowser({
     await expect(main.getByTestId("month-available")).toHaveText(
       balances[index][0],
     );
+    await verifyBudgetLinks({
+      page,
+      view,
+      index,
+      account,
+      accounts,
+      target,
+      database,
+      source,
+      fixtures,
+      assertFinance() {
+        same(
+          budgets(target, database, account.id),
+          beforeBudgetCreation,
+          "Budget linking changed existing budgets",
+        );
+        unchangedExpensesAndIsolated();
+      },
+    });
+    await page.goto(monthPath);
+    await initialBudget();
+    await expect(main.getByTestId("month-available")).toHaveText(
+      balances[index][0],
+    );
     target.setPhase(
       `${view} restored Money account ${index + 1} foreign budget denial`,
     );
@@ -764,7 +793,7 @@ await rehearseRecoveryBrowser({
       "Restored Money screen has horizontal overflow",
     );
     console.log(
-      `Restored ${view} Money account ${index + 1} passed: saved month, exact creation/edit/month move, rejected and confirmed deletion, budget creation/usage/edit/confirmed deletion preserving expenses, month/source isolation and foreign-record denial.`,
+      `Restored ${view} Money account ${index + 1} passed: saved month, exact creation/edit/month move, rejected and confirmed deletion, budget creation/usage/edit/confirmed deletion preserving expenses, restored bidirectional goal links and confirmed unlinking, month/source isolation and foreign-record denial.`,
     );
   },
 });
