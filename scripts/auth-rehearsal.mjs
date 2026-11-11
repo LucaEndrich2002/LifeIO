@@ -20,7 +20,7 @@ export async function request(
   });
   const chunks = [];
   let size = 0;
-  for await (const chunk of response.body) {
+  for await (const chunk of response.body ?? []) {
     size += chunk.byteLength;
     check(size <= 65536, "Auth test response too large");
     chunks.push(Buffer.from(chunk));
