@@ -1,5 +1,7 @@
 # LifeOS – Roadmap
 
+Ergänzung 11.11.2026: Ein [begrenzter Sitzungsnachweis nach Auth-Wiederanlauf](../RECOVERY_SESSION_STATUS.md) ergänzt Refresh-Rotation und lokale Abmeldung mit unabhängigen Kontrollsitzungen und unveränderten Anwendungsdaten. Der Bericht hält den tatsächlichen Prüfstand fest; Schlüsselrotation, abgelaufene Zugriffstokens und Cloudbetrieb bleiben offen.
+
 Ergänzung 11.11.2026: Die [Money-Wiederherstellungsprobe](../RECOVERY_MONEY_STATUS.md) erhält gespeicherte Verbindungen zwischen beiden Zielarten und Monatsbudgets sowie die Anlage und bestätigte Entfernung einer neuen Zuordnung. Finanz- und Zieldaten müssen unverändert bleiben. Tatsächlicher Prüfstand im Bericht; Aufgaben-/Terminverknüpfungen und weitere restaurierte Kernjourneys bleiben offen.
 
 Ergänzung 11.11.2026: Die [Money-Wiederherstellungsprobe](../RECOVERY_MONEY_STATUS.md) ergänzt Budget-Erstellen und bestätigtes Entfernen mit erhaltenen Ausgaben. Der Bericht unterscheidet die vorbereitete Implementierung vom tatsächlichen Prüfstand. Zielverknüpfungen und weitere restaurierte Kernjourneys bleiben offen.

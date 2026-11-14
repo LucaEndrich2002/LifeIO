@@ -76,7 +76,7 @@ Vitest prüft Konfigurationsvalidierung und zugängliche Navigation. Playwright 
 
 `pnpm test:recovery:browser` ergänzt die unabhängige Auth-Wiederherstellung um einen eigenen minimalen Gateway und einen getrennten Produktions-Build. Desktop und Mobil prüfen Anmeldung, Profil, Einkommen und Abmeldung gegen das restaurierte Ziel. Voraussetzungen, Prüfstand und Grenzen: [RECOVERY_BROWSER_STATUS.md](RECOVERY_BROWSER_STATUS.md).
 
-`pnpm test:auth:restore` prüft die Wiederherstellung bestätigter fiktiver Konten in einen unabhängigen PostgreSQL-Cluster, neue Anmeldungen, tatsächliche Data-API-Zugriffsrechte und Auth-Neustart. Benötigt vorhandene PostgreSQL-/GoTrue-/Mailpit-/PostgREST-Images; keine bestehende Datenbank oder echte Schlüssel. Umfang und Grenzen: [AUTH_RECOVERY_ACCEPTANCE.md](AUTH_RECOVERY_ACCEPTANCE.md).
+`pnpm test:auth:restore` prüft die Wiederherstellung bestätigter fiktiver Konten in einen unabhängigen PostgreSQL-Cluster, neue Anmeldungen, tatsächliche Data-API-Zugriffsrechte und Auth-Neustart. Der gemeinsame Ablauf ergänzt [Refresh-Rotation und lokale Abmeldung mit unabhängigen Kontrollsitzungen](RECOVERY_SESSION_STATUS.md). Benötigt vorhandene PostgreSQL-/GoTrue-/Mailpit-/PostgREST-Images; keine bestehende Datenbank oder echte Schlüssel. Umfang und Grenzen: [AUTH_RECOVERY_ACCEPTANCE.md](AUTH_RECOVERY_ACCEPTANCE.md).
 
 Die In-App-Benachrichtigungen unter `/account/notifications` benötigen `20261012090000_notifications.sql`. Mit `pnpm exec supabase migration up --local` additiv anwenden; kein Reset. „Hinweise“ in der privaten Navigation öffnet die Liste, „Hinweise prüfen“ wertet die vier V1-Auslöser aus. Kein Hintergrunddienst oder Providerzugang erforderlich. Regeln und Prüfstand: [NOTIFICATIONS_STATUS.md](NOTIFICATIONS_STATUS.md).
 
@@ -138,6 +138,8 @@ Kein Service-Role-Key und kein OpenAI-Key sind für normale App-Anfragen nötig.
 Das vom Nutzer vorgegebene Repository ist [LucaEndrich2002/LifeIO](https://github.com/LucaEndrich2002/LifeIO). `origin` verweist auf dessen HTTPS-URL. Das lokale Fundament wurde als erster Commit auf `main` übertragen; der Dashboard-Ausbau erfolgt auf `codex/dashboard-and-ci` und wird als Pull Request bereitgestellt.
 
 `.github/workflows/ci.yml` läuft bei Pushes, Pull Requests und manueller Auslösung: Installation mit Lockfile, Formatterprüfung, Lint, Typecheck, Unit-/Komponententests, Build und Playwright auf Desktop/Mobil. Kein Deployment und keine Cloud-Secrets sind dafür erforderlich. [GitHub Actions](https://github.com/LucaEndrich2002/LifeIO/actions) zeigt die tatsächlichen Läufe. Browserberichte und Screenshots werden für sieben Tage als Artefakt gespeichert. Der aktuelle Prüfstand steht in [DASHBOARD_STATUS.md](DASHBOARD_STATUS.md).
+
+Der vollständige Quality-Job hat eine feste Laufzeitgrenze von 30 Minuten. Die gewachsenen Restore-Proben und 124 seriellen Auth-Browserfälle überschritten am 14.11.2026 die frühere 20-Minuten-Grenze bei laufenden erfolgreichen Tests. Die Auth-Suite behält einen Worker, keine Wiederholungen und 30 Sekunden pro Test; es werden keine Prüfungen übersprungen. Nachweis und tatsächlicher Abschlussstand: [RECOVERY_SESSION_STATUS.md](RECOVERY_SESSION_STATUS.md).
 
 Vercel und Supabase Cloud bleiben die vorgesehenen späteren Hosting-Ziele. Das GitHub-Repository existierte bereits und wurde auf ausdrücklichen Nutzerwunsch angebunden. Ein Cloud-Projekt oder öffentliches App-Deployment ist noch nicht eingerichtet. Die Repository-Sichtbarkeit wurde nicht verändert.
 
