@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import { expect as baseExpect } from "@playwright/test";
 import { rehearseRecoveryBrowser } from "./recovery-browser-scenario.mjs";
 import { check, same } from "./isolated-database.mjs";
+import { verifyPlanLinks } from "./recovery-plan-links.mjs";
 import {
   prepareBudgetLinks,
   verifyBudgetLinks,
@@ -747,6 +748,17 @@ await rehearseRecoveryBrowser({
         );
         unchangedExpensesAndIsolated();
       },
+    });
+    await verifyPlanLinks({
+      page,
+      view,
+      index,
+      account,
+      accounts,
+      target,
+      database,
+      source,
+      fixtures,
     });
     await page.goto(monthPath);
     await initialBudget();
