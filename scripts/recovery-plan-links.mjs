@@ -9,15 +9,16 @@ const targetPath = (kind, id) =>
 
 export function preparePlanLinks(source, account, fixture, index) {
   source.setPhase(`fictional saved Plan links for account ${index + 1}`);
-  fixture.unlinkedTask = {
-    id: randomUUID(),
-    title: `Weitere Aufgabe Konto ${index + 1}`,
+  fixture.unlinkedPlan = {
+    task: { id: randomUUID(), title: `Weitere Aufgabe Konto ${index + 1}` },
+    event: { id: randomUUID(), title: `Weiterer Termin Konto ${index + 1}` },
   };
   source.sql(
     source.source,
     `begin; set local role authenticated;
     set local request.jwt.claim.sub='${account.id}';
-    select public.mutate_task('create','${fixture.unlinkedTask.id}',0,'${fixture.unlinkedTask.title}','normal','');
+    select public.mutate_task('create','${fixture.unlinkedPlan.task.id}',0,'${fixture.unlinkedPlan.task.title}','normal','');
+    select public.mutate_calendar_event('create','${fixture.unlinkedPlan.event.id}',0,'${fixture.unlinkedPlan.event.title}','2026-10-16T08:00:00Z','2026-10-16T09:00:00Z','Europe/Berlin');
     commit;`,
   );
   fixture.plan = kinds.map((kind) => ({

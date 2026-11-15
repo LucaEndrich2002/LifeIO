@@ -1,5 +1,13 @@
 # Gesicherte Ziel-Verknüpfungen mit Aufgaben und Terminen
 
+## Folgeinkrement: Terminverknüpfung nach Restore ändern
+
+Branch `codex/recovery-event-link-lifecycle`, Basis PR #43. Der gemeinsame Helfer `scripts/recovery-plan-link-lifecycle.mjs` erhält den bisherigen Aufgabenablauf und ergänzt dieselben Prüfungen für Termine an Sparzielen. Vor dem Backup erhält jedes fiktive Konto einen zusätzlichen unverbundenen Termin. Nach Restore prüfen beide Konten auf Desktop/Mobil Auswahl, Tastaturbestätigung, Neuladen, Duplikatschutz sowie abgewiesenes, abgebrochenes und bestätigtes Entfernen. Aufgabenlinks bleiben an persönlichen Zielen geprüft; damit deckt der Schreibnachweis beide Zielarten ab.
+
+Vollständige Vergleiche aller Anwendungstabellen erlauben nur den neuen eigenen Link und dessen Entfernungszeitpunkt. Termin und Zeitzone, Ziele, Geldwerte, fremdes Konto, bestehende Links und sämtliche Quelldaten bleiben erhalten. Der Endpunkt bleibt erreichbar, der entfernte Link bietet keine weitere Aktion. Fremde Titel und horizontaler Überlauf werden geprüft. Keine Produkt-, Migrations-, Abhängigkeits-, Prüflimit- oder CI-Serienänderung.
+
+Prüfstand: Die erste vollständige erweiterte Restore-Probe besteht mit Exit 0 (`.cache/recovery-event-link-first-20261115.log`). Alle vier neuen Terminlink-Fälle für beide Konten auf Desktop/Mobil sowie die bisherigen Aufgabenlink-, Money-, Plan-, Auth- und Gateway-Fälle bestehen. Lint, Typprüfung, 196 Unit-/20 Werkzeugtests, vollständige Formatprüfung, Produktionsbuild und alle 16 öffentlichen Browserfälle bestanden ebenfalls mit Exit 0 (`.cache/recovery-event-link-{lint,typecheck,test,test-tooling,format-check,build,public}-20261115.log`). Diff auf Umfang, Datenerhaltung, Autorisierung, Typen und Geheimnisschutz geprüft. Die vollständige neue GitHub-CI bleibt offen. Frühere grüne Ergebnisse belegen ausschließlich die jeweiligen Vorgängerschritte.
+
 ## Folgeinkrement: Aufgabenverknüpfung nach Restore ändern
 
 Branch `codex/recovery-task-link-lifecycle`, Basis PR #42. `scripts/recovery-task-link-lifecycle.mjs` ergänzt eine neue Zuordnung zwischen einem persönlichen Ziel und einer zuvor unverbunden gesicherten Aufgabe. Beide Konten durchlaufen auf Desktop/Mobil Auswahl, Tastaturbestätigung, gespeicherte Anzeige nach Neuladen und Duplikatschutz beim erneuten Öffnen. Die umgekehrte Aufgabenansicht prüft abgewiesenes Entfernen ohne Bestätigung, Abbrechen und bestätigtes Entfernen. Die entfernte ID bleibt als Tombstone erhalten; ihre Route bietet keine weitere Entfernen-Aktion.
