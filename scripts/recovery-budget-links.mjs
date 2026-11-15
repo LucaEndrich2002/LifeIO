@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { expect as baseExpect } from "@playwright/test";
 import { check, same } from "./isolated-database.mjs";
+import { preparePlanLinks } from "./recovery-plan-links.mjs";
 
 const expect = baseExpect.configure({ timeout: 15000 });
 const goalTables = [
@@ -41,6 +42,7 @@ export function prepareBudgetLinks(source, account, fixture, index) {
     select public.mutate_goal_budget_link('create','${fixture.linkIds[1]}','${fixture.goalIds[1]}','${fixture.budgetIds[0]}');
     commit;`,
   );
+  preparePlanLinks(source, account, fixture, index);
   fixture.sourceGoals = goals(source, source.source, account.id);
   fixture.sourceLinks = rows(source, source.source, account.id, "entity_links");
 }

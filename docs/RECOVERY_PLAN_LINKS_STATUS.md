@@ -1,0 +1,22 @@
+# Gesicherte Ziel-Verknüpfungen mit Aufgaben und Terminen
+
+Stand: 15.11.2026. Branch `codex/recovery-plan-links`, Basis PR #41. Begrenzter V1-Nachweis im bestehenden isolierten Money-Restore-Browserablauf; keine vollständige Plan- oder Produktionsabnahme.
+
+## Umfang
+
+Vor der Sicherung erhalten beide fiktiven Konten eine eigene offene Aufgabe mit hoher Priorität ohne Fälligkeitsdatum und einen eigenen Termin über Mitternacht. Die normalen authentifizierten Datenbankfunktionen verbinden beide Endpunkte jeweils mit dem vorhandenen Sparziel und persönlichen Ziel. Die unabhängige Auth-/Datenwiederherstellung und der bestehende Budget-Link-Nachweis bleiben erhalten.
+
+`scripts/recovery-plan-links.mjs` prüft anschließend für beide Konten auf Desktop und Mobil:
+
+- Erhaltene Aufgabe und Termin an beiden Zielarten, genaue Anzahl und gespeicherte Inhalte nach Neuladen. Der Termin wird in Europe/Berlin als 14.10.2026, 23:30 bis 15.10.2026, 02:00 mit UTC+02:00 dargestellt. Die Aufgabe erhält kein erfundenes Datum.
+- Navigation vom Ziel zur Verknüpfungsliste, per Tastatur zum konkreten Aufgaben-/Terminformular, weiter zu beiden verknüpften Zielen und zurück zum Ausgangsziel.
+- Abgewiesene fremde Ziellisten, umgekehrte Endpunktlisten, fremde Link-IDs unter einem eigenen Ziel und Auswahlbestätigungen mit fremdem Endpunkt. Persönliche Titel des anderen Kontos dürfen auch außerhalb des sichtbaren Hauptbereichs nicht erscheinen; verweigerte Seiten bieten keine Verknüpfungs-/Entfernungsaktion.
+- Kein horizontaler Überlauf. Vollständige Vergleiche sämtlicher Anwendungstabellen vor und nach Navigation und Negativprüfungen bestätigen unveränderte Quelle und Ziel, einschließlich beider Konten, Geldwerte, Fortschritte und Endpunkte. Fehlermeldungen geben keine Tabelleninhalte aus.
+
+Aufbauend auf den bestehenden produktiven Regeln aus [GOAL_PLAN_LINKS_STATUS.md](GOAL_PLAN_LINKS_STATUS.md). Keine Änderung an Produktcode, Migrationen, Abhängigkeiten, Testzeitlimits oder CI-Serien. Ausführung über `pnpm test:recovery:money`; die bisherigen Money-/Budgetfälle bleiben aktiv. Erstellen/Entfernen von Plan-Links nach Restore, Aufgabenabschluss und Terminbearbeitung bleiben eigene begrenzte Folgearbeiten.
+
+## Tatsächlicher Prüfstand
+
+Lint, Typprüfung, 196 Unit-/20 Werkzeugtests und vollständige Formatprüfung bestanden. Die erste vollständige erweiterte Restore-Browserprobe besteht mit Exit 0 (`.cache/recovery-plan-links-first-20261115.log`): alle neuen Aufgaben-/Terminlinkfälle für beide Konten auf Desktop/Mobil sowie alle bisherigen Money-, Budget-, Auth-, Gateway-, Profil- und Abmeldefälle. Die Probe schließt ihren eigenen isolierten Produktionsbuild und die Bereinigung ein. Diff auf Umfang, gespeicherte Identitäten, unveränderte Daten, Zugriffsschutz und Geheimnisschutz geprüft. Der reguläre Produktionsbuild und alle 16 öffentlichen Browserfälle sind ebenfalls erfolgreich (Exit 0; `.cache/recovery-plan-links-build-20261115.log` und `.cache/recovery-plan-links-public-20261115.log`). Die vollständige CI dieses Branches steht noch aus; der Pull Request bleibt bis dahin Entwurf. Frühere grüne Läufe werden nicht als Nachweis dieser Erweiterung gezählt.
+
+Vor der Probe trat der dokumentierte Docker-Desktop-Socketfehler erneut auf. Nach Prüfung der ausführbaren Pfade wurden ausschließlich die fehlgeschlagenen Docker-Prozesse und die Distribution `docker-desktop` beendet. Die beiden verifizierten Laufzeitverzeichnisse wurden mit `.lifeos-socket-backup-20261115-0228` reversibel gesichert. Docker wurde verborgen neu gestartet; `docker info` bestätigt wieder eine Linux-Engine. Images, Volumes und vorhandene Datenbanken wurden nicht zurückgesetzt. Der anschließende vollständige Browsernachweis ist wie oben dokumentiert bestanden.
