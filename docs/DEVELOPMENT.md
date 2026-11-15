@@ -72,7 +72,7 @@ Vitest prüft Konfigurationsvalidierung und zugängliche Navigation. Playwright 
 
 ## Supabase lokal
 
-Die vorhandene Money-Restore-Probe ergänzt Aufgabenlink-Erstellen an persönlichen Zielen und Terminlink-Erstellen an Sparzielen samt bestätigtem Entfernen bei erhaltenen Endpunkten über den gemeinsamen Helfer `scripts/recovery-plan-link-lifecycle.mjs`. Umfang und tatsächlicher Prüfstand: [Plan-Restore-Bericht](RECOVERY_PLAN_LINKS_STATUS.md).
+Die vorhandene Money-Restore-Probe ergänzt Aufgabenlink-Erstellen an persönlichen Zielen und Terminlink-Erstellen an Sparzielen samt bestätigtem Entfernen bei erhaltenen Endpunkten über den gemeinsamen Helfer `scripts/recovery-plan-link-lifecycle.mjs`. `scripts/recovery-task-completion.mjs` prüft Abschluss und Wiederöffnen der gesicherten Aufgabe mit erhaltenen Zielverknüpfungen. Umfang und tatsächlicher Prüfstand: [Plan-Restore-Bericht](RECOVERY_PLAN_LINKS_STATUS.md).
 
 Die bestehende Money-Restore-Probe umfasst außerdem gesicherte Ziel-Verknüpfungen mit Aufgaben und Terminen. `scripts/recovery-plan-links.mjs` prüft beide Zielarten, Navigation in beide Richtungen und Kontentrennung ohne Änderung von Anwendungsdaten. Umfang, Voraussetzungen und tatsächlicher Stand: [RECOVERY_PLAN_LINKS_STATUS.md](RECOVERY_PLAN_LINKS_STATUS.md).
 

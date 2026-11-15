@@ -1,5 +1,7 @@
 # LifeOS – Roadmap
 
+Ergänzung 15.11.2026: Ein begrenzter [Plan-Restore-Nachweis](../RECOVERY_PLAN_LINKS_STATUS.md) ergänzt Aufgabenabschluss und Wiederöffnen per Tastatur, gespeicherte Statusansichten und erhaltene Verknüpfungen zu beiden Zielarten bei unveränderten übrigen Daten. Tatsächlicher Prüfstand im Bericht; weitere Plan-Schreibabläufe bleiben offen.
+
 Ergänzung 15.11.2026: Die [Plan-Restore-Probe](../RECOVERY_PLAN_LINKS_STATUS.md) ergänzt das Erstellen und bestätigte Entfernen von Terminlinks an Sparzielen. Der gemeinsame Ablauf erhält den Aufgabenlink-Nachweis an persönlichen Zielen und prüft unveränderte Endpunkte sowie übrige Daten. Tatsächlicher Prüfstand im Bericht; weitere Plan-Schreibabläufe bleiben offen.
 
 Ergänzung 15.11.2026: Die [Plan-Restore-Probe](../RECOVERY_PLAN_LINKS_STATUS.md) erhält ein begrenztes Folgeinkrement für Aufgabenlink-Erstellen und bestätigtes Entfernen. Der Bericht trennt Implementierung und tatsächliche Prüfung; schreibende Terminlinks bleiben offen.
