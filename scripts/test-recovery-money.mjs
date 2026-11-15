@@ -3,7 +3,7 @@ import { expect as baseExpect } from "@playwright/test";
 import { rehearseRecoveryBrowser } from "./recovery-browser-scenario.mjs";
 import { check, same } from "./isolated-database.mjs";
 import { verifyPlanLinks } from "./recovery-plan-links.mjs";
-import { verifyTaskLinkLifecycle } from "./recovery-task-link-lifecycle.mjs";
+import { verifyPlanLinkLifecycle } from "./recovery-plan-link-lifecycle.mjs";
 import {
   prepareBudgetLinks,
   verifyBudgetLinks,
@@ -761,17 +761,19 @@ await rehearseRecoveryBrowser({
       source,
       fixtures,
     });
-    await verifyTaskLinkLifecycle({
-      page,
-      view,
-      index,
-      account,
-      accounts,
-      source,
-      target,
-      database,
-      fixtures,
-    });
+    for (const kind of ["task", "event"])
+      await verifyPlanLinkLifecycle({
+        kind,
+        page,
+        view,
+        index,
+        account,
+        accounts,
+        source,
+        target,
+        database,
+        fixtures,
+      });
     await page.goto(monthPath);
     await initialBudget();
     await expect(main.getByTestId("month-available")).toHaveText(

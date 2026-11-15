@@ -1,5 +1,7 @@
 # LifeOS – Roadmap
 
+Ergänzung 15.11.2026: Die [Plan-Restore-Probe](../RECOVERY_PLAN_LINKS_STATUS.md) ergänzt das Erstellen und bestätigte Entfernen von Terminlinks an Sparzielen. Der gemeinsame Ablauf erhält den Aufgabenlink-Nachweis an persönlichen Zielen und prüft unveränderte Endpunkte sowie übrige Daten. Tatsächlicher Prüfstand im Bericht; weitere Plan-Schreibabläufe bleiben offen.
+
 Ergänzung 15.11.2026: Die [Plan-Restore-Probe](../RECOVERY_PLAN_LINKS_STATUS.md) erhält ein begrenztes Folgeinkrement für Aufgabenlink-Erstellen und bestätigtes Entfernen. Der Bericht trennt Implementierung und tatsächliche Prüfung; schreibende Terminlinks bleiben offen.
 
 Ergänzung 15.11.2026: Ein [begrenzter Nachweis gesicherter Ziel-Aufgaben-/Terminverknüpfungen](../RECOVERY_PLAN_LINKS_STATUS.md) erweitert die bestehende Money-Wiederherstellungsprobe um beide Zielarten, Navigation in beide Richtungen, Darstellung über Mitternacht und fremde Routen bei unveränderten Anwendungsdaten. Der Bericht hält den tatsächlichen Prüfstand fest; weitere Plan-Schreibabläufe nach Restore bleiben offen.
