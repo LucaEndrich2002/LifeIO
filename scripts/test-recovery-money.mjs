@@ -4,6 +4,7 @@ import { rehearseRecoveryBrowser } from "./recovery-browser-scenario.mjs";
 import { check, same } from "./isolated-database.mjs";
 import { verifyPlanLinks } from "./recovery-plan-links.mjs";
 import { verifyPlanLinkLifecycle } from "./recovery-plan-link-lifecycle.mjs";
+import { verifyTaskCompletion } from "./recovery-task-completion.mjs";
 import {
   prepareBudgetLinks,
   verifyBudgetLinks,
@@ -774,6 +775,17 @@ await rehearseRecoveryBrowser({
         database,
         fixtures,
       });
+    await verifyTaskCompletion({
+      page,
+      view,
+      index,
+      account,
+      accounts,
+      source,
+      target,
+      database,
+      fixtures,
+    });
     await page.goto(monthPath);
     await initialBudget();
     await expect(main.getByTestId("month-available")).toHaveText(

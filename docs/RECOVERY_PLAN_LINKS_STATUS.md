@@ -1,5 +1,15 @@
 # Gesicherte Ziel-Verknüpfungen mit Aufgaben und Terminen
 
+## Folgeinkrement: Gesicherte Aufgabe abschließen und wieder öffnen
+
+Branch `codex/recovery-task-completion`, Basis PR #44. `scripts/recovery-task-completion.mjs` ergänzt die bestehende Wiederherstellungsprobe um den Abschluss und das Wiederöffnen der mit beiden Zielarten verbundenen Aufgabe. Beide Konten durchlaufen auf Desktop/Mobil Tastaturbedienung, Neuladen und Wechsel der Statusansicht. Beide Zielverknüpfungen müssen erhalten bleiben und den neuen Aufgabenstatus bei unveränderter Priorität und fehlendem Fälligkeitsdatum anzeigen.
+
+Vollständige Anwendungstabellenvergleiche erlauben ausschließlich `completed_at` und die erwartete Revision dieser eigenen Aufgabe. Andere Aufgaben, Konten, Verknüpfungen, Ziele, Geldwerte und sämtliche Quelldaten bleiben unverändert. Keine Änderung an Produkt, Migrationen, Abhängigkeiten, Zeitlimits oder CI-Serien. Aufgabenbearbeitung, Löschung und Terminbearbeitung bleiben getrennte Folgearbeiten.
+
+Prüfstand: Die erste Probe scheiterte beim neuen Desktop-Aufgabenabschluss für Konto 1 (Exit 1; `.cache/recovery-task-completion-first-20261115.log`). Die bisherigen Linkfälle waren bis dahin erfolgreich; kein vollständiger Erfolg. Der Test wartete nach dem clientseitigen Statuswechsel nicht auf dessen Zieladresse, bevor er neu lud. Diese Synchronisationslücke ist geschlossen; feinere feste Phasennamen grenzen Fehler ohne Ausgabe von Datensätzen ein. Die zweite vollständige Probe besteht mit Exit 0 (`.cache/recovery-task-completion-second-20261115.log`): alle vier neuen Aufgabenabschluss-/Wiederöffnungsfälle sowie sämtliche bisherigen Link-, Money-, Plan-, Auth- und Gateway-Fälle. Der frühere Fehllauf bleibt ausdrücklich dokumentiert; kein Produktcode wurde geändert.
+
+Lint, Typprüfung, 196 Unit-/20 Werkzeugtests, vollständige Formatprüfung, Produktionsbuild und alle 16 öffentlichen Browserfälle ebenfalls bestanden (Exit 0; `.cache/recovery-task-completion-{lint,typecheck,test,test-tooling,format-check,build,public}-20261115.log`). Diff auf Umfang, Datenerhaltung, Autorisierung, Typen und Geheimnisschutz geprüft. Vollständige neue CI noch offen. Frühere Ergebnisse gelten ausschließlich für die jeweiligen Vorgängerschritte.
+
 ## Folgeinkrement: Terminverknüpfung nach Restore ändern
 
 Branch `codex/recovery-event-link-lifecycle`, Basis PR #43. Der gemeinsame Helfer `scripts/recovery-plan-link-lifecycle.mjs` erhält den bisherigen Aufgabenablauf und ergänzt dieselben Prüfungen für Termine an Sparzielen. Vor dem Backup erhält jedes fiktive Konto einen zusätzlichen unverbundenen Termin. Nach Restore prüfen beide Konten auf Desktop/Mobil Auswahl, Tastaturbestätigung, Neuladen, Duplikatschutz sowie abgewiesenes, abgebrochenes und bestätigtes Entfernen. Aufgabenlinks bleiben an persönlichen Zielen geprüft; damit deckt der Schreibnachweis beide Zielarten ab.
