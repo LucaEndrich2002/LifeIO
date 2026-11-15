@@ -1,5 +1,7 @@
 # LifeOS – Roadmap
 
+Ergänzung 15.11.2026: Die [Plan-Restore-Probe](../RECOVERY_PLAN_LINKS_STATUS.md) erhält ein begrenztes Folgeinkrement für Aufgabenlink-Erstellen und bestätigtes Entfernen. Der Bericht trennt Implementierung und tatsächliche Prüfung; schreibende Terminlinks bleiben offen.
+
 Ergänzung 15.11.2026: Ein [begrenzter Nachweis gesicherter Ziel-Aufgaben-/Terminverknüpfungen](../RECOVERY_PLAN_LINKS_STATUS.md) erweitert die bestehende Money-Wiederherstellungsprobe um beide Zielarten, Navigation in beide Richtungen, Darstellung über Mitternacht und fremde Routen bei unveränderten Anwendungsdaten. Der Bericht hält den tatsächlichen Prüfstand fest; weitere Plan-Schreibabläufe nach Restore bleiben offen.
 
 Ergänzung 11.11.2026: Ein [begrenzter Sitzungsnachweis nach Auth-Wiederanlauf](../RECOVERY_SESSION_STATUS.md) ergänzt Refresh-Rotation und lokale Abmeldung mit unabhängigen Kontrollsitzungen und unveränderten Anwendungsdaten. Der Bericht hält den tatsächlichen Prüfstand fest; Schlüsselrotation, abgelaufene Zugriffstokens und Cloudbetrieb bleiben offen.

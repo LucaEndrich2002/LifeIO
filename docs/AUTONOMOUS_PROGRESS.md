@@ -14,7 +14,11 @@ Vollständige CI am genannten Kopf bestanden: [PR-Lauf 43685179620](https://gith
 
 Umfang und tatsächlicher Prüfstand: [RECOVERY_PLAN_LINKS_STATUS.md](RECOVERY_PLAN_LINKS_STATUS.md). Der erneut aufgetretene bekannte Docker-Socketfehler wurde reversibel behoben; anschließende Linux-Engine- und vollständige Browserprüfung erfolgreich.
 
-## Nächster begrenzter Schritt und Restumfang
+## Aktueller begrenzter Schritt
+
+Branch `codex/recovery-task-link-lifecycle`, Basis PR #42; Abschlussnotizen mit `370f3d4` gesichert. Neue Aufgabenverknüpfung zu einem persönlichen Ziel, Duplikatschutz und abgewiesenes/abgebrochenes/bestätigtes Entfernen vorbereitet. Vollständige Tabellenvergleiche schützen Endpunkte, Ziele, Geldwerte und Quelle. Erste vollständige erweiterte Browserprobe bestanden, Exit 0 (`.cache/recovery-task-link-first-20261115.log`); Sitzung 10356 beendet. Lint, Typprüfung, 196 Unit-/20 Werkzeugtests, Format, Produktionsbuild und alle 16 öffentlichen Browserfälle bestanden. Logs: `.cache/recovery-task-link-{lint,typecheck,test,test-tooling,format-check,build,public}-20261115.log`. Diff geprüft; vollständige CI noch offen, bis dahin Draft-PR. Bei Wiederaufnahme reguläre Nutzung erlaubt, 98 % / 52 % Rest nach regulärer Erneuerung. Erst diesen Schritt abschließen. Ressourcen vor Beginn: reguläre Nutzung erlaubt, 27 % / 57 % Rest; keine Credits/Resets. Details im [Plan-Restore-Bericht](RECOVERY_PLAN_LINKS_STATUS.md).
+
+## Weiterer Restumfang
 
 Als nächster Schritt bieten sich Erstellen und bestätigtes Entfernen von Aufgaben-/Terminlinks am restaurierten Ziel bei unveränderten Endpunkten und Ziel-/Finanzwerten an. Die zuletzt ergänzte Probe ist ausdrücklich lesend. Weitere Money-/Plan-/Goals-/Home-Abläufe nach Restore, Schlüsselrotation, abgelaufene Tokens, externe Sicherung/Aufbewahrung und ausführbare Löschprozesse bleiben offen. Vor Umsetzung aktuellen Umfang und relevante Guides prüfen.
 

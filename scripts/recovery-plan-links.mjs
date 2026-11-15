@@ -9,6 +9,17 @@ const targetPath = (kind, id) =>
 
 export function preparePlanLinks(source, account, fixture, index) {
   source.setPhase(`fictional saved Plan links for account ${index + 1}`);
+  fixture.unlinkedTask = {
+    id: randomUUID(),
+    title: `Weitere Aufgabe Konto ${index + 1}`,
+  };
+  source.sql(
+    source.source,
+    `begin; set local role authenticated;
+    set local request.jwt.claim.sub='${account.id}';
+    select public.mutate_task('create','${fixture.unlinkedTask.id}',0,'${fixture.unlinkedTask.title}','normal','');
+    commit;`,
+  );
   fixture.plan = kinds.map((kind) => ({
     kind,
     id: randomUUID(),
@@ -32,7 +43,7 @@ export function preparePlanLinks(source, account, fixture, index) {
 }
 
 // Snapshot every application table without emitting row contents on failure.
-function applicationRows(context, database) {
+export function applicationRows(context, database) {
   const tables = JSON.parse(
     context.sql(
       database,

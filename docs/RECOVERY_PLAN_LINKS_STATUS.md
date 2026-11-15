@@ -1,5 +1,15 @@
 # Gesicherte Ziel-Verknüpfungen mit Aufgaben und Terminen
 
+## Folgeinkrement: Aufgabenverknüpfung nach Restore ändern
+
+Branch `codex/recovery-task-link-lifecycle`, Basis PR #42. `scripts/recovery-task-link-lifecycle.mjs` ergänzt eine neue Zuordnung zwischen einem persönlichen Ziel und einer zuvor unverbunden gesicherten Aufgabe. Beide Konten durchlaufen auf Desktop/Mobil Auswahl, Tastaturbestätigung, gespeicherte Anzeige nach Neuladen und Duplikatschutz beim erneuten Öffnen. Die umgekehrte Aufgabenansicht prüft abgewiesenes Entfernen ohne Bestätigung, Abbrechen und bestätigtes Entfernen. Die entfernte ID bleibt als Tombstone erhalten; ihre Route bietet keine weitere Entfernen-Aktion.
+
+Vollständige Anwendungstabellenvergleiche erlauben ausschließlich die neue eigene Linkzeile und später deren Entfernungszeitpunkt. Quelle, andere Links, fremdes Konto, Aufgaben, Ziele, Fortschritte und Geldwerte müssen unverändert bleiben. Die Aufgabe bleibt erreichbar; bestehende Verknüpfungen bleiben angezeigt. Auf Mobil wird derselbe Aufgabenendpunkt bewusst mit einer neuen Link-ID erneut verwendet. Schreibende Terminlinks und weitere Plan-Abläufe bleiben separate Schritte.
+
+Prüfstand: Die erste vollständige erweiterte Restore-Probe besteht mit Exit 0 (`.cache/recovery-task-link-first-20261115.log`). Beide Konten auf Desktop/Mobil bestehen die neuen Aufgabenlink-Fälle und alle bisherigen Money-/Plan-/Auth-/Gateway-Fälle. Lint, Typprüfung, 196 Unit-/20 Werkzeugtests, vollständige Formatprüfung, Produktionsbuild und alle 16 öffentlichen Browserfälle ebenfalls bestanden (Exit 0; `.cache/recovery-task-link-{lint,typecheck,test,test-tooling,format-check,build,public}-20261115.log`). Diff auf Umfang, vollständige Datenerhaltung, Autorisierung und Geheimnisschutz geprüft. Vollständige CI dieses Folgeinkrements steht noch aus; bis dahin bleibt der PR Entwurf. Ergebnisse von PR #42 belegen ausschließlich den vorherigen lesenden Schritt.
+
+## Vorheriger abgeschlossener Nachweis
+
 Stand: 15.11.2026. Branch `codex/recovery-plan-links`, Basis PR #41. Begrenzter V1-Nachweis im bestehenden isolierten Money-Restore-Browserablauf; keine vollständige Plan- oder Produktionsabnahme.
 
 ## Umfang
